@@ -47,7 +47,6 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/signalr/jquery.signalr.js",
               "node_modules/alertifyjs/build/alertify.js"
             ]
           },
