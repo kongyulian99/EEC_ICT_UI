@@ -1,0 +1,52 @@
+.nav {
+  // background-color: #337ab7;
+  // margin-top: 10px;
+  // height: 40px;
+  align-items: center;
+  a {
+    padding: 8px;
+    // margin: 0 10px 0 10px;
+    // border: solid 1px black;
+    // border-radius: 5px;
+    color: black;
+    text-transform: uppercase;
+    &:first-child {
+      margin-left: 5px;
+    }
+    &:hover {
+      // border: solid 1px;
+    }
+  }
+  .active {
+    // background-color: #0E21A0;
+    // box-shadow: 0 5px 5px -5px #333;
+    font-weight: bold;
+    color: white;
+    border-bottom: solid 3px #BB2525;
+    color: #BB2525;
+  }
+}
+
+
+// animations
+#box {
+  background: url('/assets/images/world-map-small.png');
+  background-size: cover;
+  border: 1px solid green;
+  border-radius:50%;
+  width: 45px;
+  height: 45px;
+  animation: movimiento 20s linear 0s infinite;
+  // box-shadow:0 0 25px RGBA(255,255,255, 0.10),
+  //            -8px -8px 15px #000 inset,
+  //            2px 2px 25px #000 inset,
+  //            -45px -45px 25px RGBA(0,0,0, 0.5) inset,
+  //            25px 25px 45px RGBA(0,0,0, 0.45) inset;
+/*   margin:6em auto; */
+  transform:rotateX(6deg) rotateY(6deg) rotateZ(6deg);
+}
+
+@keyframes movimiento {
+  0% { background-position:0 0 }
+  100% { background-position: 480px 0 }
+}

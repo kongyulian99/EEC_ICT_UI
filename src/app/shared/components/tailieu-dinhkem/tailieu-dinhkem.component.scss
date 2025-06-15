@@ -1,0 +1,64 @@
+.dinhkem-wrapper {
+  position: relative;
+  .dinhkem {
+    margin: 0;
+    padding: 0;
+    // color: blue;
+    color: black;
+    // background-color: white;
+    cursor: pointer;
+    font-size: 18px;
+
+    &.haveDinhkem {
+      color: blue;
+    }
+  }
+
+  .dinhkem-box {
+    position: absolute;
+    padding: 10px;
+    border: solid 1px #ccc;
+    box-shadow: 5px 5px 5px -5px #333;
+    border-radius: 5px;
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    width: 80%;
+    min-width: 300px;
+    z-index: 101;
+    background-color: #fff;
+    // display: none;
+
+    ul {
+      li {
+        a {
+          display: block;
+          text-align: left;
+          overflow-x: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    .upload-icon {
+      margin: 0 70px;
+      padding: 5px 10px;
+      border: solid 1px #ccc;
+      border-radius: 5px;
+      box-shadow: 2px 2px 2px -2px #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  // &:hover {
+  //   .dinhkem-box {
+  //     display: block;
+  //   }
+  // }
+}

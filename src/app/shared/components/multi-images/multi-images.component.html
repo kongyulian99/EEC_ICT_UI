@@ -1,0 +1,69 @@
+<div class="view-form">
+    <div class="view-form-body">
+        <div class="form-group">
+            <label for="file-upload-multiple" class="custom-file-upload"> <i class="fa fa-cloud-upload"></i> Thêm ảnh </label>
+            <!-- <input (change)="onFileChange($event)" type="file" id="file-upload" /> -->
+            <input type='file' (change)="readURL($event)" multiple accept="image/*" id="file-upload-multiple"  />
+            <div class="container-images">
+                <div class="item-image"  *ngFor="let item of listFile; index as i;">
+                    <div class="image">
+                        <img class="img" [src]="item.fileBase64" alt="" />
+                        <div class="middle">
+                            <div class="delete-function" (click)="deleteImgDetail(i)">Xóa</div>
+                        </div>
+                    </div>
+                    <div class="text">
+                        <dx-text-area
+                            placeholder="Nhập nội dung ảnh..."
+                            [autoResizeEnabled]="true"
+                            [(value)]="listFile[i].NoiDung"
+                            (onValueChanged)="textChanged(i)"
+                        ></dx-text-area>
+                    </div>
+                </div>
+
+            </div>
+            <!-- <div *ngIf="uploadFile" class="filename">
+                <span>{{ uploadFile.name }}<i style="margin-left: 5px; color: #888;">{{uploadFile.size/1024 | number: '1.0-0'}}kb</i></span>
+            </div> -->
+        </div>
+    </div>
+</div>
+<!-- <dx-popup
+    [width]="500"
+    [height]="700"
+    [showTitle]="true"
+    title="Thông tin hình ảnh"
+    [dragEnabled]="false"
+    [hideOnOutsideClick]="false"
+    shadingColor="rgba(0, 0, 0, 0.5)"
+    [animation]="{ hide: null, show: null}"
+    [showCloseButton]="false"
+    [(visible)]="popupVisible"
+  >
+    <dxi-toolbar-item
+      widget="dxButton"
+      toolbar="bottom"
+      location="before"
+      [options]="saveButtonOptions"
+    >
+    </dxi-toolbar-item>
+    <dxi-toolbar-item
+      widget="dxButton"
+      toolbar="bottom"
+      location="after"
+      [options]="deleteButtonOptions"
+    >
+    </dxi-toolbar-item>
+    <dxo-position at="center" my="center"> </dxo-position>
+    <div *dxTemplate="let data of 'content'">
+        <div class="image-detail">
+            <img [src]="fileDetail.base64Data" alt="" />
+        </div>
+        <div class="text-image">
+            <dx-text-area
+                [autoResizeEnabled]="true"
+            ></dx-text-area>
+        </div>
+    </div>
+  </dx-popup> -->

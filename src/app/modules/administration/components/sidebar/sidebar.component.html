@@ -1,0 +1,31 @@
+<nav [ngClass]="{ sidebarPushRight: isActive, collapsed: collapsed }" class="sidebar">
+  <div class="user" style="margin-bottom: 10px;">
+    <a href="#">
+      <img src="assets/images/Logo IGCSE.png" alt="" width="50" height="50">
+    </a>
+  </div>
+  <div class="list-group">
+    <div class="nested-menu" *ngFor="let item of userSideBarInfo">
+      <a class="list-group-item" href="javascript:void(0)" [ngClass]="{active: checkActive(item)}" [routerLink]="(item.children && item.children.length > 0)?router.url.split('?')[0]:item.cUrl" (click)="activate(item)">
+        <div>
+          <i class="fa {{ item.cIconCss }} fa-lg" title="{{item.cRoleName}}" style="font-size: 20px;"></i>
+          <span class="role-name ml-1">{{ item.cRoleName }}</span>
+        </div>
+        <span>
+          <i *ngIf="item.children && item.children.length > 0" class="fa fa-chevron-right" [ngClass]="{isExpand: item.expand, isColapse: !item.expand}"></i>
+        </span>
+      </a>
+      <li class="nested" [ngClass]="{ expand: item.expand}">
+        <ul class="submenu">
+          <p *ngIf="collapsed" class="head" href="javascript:void(0)">{{item.cRoleName}}</p>
+
+          <li *ngFor="let subItem of item.children" (click)="activate(subItem)">
+            <a [ngClass]="{active: checkActive(subItem)}" href="javascript:void(0)" routerLink="{{ subItem.cUrl }}">
+              <span>{{ subItem.cRoleName }}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </div>
+  </div>
+</nav>

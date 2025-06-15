@@ -1,0 +1,176 @@
+$topnav-background-color: #243B55;
+
+:host {
+  .navbar {
+    z-index: 1500;
+    background-color: $topnav-background-color;
+    // background: linear-gradient(to right, #141E30, #243B55);
+    padding-bottom: 0;
+    padding-top: 0;
+    height: 50px;
+    // margin: 5px;
+
+    .navbar-brand {
+      color: white;
+      font-size: .9rem;
+      text-transform: uppercase;
+    }
+
+    .message {
+      .mail-icon {
+        display: inline-block;
+        position: relative;
+
+        .number {
+          background-color: red;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          text-align: center;
+          position: absolute;
+          left: 15px;
+          top: -3px;
+          font-size: 13px;
+        }
+
+        .vibration {
+          animation: swing 0.2s ease infinite;
+        }
+      }
+    }
+
+    .nav-item>a {
+      color: white;
+
+      // &:hover {
+      //   color: #3b9eec;
+      // }
+    }
+  }
+
+  .nav-link {
+    font-size: 0.875rem;
+    min-width: 150px;
+    text-align: end;
+
+    i {
+      margin-left: 0.5rem;
+    }
+  }
+
+  .messages {
+    margin: 0;
+    padding: 0;
+    width: 300px;
+    background-color: $topnav-background-color;
+    // background: linear-gradient(to right, #141E30, #243B55);
+
+    .media {
+      border-bottom: 1px solid #ddd;
+      padding: 5px 10px;
+
+      &:last-child {
+        border-bottom: none;
+        display: flex;
+        justify-content: center;
+      }
+
+      a {
+        i {
+          font-size: 20px;
+        }
+
+        color: #fff;
+      }
+    }
+
+    .media-body {
+      h5 {
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .small {
+        margin: 0;
+      }
+
+      .last {
+        font-size: 12px;
+        margin: 0;
+        color: blanchedalmond;
+      }
+    }
+  }
+
+  .dropdown-user {
+    margin: 0;
+    font-size: 0.875rem;
+    z-index: 50000;
+    padding: 0;
+    right: 0;
+    // background-color: $topnav-background-color;
+    background: linear-gradient(to right, #141E30, #243B55);
+
+    .dropdown-item {
+      color: #fff;
+      padding: 0.5rem;
+
+      &:hover {
+        background-color: #215991;
+      }
+
+      i {
+        margin-right: 0.5rem;
+      }
+    }
+
+    .dropdown-divider {
+      margin: 0;
+    }
+  }
+}
+
+@keyframes ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(15deg);
+  }
+
+  50% {
+    transform: rotate(-15deg);
+  }
+
+  75% {
+    transform: rotate(15deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes swing {
+  0% {
+    transform: rotateZ(0);
+  }
+
+  25% {
+    transform: rotateZ(10deg);
+  }
+
+  50% {
+    transform: rotateZ(0deg);
+  }
+
+  75% {
+    transform: rotateZ(-10deg);
+  }
+
+  100% {
+    transform: rotateZ(0);
+  }
+}

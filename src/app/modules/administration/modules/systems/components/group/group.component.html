@@ -1,0 +1,70 @@
+<app-generic-page [pageTitle]="title" [loading]="loading">
+  <ng-container main-filters>
+  </ng-container>
+
+  <ng-container extra-filters>
+
+  </ng-container>
+
+  <ng-container buttons>
+    <dx-button appPermission appRole="GROUP_MANAGEMENT" permissionCode="ADD" text="Thêm mới"
+      [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()">
+    </dx-button>
+  </ng-container>
+
+  <ng-container body>
+    <div class="view-card-body">
+      <div class="card-content">
+        <div class="content">
+          <dx-data-grid id="gridContainer" [keyExpr]="'ID'" [dataSource]="listData" [showBorders]="true"
+            [showColumnLines]="true" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" [hoverStateEnabled]="true"
+            [focusedRowEnabled]="true" [focusedRowKey]="focusKey" [paging]="{ enabled: false }"
+            noDataText="Không có dữ liệu" [wordWrapEnabled]="true" (onFocusedRowChanged)="onFocusedRowChanged($event)">
+            <dxo-scrolling mode="standard" rowRenderingMode="standard"></dxo-scrolling>
+            <dxo-header-filter [visible]="false"></dxo-header-filter>
+
+            <dxi-column cellTemplate="cellIndex" caption="TT" [width]="50" alignment="center"
+              cssClass="vertical-middle"> </dxi-column>
+            <dxi-column dataField="cGroupCode" caption="Tên mã hoá" cssClass="vertical-middle"></dxi-column>
+            <dxi-column dataField="cGroupName" caption="Tên nhóm" cssClass="vertical-middle"></dxi-column>
+            <dxi-column cellTemplate="cellAction" [width]="45" alignment="center" [showInColumnChooser]="false"
+              cssClass="vertical-middle"></dxi-column>
+
+            <div *dxTemplate="let row of 'cellIndex'" style="text-align: center;">
+              <span>{{ pageSize * (pageIndex - 1) + (row.rowIndex + 1) }}</span>
+            </div>
+            <div appPermission appRole="GROUP_MANAGEMENT" permissionCode="DELETE" class="rowAction"
+              *dxTemplate="let row of 'cellAction'">
+              <span class="dx-icon-close" (click)="delete(row.data.ID, row.data.cGroupName)"></span>
+            </div>
+          </dx-data-grid>
+        </div>
+      </div>
+
+      <div class="toggle-detail">
+        <i *ngIf="isShowDetail" class="fa fa-chevron-right fa-lg" (click)="toggleDetail()"></i>
+        <i *ngIf="!isShowDetail" class="fa fa-chevron-left fa-lg" (click)="toggleDetail()"></i>
+      </div>
+
+      <div *ngIf="isShowDetail" class="card-detail">
+        <div class="detail-header">
+          <p>{{ state === 'detail' ? 'CHI TIẾT' : state === 'insert' ? 'THÊM MỚI' : 'CẬP NHẬT' }}</p>
+        </div>
+        <div class="detail-content">
+          <dx-scroll-view>
+            <app-form-group-detail #detail [entity]="currentEntity" [listData]="listData" [state]="state">
+            </app-form-group-detail>
+          </dx-scroll-view>
+        </div>
+        <div class="detail-footer">
+          <dx-button appPermission appRole="GROUP_MANAGEMENT" permissionCode="UPDATE" *ngIf="state=='detail'"
+            [icon]="dxButtonConfig.edit_icon" [type]="dxButtonConfig.edit_type" text="Sửa" (click)="edit()"></dx-button>
+          <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type"
+            text="Lưu" (click)="save()"></dx-button>
+          <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.cancel_icon" [type]="dxButtonConfig.cancel_type"
+            text="Hủy" (click)="cancel()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</app-generic-page>

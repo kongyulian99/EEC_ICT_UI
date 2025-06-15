@@ -1,0 +1,1 @@
+export * from './sharedDiretives.module';

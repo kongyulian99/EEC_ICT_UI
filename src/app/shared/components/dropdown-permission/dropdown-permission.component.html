@@ -1,0 +1,10 @@
+<dx-select-box class="filter" [readOnly]="readOnly" [label]="label" [stylingMode]="stylingMode" [dataSource]="items"
+  displayExpr="cPermissionName" valueExpr="cPermissionCode"
+  [(value)]="permissionCode" (onValueChanged)="onValueChanged($event)"
+  [searchEnabled]="true"
+  searchMode="contains"
+  searchExpr="TenTacNhanKhungBo">
+  <dx-validator *ngIf="isValidate">
+    <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+  </dx-validator>
+</dx-select-box>

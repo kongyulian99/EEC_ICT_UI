@@ -1,0 +1,67 @@
+
+<div class="row">
+    <div class="col-4">
+        <div class="d-flex flex-row align-items-center">
+            <label class="mr-2" for="">Đơn vị nhận</label>
+            <app-dropdown-donvi class="flex-grow-1"
+                [showBQP]="true" [thuocQuanLy]="true"
+                [(maDonVi)]="maDonViNhan" (maDonViChange)="loadAllThongBao()">
+            </app-dropdown-donvi>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="dx-field">
+            <div class="input-group">
+                <dx-text-box mode="search" [elementAttr]="{ class: 'form-control' }"
+                    placeholder="Tìm kiếm tên thông báo ..." [(value)]="keyword" (onEnterKey)="loadAllThongBao()">
+                </dx-text-box>
+                <dx-button class="custom-button" style="margin-left: 4px;" (click)="loadAllThongBao()"
+                    [type]="dxButtonConfig.search_type" text="Tìm kiếm"></dx-button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mt-2 row">
+    <div class="col-12">
+        <table class="table table-bordered table-hover text-center">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên thông báo</th>
+                    <th>Nội dung</th>
+                    <th>Đơn vị nhận</th>
+                    <th>Tài liệu đính kèm</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of items; index as i">
+                   <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+                   <td>{{ item.Ten }}</td>
+                   <td>{{ item.NoiDung }}</td>
+                   <td>
+                        <p *ngFor="let dv of item.ListDonViNhan; index as indexDV">
+                            <span>{{dv.TenDonViNhan}} (<i>
+                                <ng-container *ngIf="dv.DaNhan">đã xem</ng-container>
+                                <ng-container *ngIf="!dv.DaNhan">chưa xem</ng-container>
+                            </i>)</span>
+                        </p>
+                   </td>
+                   <td><a href="{{prefixLinkDinhKem}}/{{item.TaiLieuDinhKem}}" target="_blank" class="text-success">
+                        <i class="fa fa-file-text" aria-hidden="true"></i>
+                   </a></td>
+                   <td>
+                        <button class="delete-btn" (click)="handleDeleteEntity(item.Id)"><i
+                                class="icon fa fa-times fa-lg"></i></button>
+                   </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col-12" style="border-top: 1px solid #ddd; padding-top: 8px;">
+        <app-paginator [pageSize]="pageSize" [totalRows]="totalRecords" [pageSizes]="PaginatorConfig"
+            (onPageChanged)="handlePageChange($event)" (onPageSizeChanged)="handlePageSizeChange($event)"
+            [page]="pageIndex"></app-paginator>
+    </div>
+</div>

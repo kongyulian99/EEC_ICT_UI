@@ -1,0 +1,21 @@
+<!-- <app-sidebar [collapsed]="collapedSideBar" (collapsedEvent)="receiveCollapsed($event)"></app-sidebar>
+<section [ngClass]="{ collapsed: collapedSideBar }" class="main-container">
+  <app-header (onToggle)="collapedSideBar = !collapedSideBar"></app-header>
+  <router-outlet></router-outlet>
+</section>
+ -->
+
+<!-- Hiển thị sidebar chỉ khi người dùng có quyền admin -->
+<ng-container *ngIf="isAdmin">
+  <app-sidebar #sidebar [collapsed]="collapedSideBar" (collapsedEvent)="receiveCollapsed($event)"></app-sidebar>
+  <section [ngClass]="{ collapsed: collapedSideBar }" class="main-container">
+    <app-header [isAdmin]="isAdmin" (onToggle)="collapedSideBar = !collapedSideBar"></app-header>
+    <router-outlet></router-outlet>
+  </section>
+</ng-container>
+
+<!-- Hiển thị layout đơn giản khi người dùng không có quyền admin -->
+<ng-container *ngIf="!isAdmin">
+  <app-header [isAdmin]="isAdmin"></app-header>
+  <router-outlet></router-outlet>
+</ng-container>

@@ -1,0 +1,10 @@
+<div class="process-wrap show-step">
+  <div class="process-main">
+    <div class="status-bar-block" *ngFor="let item of data" [ngClass]="{'active': item.status <= status}">
+      <span class="process-label">{{item.text}}</span>
+      <div class="process-step-cont">
+        <div class="process-step"></div>
+      </div>
+    </div>
+  </div>
+</div>

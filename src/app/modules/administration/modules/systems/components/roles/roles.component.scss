@@ -1,0 +1,141 @@
+$paginatorColor: #fff;
+
+.widget-header {
+  border-radius: 5px;
+}
+
+.view-card-body {
+  height: calc(100vh - 115px);
+  display: flex;
+  flex-direction: row;
+  // margin: 5px 10px;
+  box-shadow: 5px 5px 5px -5px #333;
+  border-radius: 5px;
+
+  .card-content {
+    width: 1px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: white;
+
+    .bar {
+      display: flex;
+      flex-direction: row;
+      height: 46px;
+      padding: 5px;
+      box-shadow: 0 5px 5px -5px #333;
+
+      .input-group {
+        flex-grow: 1;
+
+        dx-text-box {
+          width: 70%;
+        }
+      }
+
+      .slide-button {
+        display: flex;
+        flex-direction: row-reverse;
+        width: 100px;
+      }
+    }
+
+    .content {
+      height: 1px;
+      flex-grow: 1;
+      margin: 5px 5px 0 5px;
+      // background-color: white;
+    }
+
+    .paginator {
+      position: relative;
+      bottom: 0;
+      height: 53px;
+      width: 100%;
+      background-color: $paginatorColor;
+      box-shadow: 0 -5px 5px -5px #333;
+    }
+  }
+
+  .card-detail {
+    position: relative;
+    width: 400px;
+    height: 100%;
+    border-left: 1px solid #dfdcdc;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+
+    .detail-header {
+      display: flex;
+      flex-direction: row;
+      height: 46px;
+      justify-content: space-between;
+      padding: 5px;
+      background-color: darken(whitesmoke, 5%);
+      align-items: center;
+
+      p {
+        margin-left: 10px;
+        font-size: 20px;
+        margin-bottom: 0;
+        height: 1.5rem;
+        font-weight: 500;
+      }
+    }
+
+    .detail-content {
+      height: 1px;
+      flex-grow: 1;
+      padding: 8px 8px 0 8px;
+
+      dx-scroll-view {
+        height: 100%;
+      }
+    }
+
+    .detail-footer {
+      position: relative;
+      bottom: 0px;
+      height: 53px;
+      padding: .25rem;
+      background-color: white;
+      border-top: 1px solid #dedede;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+
+      dx-button {
+        margin-left: 5px;
+        margin-right: 10px;
+        height: 35px;
+      }
+    }
+  }
+}
+
+::ng-deep #gridContainer {
+  max-height: calc(100vh - 125px);
+}
+
+::ng-deep .rowAction {
+  span {
+    margin-left: 0;
+  }
+}
+
+i {
+  background-color: #fff;
+  border: solid 1px #ccc;
+  color: #146C94;
+  padding: 10px 5px;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  transform: translateY(-50%);
+  z-index: 1700;
+}

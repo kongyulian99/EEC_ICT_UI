@@ -1,0 +1,31 @@
+<dx-validation-group #validationEntity>
+    <div class="field">
+        <div class="field">
+            <label>Tên mã hoá:</label>
+            <div class="input">
+                <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cPermissionCode">
+                    <dx-validator>
+                        <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+                    </dx-validator>
+                </dx-text-box>
+            </div>
+        </div>
+        <div class="field">
+            <label>Tên hành động:</label>
+            <div class="input">
+                <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cPermissionName">
+
+                </dx-text-box>
+            </div>
+        </div>
+        <div class="field">
+            <label>STT:</label>
+            <div class="input">
+                <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cSTT">
+
+                </dx-text-box>
+            </div>
+        </div>
+    </div>
+
+</dx-validation-group>

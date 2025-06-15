@@ -1,0 +1,30 @@
+<dx-validation-group #validationEntity>
+  <!-- <div class="field mt-2">
+    <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" label="Tên hành động" [(value)]="entity.cCommandName">
+      <dx-validator>
+        <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+  </div> -->
+
+  <div class="field mt-2">
+    <dx-text-box label="Tên mã hoá hành động" [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cCommand">
+      <dx-validator>
+        <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+  </div>
+
+  <div class="field mt-2">
+    <dx-select-box label="Tên mã hoá chức năng" [readOnly]="state != 'edit' && state != 'insert'" [dataSource]="allRole" displayExpr="cRoleCode"
+      valueExpr="cRoleCode" [(value)]="entity.cRoleCode">
+    </dx-select-box>
+  </div>
+
+  <div class="field mt-2">
+    <!-- <dx-text-box label="Hành động" [(value)]="entity.cCommandName"></dx-text-box> -->
+    <app-dropdown-permission label="Hành động" [readOnly]="state != 'edit' && state != 'insert'" [showAll]="false" [(permissionCode)]="entity.cPermissionCode">
+    </app-dropdown-permission>
+  </div>
+
+</dx-validation-group>

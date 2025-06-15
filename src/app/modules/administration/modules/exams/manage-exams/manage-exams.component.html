@@ -1,0 +1,69 @@
+<app-generic-page pageTitle="Quản lý đề thi">
+  <ng-container buttons>
+    <dx-button text="Thêm mới" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (onClick)="addExam()"></dx-button>
+    <dx-button text="Làm mới" icon="refresh" (onClick)="loadExams()"></dx-button>
+  </ng-container>
+  <ng-container body>
+    <div class="container-fluid">
+      <!-- DataGrid -->
+      <div class="row">
+        <div class="col">
+          <dx-data-grid
+            id="examsGrid"
+            [dataSource]="exams"
+            [showBorders]="true"
+            [columnAutoWidth]="true"
+            [allowColumnResizing]="true"
+            [allowColumnReordering]="true"
+            [showRowLines]="true"
+            [rowAlternationEnabled]="true"
+            [hoverStateEnabled]="true"
+            [height]="'calc(100vh - 220px)'"
+          >
+            <!-- Cấu hình phân trang -->
+            <dxo-paging [pageSize]="gridConfig.pageSize"></dxo-paging>
+            <dxo-pager
+              [showPageSizeSelector]="true"
+              [allowedPageSizes]="gridConfig.allowedPageSizes"
+              [showInfo]="true"
+              [showNavigationButtons]="true"
+            ></dxo-pager>
+
+            <!-- Cấu hình tìm kiếm -->
+            <dxo-search-panel
+              [visible]="true"
+              [width]="240"
+              placeholder="Tìm kiếm..."
+            ></dxo-search-panel>
+
+            <!-- Cấu hình lọc -->
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+            <!-- Cấu hình cột -->
+            <dxi-column dataField="Id" caption="ID" [width]="70" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column cellTemplate="cellTitle" caption="Tiêu đề" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Description" caption="Mô tả" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Duration_Minutes" caption="Thời gian (phút)" [width]="120" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Total_Questions" caption="Số câu hỏi" [width]="100" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Created_At" caption="Ngày tạo" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Updated_At" caption="Cập nhật" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+
+            <!-- Cột thao tác -->
+            <dxi-column type="buttons" [width]="gridConfig.actionWidth" caption="Thao tác">
+              <dxi-button name="edit" icon="edit" (onClick)="editExam.bind(this)"></dxi-button>
+              <dxi-button name="delete" icon="trash" [onClick]="deleteExam.bind(this)"></dxi-button>
+            </dxi-column>
+
+            <div *dxTemplate="let row of 'cellTitle'" class="text-left kehoach-container">
+              <a [routerLink]="['/administration/exams/detail']" [queryParams]="{id: row.data.Id}">{{ row.data.Title }}</a>
+            </div>
+
+            <!-- Cấu hình loading -->
+            <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          </dx-data-grid>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</app-generic-page>

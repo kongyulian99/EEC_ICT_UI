@@ -1,0 +1,30 @@
+<div class="paginator-view">
+    <div class="page-sizes float-left" *ngIf="showLeftPanel && pageSizes.length>0">
+        <dx-select-box
+            [width]="50"
+            [(value)]="pageSize"
+            (onValueChanged)="pageSizeChanged()"
+            [items]="pageSizes"
+            [showDropDownButton]="false"
+        ></dx-select-box>
+        <label>{{nameData}}/trang | <b>Tổng số: {{totalRows}} {{nameData}}</b></label>
+    </div>
+    <ngb-pagination
+        #paginator
+        class="float-right"
+        [page]="page"
+        [pageSize]="pageSize"
+        [collectionSize]="totalRows"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="pageChanged($event)"
+    >
+        <ng-template ngbPaginationFirst><i class="dx-icon-chevrondoubleleft"></i></ng-template>
+        <ng-template ngbPaginationLast><i class="dx-icon-chevrondoubleright"></i></ng-template>
+        <ng-template ngbPaginationPrevious><i class="dx-icon-chevronleft"></i></ng-template>
+        <ng-template ngbPaginationNext><i class="dx-icon-chevronright"></i></ng-template>
+        <ng-template ngbPaginationEllipsis>...</ng-template>
+        <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+    </ngb-pagination>
+</div>

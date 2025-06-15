@@ -1,0 +1,291 @@
+// Biến màu sắc
+$primary-color: #0d6efd;
+$secondary-color: #6c757d;
+$success-color: #198754;
+$danger-color: #dc3545;
+$light-bg: #f8f9fa;
+$border-color: #dee2e6;
+$hover-bg: #e9ecef;
+$text-color: #212529;
+$light-text: #6c757d;
+$correct-answer-color: #d1e7dd;
+$correct-answer-border: #badbcc;
+$correct-answer-text: #0f5132;
+
+// // Styles chung
+// :host ::ng-deep {
+//   .dx-popup-title {
+//     background-color: $primary-color;
+//     color: white;
+//     padding: 12px 16px;
+//     border-top-left-radius: 8px;
+//     border-top-right-radius: 8px;
+
+//     .dx-popup-title-text {
+//       font-size: 18px;
+//       font-weight: 500;
+//     }
+
+//     .dx-closebutton {
+//       color: white;
+//       &:hover {
+//         background-color: rgba(255, 255, 255, 0.1);
+//       }
+//     }
+//   }
+
+//   .dx-popup-content {
+//     padding: 0;
+//     border-bottom-left-radius: 8px;
+//     border-bottom-right-radius: 8px;
+//   }
+
+//   .dx-texteditor {
+//     border-radius: 6px;
+
+//     &.dx-state-focused {
+//       border-color: $primary-color;
+//       box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+//     }
+
+//     .dx-texteditor-input {
+//       border-radius: 6px;
+//       padding: 8px 12px;
+//     }
+
+//     &.dx-editor-filled {
+//       background-color: $light-bg;
+
+//       &:hover {
+//         background-color: darken($light-bg, 2%);
+//       }
+
+//       &.dx-state-focused {
+//         background-color: white;
+//       }
+//     }
+//   }
+
+//   .dx-button {
+//     border-radius: 6px;
+//     font-weight: 500;
+//     height: 38px;
+//     min-width: 100px;
+
+//     &.dx-button-mode-contained {
+//       &.dx-button-default {
+//         background-color: $primary-color;
+//         border-color: $primary-color;
+
+//         &:hover {
+//           background-color: darken($primary-color, 10%);
+//           border-color: darken($primary-color, 10%);
+//         }
+//       }
+
+//       &.dx-button-danger {
+//         background-color: $danger-color;
+//         border-color: $danger-color;
+
+//         &:hover {
+//           background-color: darken($danger-color, 10%);
+//           border-color: darken($danger-color, 10%);
+//         }
+//       }
+//     }
+
+//     &.dx-button-mode-outlined {
+//       &.dx-button-default {
+//         border-color: $primary-color;
+//         color: $primary-color;
+
+//         &:hover {
+//           background-color: rgba($primary-color, 0.1);
+//         }
+//       }
+//     }
+
+//     .dx-button-content {
+//       padding: 8px 16px;
+
+//       .dx-icon {
+//         margin-right: 8px;
+//       }
+//     }
+//   }
+
+//   .dx-selectbox {
+//     .dx-selectbox-container {
+//       .dx-texteditor-input {
+//         padding: 8px 12px;
+//       }
+//     }
+//   }
+
+//   // CKEditor styles
+//   .ck-editor {
+//     width: 100%;
+//     margin-bottom: 10px;
+
+//     .ck-editor__editable {
+//       min-height: 150px;
+//       max-height: 400px;
+//       border-radius: 0 0 6px 6px !important;
+//     }
+
+//     .ck-toolbar {
+//       border-radius: 6px 6px 0 0 !important;
+//     }
+
+//     &.ck-focused {
+//       .ck-editor__editable {
+//         border-color: $primary-color !important;
+//       }
+
+//       .ck-toolbar {
+//         border-color: $primary-color !important;
+//       }
+//     }
+//   }
+// }
+
+// Styles cho form câu hỏi
+.question-options,
+.true-false-options,
+.fill-blank-options {
+  background-color: $light-bg;
+  // border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+// Styles cho các lựa chọn trắc nghiệm
+.option-item,
+.answer-item {
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid $border-color;
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: $primary-color;
+    transform: translateY(-2px);
+  }
+
+  &.correct-answer {
+    background-color: $correct-answer-color;
+    border-color: $correct-answer-border;
+
+    .correct-answer-label {
+      color: $correct-answer-text;
+      font-weight: 500;
+    }
+  }
+}
+
+// Styles cho radio buttons và đáp án đúng
+.option-radio {
+  display: flex;
+  align-items: center;
+
+  .form-check-input {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+    cursor: pointer;
+
+    &:checked {
+      background-color: $primary-color;
+      border-color: $primary-color;
+
+      & + .correct-answer-label {
+        display: inline-block;
+      }
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+    }
+  }
+}
+
+.correct-answer-label {
+  background-color: $correct-answer-color;
+  color: $correct-answer-text;
+  border: 1px solid $correct-answer-border;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.form-check-label {
+  font-size: 16px;
+  cursor: pointer;
+  padding-left: 4px;
+}
+
+// Styles cho tiêu đề
+h5.fw-bold {
+  color: $text-color;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+// Styles cho labels
+.form-label {
+  font-size: 14px;
+  color: $text-color;
+  margin-bottom: 8px;
+
+  .text-danger {
+    font-weight: bold;
+  }
+}
+
+// Container chung
+.container-fluid {
+  padding: 20px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .option-item,
+  .answer-item {
+    padding: 12px;
+  }
+
+  .option-radio {
+    flex-wrap: wrap;
+
+    .correct-answer-label {
+      margin-left: 28px;
+      margin-top: 4px;
+    }
+  }
+
+  .d-flex.align-items-center {
+    flex-direction: column;
+    align-items: flex-start !important;
+
+    .option-radio,
+    .option-content,
+    .option-actions,
+    .answer-content,
+    .answer-actions {
+      margin: 4px 0;
+      width: 100%;
+    }
+
+    .option-actions,
+    .answer-actions {
+      text-align: right;
+      margin-top: 8px;
+    }
+  }
+}

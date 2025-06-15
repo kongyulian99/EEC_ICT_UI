@@ -1,0 +1,59 @@
+<!-- <div style="position: relative; " class="list-gallery">
+    <div>
+        <div *ngFor="let item of dataImages; index as indexHinhAnh">
+            <img *ngIf="indexHinhAnh == indexShow"
+                [width]="width" [height]="height"
+                src="{{urlFolder}}/{{item.HinhAnhUrl}}" alt="" />
+        </div>
+    </div>
+
+    <button class="change-index-gallery-button" *ngIf="indexShow > 0"
+        style="font-size: 16px; position: absolute; left: 5px; border-radius: 50%; border: none; font-weight: 100;"
+        (click)="indexShow = indexShow - 1;"
+        [style.top]="(height / 2) + 'px'"
+        >
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+    </button>
+
+    <button class="change-index-gallery-button" *ngIf="indexShow < dataImages.length - 1"
+        style="font-size: 16px; position: absolute; right: 5px; border-radius: 50%; border: none; font-weight: 100;"
+        (click)="indexShow = indexShow + 1;"
+        [style.top]="(height / 2) + 'px'">
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+    </button>
+
+    <div></div>
+</div> -->
+
+<div class="popup-overlay" *ngIf="isOpen">
+    <div class="popup-content">
+      <button class="close-btn" (click)="closePopup()">×</button>
+  
+      <div class="slider">
+        <button class="nav-btn prev" (click)="prevImage()">&#10094;</button>
+  
+        <div class="slider-image">
+            <ng-container *ngFor="let item of dataImages; index as indexHinhAnh">
+                <img *ngIf="indexHinhAnh == currentIndex"
+                    [width]="width" [height]="height"
+                    src="{{urlFolder}}/{{item.UrlHinhAnh}}" alt="" />
+            </ng-container>
+        </div>
+  
+        <button class="nav-btn next" (click)="nextImage()">&#10095;</button>
+      </div>
+  
+      <div class="indicators">
+        <!-- <span
+          *ngFor="let image of dataImages; let i = index"
+          [class.active]="i === currentIndex"
+          (click)="currentIndex = i"
+        ></span> -->
+        <div class="d-flex flex-row align-items-center justify-content-center">
+          <ng-container *ngFor="let item of dataImages; let i = index">
+            <img src="{{urlFolder}}/{{item.UrlHinhAnh}}" width="80" height="60" alt="" [class.active]="i === currentIndex" (click)="currentIndex = i">
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>

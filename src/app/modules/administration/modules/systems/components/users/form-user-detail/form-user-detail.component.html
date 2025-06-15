@@ -1,0 +1,104 @@
+<dx-validation-group #validationEntity>
+  <div class="p-1">
+    <div>
+      <label class="fw-bold mb-0">Họ và tên:</label>
+      <div class="mt-0">
+        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cUserFullName">
+        </dx-text-box>
+      </div>
+    </div>
+
+    <div class="mt-2">
+      <label class="fw-bold mb-0">Tên đăng nhập:</label>
+      <div class="mt-0">
+        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cUserName">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+            <!-- <dxi-validation-rule type="custom" message="Tên đăng nhập đã tồn tại!" [ignoreEmptyValue]="true"
+                            [validationCallback]="validationExitingUser"></dxi-validation-rule> -->
+            <!-- <dxi-validation-rule type="stringLength" [min]="6"
+                            message="Mật khẩu có độ dài lớn hơn 6 ký tự"></dxi-validation-rule> -->
+          </dx-validator>
+        </dx-text-box>
+
+
+      </div>
+    </div>
+
+    <ng-container *ngIf="state == 'insert'">
+      <div class="mt-2">
+        <label class="fw-bold mb-0">Mật khẩu</label>
+        <div class="mt-0">
+          <dx-text-box [(value)]="entity.cPassword" mode="password">
+            <dx-validator>
+              <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+              <dxi-validation-rule type="custom"
+                message="Mật khâu phải có ít nhất 8 ký tự, có ký tự số, chữ cái và ký tự đặc biệt"
+                [ignoreEmptyValue]="true" [validationCallback]="validationPasswordCheck"></dxi-validation-rule>
+            </dx-validator>
+
+          </dx-text-box>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- <div class="mt-2">
+      <label class="fw-bold mb-0">Đơn vị quản lý trực tiếp</label>
+      <div class="mt-0">
+        <app-dropdown-donvi-multiplechoice [readOnly]="state != 'edit' && state != 'insert'" [(maDonVi)]="entity.DonViQuanLyTrucTiep" [isValidate]="true"></app-dropdown-donvi-multiplechoice>
+      </div>
+    </div> -->
+
+    <div class="mt-2">
+      <label class="fw-bold mb-0">Giới tính</label>
+      <div class="mt-0">
+        <dx-select-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cGioiTinh"
+          [dataSource]="listGioiTinh" displayExpr="label" valueExpr="value"></dx-select-box>
+      </div>
+    </div>
+    <div class="mt-2">
+      <label class="fw-bold mb-0">Số điện thoại</label>
+      <div class="mt-0">
+        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cSDT"></dx-text-box>
+      </div>
+    </div>
+
+    <div class="mt-2">
+      <label class="fw-bold mb-0">Email</label>
+      <div class="mt-0">
+        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cEmail"></dx-text-box>
+      </div>
+    </div>
+
+    <div class="mt-2" *ngIf="state !== 'insert'">
+      <label class="fw-bold mb-0">Danh sách nhóm quyền: </label>
+      <a *ngIf="state !== 'detail'" (click)="openGroupForm()" class="ml-2 btn btn-sm btn-primary"
+        href="javascript:void(0)"><i class="fa fa-plus"></i></a>
+      <div class="p-1 d-flex flex-row align-items-center border-bottom" *ngFor="let gr of listGroupInUser">
+        <div class="flex-grow-1 mr-2">{{gr.cGroupName}}</div>
+        <span><button *ngIf="state !== 'detail'" (click)="deleteGroup(gr.ID)" class="btn btn-sm btn-danger"><i
+              class="fa fa-trash"></i></button></span>
+      </div>
+    </div>
+  </div>
+
+</dx-validation-group>
+
+
+<dx-popup [width]="400" height="auto" [showTitle]="true" title="Danh sách nhóm quyền" [dragEnabled]="false"
+  [(visible)]="popupVisible">
+
+  <div *dxTemplate="let data of 'content'">
+    <div class="p-2">
+      <div class="d-flex flex-row align-items-center border-bottom p-1" *ngFor="let gr of listGroupNotInUser">
+        <span class="flex-grow-1">{{gr.cGroupName}}</span>
+        <dx-check-box class="" [(value)]="gr.check"></dx-check-box>
+      </div>
+
+      <div class="mt-2">
+        <dx-button [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type" text="Lưu"
+          (click)="saveGroupForm()"></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

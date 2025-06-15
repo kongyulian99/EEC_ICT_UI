@@ -1,0 +1,80 @@
+<dx-validation-group #validationEntity>
+    <div class="field">
+        <div class="field">
+            <label>Tên mã hoá:</label>
+            <div class="input">
+                <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cRoleCode">
+                </dx-text-box>
+            </div>
+        </div>
+        <div class="field">
+            <label>Tên chức năng:</label>
+            <div class="input">
+                <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cRoleName">
+                </dx-text-box>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Chức năng cha:</label>
+            <div class="input">
+                <dx-select-box [readOnly]="state != 'edit' && state != 'insert'" displayExpr="cRoleName" valueExpr="ID"
+                    [dataSource]="allMaCap1" [(value)]="entity.cParentId">
+                </dx-select-box>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Icon css:</label>
+            <div class="input">
+                <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cIconCss">
+                </dx-text-box>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Url:</label>
+            <div class="input">
+                <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cUrl">
+                </dx-text-box>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>STT:</label>
+            <div class="input">
+                <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cSTT">
+                </dx-text-box>
+            </div>
+        </div>
+
+        <div *ngIf="state !== 'insert'" class="field">
+            <label for="">Danh sách hành động</label>
+
+            <a *ngIf="state !== 'detail'" (click)="openPermissionForm()" class="ml-2 btn btn-sm btn-primary" href="javascript:void(0)"><i
+                    class="fa fa-plus"></i></a>
+            <div class="p-1 d-flex flex-row align-items-center border-bottom" *ngFor="let per of listPermissionsInRole">
+                <div class="flex-grow-1 mr-2">{{per.cPermissionName}}</div>
+                <span><button *ngIf="state !== 'detail'" (click)="deletePermission(per.ID)" class="btn btn-sm btn-danger"><i class="fa fa-times" title="Xoá"></i></button></span>
+            </div>
+        </div>
+    </div>
+
+</dx-validation-group>
+
+<dx-popup [width]="450" height="auto" [showTitle]="true" title="Danh sách hành động" [dragEnabled]="false" [(visible)]="popupVisible">
+
+    <div *dxTemplate="let data of 'content'">
+        <div class="p-2">
+            <div class="d-flex flex-row align-items-center border-bottom p-1" *ngFor="let per of listPermissionsNotInRole">
+                <span class="flex-grow-1">{{per.cPermissionName}}</span>
+                <dx-check-box class="" [(value)]="per.check"></dx-check-box>
+            </div>
+
+            <div class="mt-2">
+                <dx-button [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type" text="Lưu"
+                    (click)="savePermission()"></dx-button>
+            </div>
+        </div>
+    </div>
+</dx-popup>

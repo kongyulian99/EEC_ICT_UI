@@ -1,0 +1,9 @@
+<div class="split d-flex flex-row justify-content-between align-items-center px-2">
+  <div class="split-line w-100"></div>
+  <div (click)="toggleShowMoreFilter()" class="text-center d-flex flex-row align-items-center"
+    style="font-size: 18px; cursor: pointer; ">
+    <i *ngIf="!isMoreFilterOption" class="fa fa-chevron-down" aria-hidden="true"></i>
+    <i *ngIf="isMoreFilterOption" class="fa fa-chevron-up" aria-hidden="true"></i>
+  </div>
+  <div class="split-line w-100"></div>
+</div>

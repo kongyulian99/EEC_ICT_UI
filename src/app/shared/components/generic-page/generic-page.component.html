@@ -1,0 +1,71 @@
+<div class="widget-header">
+  <dx-toolbar>
+    <dxi-item *ngIf="haveBackButton" location="before" widget="dxButton" locateInMenu="never">
+      <dx-button id="button" hint="Về trang trước" (click)="handleBack()" icon="arrowleft"
+        [type]="dxButtonConfig.onlyIcon_type">
+      </dx-button>
+    </dxi-item>
+    <dxi-item location="before" widget="dxButton" locateInMenu="never">
+      <div *dxTemplate>
+        <div class="toolbar-label mr-1 d-flex align-items-center">
+          <ng-content select="[back-button]"></ng-content>
+          {{ pageTitle | uppercase }}
+          <span style="color: red; margin-left: 5px;">{{ titleInfo | uppercase}}</span>
+        </div>
+      </div>
+    </dxi-item>
+
+    <dxi-item location="before" widget="dxButton" locateInMenu="never">
+      <div class="filters px-0">
+        <div class="main-filters px-0">
+          <ng-content select="[main-filters]"></ng-content>
+          <i #moreFilterButton title="Thêm bộ lọc" class="icon fa fa-filter fa-lg"
+            [ngClass]="{pushed: isShowExtraFilter}" (click)="showExtraFilters()"></i>
+        </div>
+        <div #extraFilters class="extra-filters" [ngClass]="{'show-filter': isShowExtraFilter}">
+          <ng-content select="[extra-filters]"></ng-content>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item location="before" widget="dxButton" locateInMenu="never">
+      <span class="info">
+        <ng-content select="[info]"></ng-content>
+      </span>
+    </dxi-item>
+    <dxi-item location="after" widget="dxButton" locateInMenu="never">
+      <div #buttons class="d-flex align-items-center gap-2">
+        <ng-content select="[buttons]"></ng-content>
+      </div>
+    </dxi-item>
+  </dx-toolbar>
+  <!-- <ng-content select="[toolbar]"></ng-content> -->
+  <!-- <ng-content select="[main-filter]"></ng-content>
+  <ng-content select="[filters]"></ng-content> -->
+</div>
+
+<div class="view-card-body">
+  <div class="loading">
+    <ng-content select="[loading]"></ng-content>
+  </div>
+  <div class="content">
+    <dx-scroll-view id="scrollView" style="height: 100%; width: 100%;">
+      <ng-content select="[body]"></ng-content>
+    </dx-scroll-view>
+    <div *ngIf="haveForm">
+      <i *ngIf="formOpen" class="fa fa-chevron-right fa-lg" (click)="changeOpenStatus()"></i>
+      <i *ngIf="!formOpen" class="fa fa-chevron-left fa-lg" (click)="changeOpenStatus()"></i>
+    </div>
+    <div class="form" [ngClass]="{'open': formOpen}">
+      <div class="form-content">
+        <ng-content select="[form]"></ng-content>
+      </div>
+    </div>
+  </div>
+  <!-- <div #navbar class="navbar">
+    <ng-content select="[navbar]"></ng-content>
+  </div> -->
+</div>
+
+<dx-load-panel shadingColor="rgba(0,0,0,0.4)" textContent="Đang xử lý" [position]="{ of: '.content' }" [(visible)]="loading"
+  [showIndicator]="true" [showPane]="false" [shading]="true" [closeOnOutsideClick]="false">
+</dx-load-panel>

@@ -1,0 +1,88 @@
+<app-generic-page [pageTitle]="title" [loading]="loading">
+  <ng-container main-filters>
+    <dx-text-box style="width: 700px;" mode="search" [showClearButton]="false" [placeholder]="placeholderSearch"
+      [(value)]="textSearch" (onEnterKey)="onFilter()">
+      <!-- <dxi-button name="filter" location="after" [options]="optionsBtnFilter"></dxi-button> -->
+    </dx-text-box>
+  </ng-container>
+
+  <ng-container buttons>
+    <dx-button appPermission appRole="ACTION_MANAGEMENT" permissionCode="ADD" text="Thêm mới" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()"></dx-button>
+  </ng-container>
+
+  <ng-container body>
+    <div class="view-card-body">
+      <div class="card-content">
+        <div class="content">
+          <dx-data-grid
+                id="gridContainer"
+                [keyExpr]="'ID'"
+                [dataSource]="listData"
+                [showBorders]="true"
+                [showColumnLines]="true"
+                [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+                [hoverStateEnabled]="true"
+                [focusedRowEnabled]="true"
+                [focusedRowKey]="focusKey"
+                [paging]="{ enabled: false }"
+                noDataText="Không có dữ liệu"
+                [wordWrapEnabled]="true"
+                (onFocusedRowChanged)="onFocusedRowChanged($event)"
+            >
+                <dxo-scrolling mode="standard" rowRenderingMode="standard"></dxo-scrolling>
+                <dxo-header-filter [visible]="false"></dxo-header-filter>
+
+                <dxi-column cellTemplate="cellIndex" caption="TT" [width]="50" alignment="center" cssClass="vertical-middle"> </dxi-column>
+                <dxi-column dataField="cPermissionCode" caption="Tên mã hoá" cssClass="vertical-middle"></dxi-column>
+                <dxi-column dataField="cPermissionName" caption="Tên hành động" cssClass="vertical-middle"></dxi-column>
+                <dxi-column cellTemplate="cellAction" [width]="45" alignment="center" [showInColumnChooser]="false" cssClass="vertical-middle"></dxi-column>
+
+                <div *dxTemplate="let row of 'cellIndex'" style="text-align: center;">
+                    <span>{{ pageSize * (pageIndex - 1) + (row.rowIndex + 1) }}</span>
+                </div>
+                <div appPermission appRole="ACTION_MANAGEMENT" permissionCode="DELETE" class="rowAction" *dxTemplate="let row of 'cellAction'">
+                    <span class="dx-icon-close" (click)="delete(row.data.ID, row.data.cPermissionName)"></span>
+                </div>
+            </dx-data-grid>
+        </div>
+        <div class="paginator">
+          <app-paginator
+                [(page)]="pageIndex"
+                [(pageSize)]="pageSize"
+                [totalRows]="totalRows"
+                [pageSizes]="pageSizes"
+                (onPageChanged)="pageChanged($event)"
+                (onPageSizeChanged)="pageSizeChanged($event)"
+            ></app-paginator>
+        </div>
+      </div>
+
+      <div class="toggle-detail">
+        <i *ngIf="isShowDetail" class="fa fa-chevron-right fa-lg" (click)="toggleDetail()"></i>
+        <i *ngIf="!isShowDetail" class="fa fa-chevron-left fa-lg" (click)="toggleDetail()"></i>
+      </div>
+
+      <div *ngIf="isShowDetail" class="card-detail">
+        <div class="detail-header">
+          <p>{{ state === 'detail' ? 'CHI TIẾT' : state === 'insert' ? 'THÊM MỚI' : 'CẬP NHẬT' }}</p>
+          <!-- <dx-button [icon]="dxButtonConfig.close_icon" [type]="dxButtonConfig.cancel_type" (click)="toggleDetail()">
+          </dx-button> -->
+        </div>
+        <div class="detail-content">
+          <dx-scroll-view>
+            <app-form-mappingcommand-detail #detail [entity]="currentEntity" [listData]="allData" [state]="state">
+            </app-form-mappingcommand-detail>
+          </dx-scroll-view>
+        </div>
+        <div class="detail-footer">
+          <dx-button appPermission appRole="ACTION_MANAGEMENT" permissionCode="UPDATE" *ngIf="state=='detail'"
+            [icon]="dxButtonConfig.edit_icon" [type]="dxButtonConfig.edit_type" text="Sửa" (click)="edit()"></dx-button>
+          <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type" text="Lưu"
+            (click)="save()"></dx-button>
+          <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.cancel_icon" [type]="dxButtonConfig.cancel_type"
+            text="Hủy" (click)="cancel()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</app-generic-page>

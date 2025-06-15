@@ -1,0 +1,13 @@
+dx-validation-group {
+  padding: 5px 5px 0 5px;
+
+  .field:nth-child(n) {
+    margin-top: 15px !important;
+    margin-bottom: .25rem;
+
+    label {
+      margin-bottom: 0;
+      font-weight: 600;
+    }
+  }
+}

@@ -1,0 +1,509 @@
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+i {
+  font: normal normal normal 14px / 1 FontAwesome;
+}
+
+.login-wrapper {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: gradientBG 15s ease infinite;
+  background-size: 400% 400%;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.main {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.row {
+  width: 900px;
+  height: 580px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 767px) {
+    height: auto;
+  }
+}
+
+.side-image {
+  position: relative;
+  background-image: url("/assets/images/tru-so-bo-quoc-phong.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 20px 0 0 20px;
+  padding: 0;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(to bottom, rgba(103, 58, 183, 0.8), rgba(63, 81, 181, 0.7), rgba(33, 150, 243, 0.9));
+    border-radius: 20px 0 0 20px;
+  }
+
+  .text {
+    position: relative;
+    z-index: 2;
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+
+    .login-header {
+      h3 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(to right, #ffffff, #ececec);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 2s infinite;
+        background-size: 200% 100%;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -100% 0;
+        }
+        100% {
+          background-position: 100% 0;
+        }
+      }
+
+      p {
+        font-size: 1.3rem;
+        opacity: 0.9;
+        font-weight: 300;
+        margin-left: 2px;
+      }
+    }
+
+    .contact {
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      margin-top: auto;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+      .title-left {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+
+        .icon {
+          margin-right: 8px;
+          color: #fff;
+        }
+      }
+
+      .left-contact {
+        a {
+          color: white;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          transition: all 0.3s ease;
+          padding: 8px 0;
+
+          i {
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+          }
+
+          &:hover {
+            color: #ffeb3b;
+            transform: translateX(5px);
+
+            i {
+              background-color: rgba(255, 235, 59, 0.3);
+              transform: rotate(360deg);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.input-box {
+  width: 90%;
+  max-width: 350px;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 480px;
+  margin: 0 auto;
+
+  @media (max-width: 767px) {
+    min-height: 520px;
+    width: 95%;
+  }
+
+  .logo {
+    text-align: center;
+    margin-bottom: 20px;
+    img {
+      width: auto;
+      height: 80px;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+
+      &:hover {
+        transform: scale(1.05) rotate(2deg);
+      }
+    }
+  }
+
+  header {
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #673ab7;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(to right, #673ab7, #3f51b5);
+      border-radius: 4px;
+    }
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 25px;
+
+    input {
+      height: 55px;
+      padding: 10px 20px 10px 55px;
+      border: 2px solid #e0e0e0;
+      border-radius: 30px !important;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background-color: #f9f9f9;
+
+      &:focus {
+        border-color: #673ab7;
+        box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.15);
+        background-color: #fff;
+      }
+
+      &::placeholder {
+        color: #9e9e9e;
+        opacity: 0.7;
+      }
+    }
+
+    i {
+      position: absolute;
+      left: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9e9e9e;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      width: 20px;
+      text-align: center;
+    }
+
+    input:focus + i {
+      color: #673ab7;
+    }
+  }
+
+  .submit-area {
+    margin-top: 30px;
+    text-align: center;
+
+    ::ng-deep .dx-button {
+      border-radius: 30px !important;
+      height: 55px;
+      background: linear-gradient(to right, #673ab7, #3f51b5) !important;
+      border: none !important;
+      transition: all 0.3s ease !important;
+      overflow: hidden;
+      position: relative;
+      margin: 0 auto;
+      max-width: 200px;
+      width: 100%;
+      display: block;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.6s ease;
+      }
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(103, 58, 183, 0.4) !important;
+
+        &::before {
+          left: 100%;
+        }
+      }
+
+      &:active {
+        transform: translateY(-1px);
+      }
+
+      .dx-button-content {
+        font-size: 17px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .register-link {
+      display: block;
+      margin-top: 20px;
+      color: #757575;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-size: 15px;
+
+      span {
+        color: #673ab7;
+        font-weight: 500;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background-color: #673ab7;
+          transition: width 0.3s ease;
+        }
+
+        &:hover {
+          &::after {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .row {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    border-radius: 15px;
+  }
+
+  .side-image {
+    height: 220px;
+    border-radius: 15px 15px 0 0;
+
+    &::after {
+      border-radius: 15px 15px 0 0;
+    }
+
+    .text {
+      padding: 20px;
+
+      .login-header {
+        h3 {
+          font-size: 2rem;
+        }
+
+        p {
+          font-size: 1rem;
+        }
+      }
+
+      .contact {
+        padding: 15px;
+      }
+    }
+  }
+
+  .right {
+    padding: 30px 0;
+  }
+
+  .input-box {
+    width: 90%;
+
+    .logo img {
+      height: 80px;
+    }
+
+    header {
+      font-size: 24px;
+      margin-bottom: 25px;
+    }
+
+    .input-field input {
+      height: 50px;
+    }
+  }
+}
+
+::ng-deep .dx-button-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.forgot-password {
+  color: #9e9e9e;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #673ab7;
+    text-decoration: underline;
+  }
+}
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+// Form container styles
+.form-container {
+  width: 100%;
+  position: relative;
+  transition: all 0.5s ease;
+  opacity: 1;
+  transform: translateX(0);
+
+  &.slide-out {
+    position: absolute;
+    opacity: 0;
+    transform: translateX(-100%);
+    pointer-events: none;
+  }
+}
+
+.register-form {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateX(100%);
+  pointer-events: none;
+
+  &.slide-in {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .form-content {
+    .row {
+      margin: 0 -5px;
+
+      .col-12 {
+        padding: 0 5px;
+      }
+    }
+  }
+}
+
+// Improve form content spacing
+.form-content {
+  margin-bottom: 15px;
+}
+
+// Make inputs a bit smaller for registration form
+.register-form {
+  .input-field {
+    margin-bottom: 12px;
+
+    input {
+      height: 45px;
+    }
+  }
+}

@@ -1,0 +1,448 @@
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  ::ng-deep {
+    .dx-textbox {
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+      &.dx-state-focused {
+        border-color: #337ab7;
+        box-shadow: 0 0 0 3px rgba(51, 122, 183, 0.2);
+      }
+
+      .dx-button {
+        background-color: transparent;
+
+        &:hover {
+          background-color: rgba(51, 122, 183, 0.1);
+        }
+      }
+    }
+  }
+}
+
+.view-card-body {
+  display: flex;
+  height: calc(100vh - 130px);
+  position: relative;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  .card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 8px 0 0 8px;
+
+    .content {
+      flex: 1;
+      overflow: auto;
+      border-radius: 6px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+
+      ::ng-deep {
+        .dx-tree-list {
+          background-color: #fff;
+          border-radius: 6px;
+
+          .dx-treelist-headers {
+            background-color: #f5f7fa;
+
+            .dx-header-row {
+              background-color: #f5f7fa;
+              color: #333;
+              font-weight: 600;
+
+              td {
+                border-bottom: 1px solid #e0e0e0;
+              }
+            }
+          }
+
+          .dx-treelist-rowsview {
+            .dx-treelist-content {
+              .dx-row {
+                transition: background-color 0.2s;
+
+                &:hover {
+                  background-color: #f5f7fa;
+                }
+
+                &.dx-state-focused {
+                  background-color: #e6f0ff;
+                }
+
+                .dx-treelist-expanded span {
+                  color: #337ab7;
+                }
+
+                .dx-treelist-collapsed span {
+                  color: #337ab7;
+                }
+              }
+            }
+          }
+
+          .dx-command-edit {
+            .dx-link {
+              margin: 0 3px;
+
+              &.dx-link-edit {
+                color: #337ab7;
+              }
+
+              &.dx-link-delete {
+                color: #d9534f;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .paginator {
+      margin-top: 16px;
+
+      ::ng-deep {
+        .pagination {
+          border-radius: 6px;
+          overflow: hidden;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+          .page-item {
+            .page-link {
+              border: none;
+              color: #555;
+              transition: all 0.2s;
+
+              &:hover {
+                background-color: #f0f0f0;
+              }
+            }
+
+            &.active .page-link {
+              background-color: #337ab7;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .toggle-detail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    background-color: #f0f2f5;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #e0e6ed;
+    }
+
+    i {
+      color: #337ab7;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  .card-detail {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-left: 1px solid #e0e6ed;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
+    border-radius: 0 8px 8px 0;
+    animation: slideIn 0.3s ease-out;
+
+    @keyframes slideIn {
+      from { transform: translateX(20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e0e6ed;
+      background-color: #f5f7fa;
+      border-radius: 0 8px 0 0;
+
+      p {
+        margin: 0;
+        font-weight: 600;
+        font-size: 16px;
+        color: #333;
+        display: flex;
+        align-items: center;
+
+        i {
+          color: #337ab7;
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .detail-content {
+      flex: 1;
+      overflow: auto;
+      padding: 20px;
+
+      .form-container {
+        padding: 10px;
+
+        ::ng-deep {
+          .dx-form {
+            .dx-field-item-label {
+              color: #555;
+              font-weight: 500;
+            }
+
+            .dx-texteditor {
+              border-radius: 4px;
+
+              &.dx-state-focused {
+                border-color: #337ab7;
+                box-shadow: 0 0 0 2px rgba(51, 122, 183, 0.15);
+              }
+            }
+
+            .dx-selectbox {
+              .dx-dropdowneditor-button {
+                border-radius: 0 4px 4px 0;
+              }
+            }
+
+            .dx-textarea {
+              border-radius: 4px;
+
+              &.dx-state-focused {
+                border-color: #337ab7;
+                box-shadow: 0 0 0 2px rgba(51, 122, 183, 0.15);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .detail-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px 20px;
+      border-top: 1px solid #e0e6ed;
+      background-color: #f9f9f9;
+      border-radius: 0 0 8px 0;
+
+      ::ng-deep {
+        dx-button {
+          margin-left: 10px;
+
+          .dx-button {
+            border-radius: 4px;
+            transition: all 0.2s;
+
+            &.dx-button-success {
+              background-color: #4caf50;
+              border-color: #4caf50;
+
+              &:hover {
+                background-color: #45a049;
+                border-color: #45a049;
+              }
+            }
+
+            &.dx-button-default {
+              background-color: #337ab7;
+              border-color: #337ab7;
+
+              &:hover {
+                background-color: #2d6da3;
+                border-color: #2d6da3;
+              }
+            }
+
+            &.dx-button-normal {
+              background-color: #f5f5f5;
+              border-color: #ddd;
+              color: #333;
+
+              &:hover {
+                background-color: #e8e8e8;
+                border-color: #ccc;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.cell-index {
+  text-align: center;
+  font-weight: 500;
+}
+
+.parent-cell {
+  .parent-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    background-color: rgba(51, 122, 183, 0.1);
+    color: #337ab7;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .root-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    background-color: rgba(92, 184, 92, 0.1);
+    color: #5cb85c;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+}
+
+.rowAction {
+  cursor: pointer;
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .action-icon {
+    padding: 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &.dx-icon-edit {
+      color: #337ab7;
+
+      &:hover {
+        background-color: rgba(51, 122, 183, 0.1);
+      }
+    }
+
+    &.dx-icon-close {
+      color: #d9534f;
+
+      &:hover {
+        background-color: rgba(217, 83, 79, 0.1);
+      }
+    }
+  }
+}
+
+.vertical-middle {
+  vertical-align: middle;
+}
+
+// Responsive adjustments
+@media (max-width: 992px) {
+  .card-detail {
+    width: 350px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .view-card-body {
+    flex-direction: column;
+    height: auto;
+
+    .card-content {
+      margin-bottom: 20px;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .toggle-detail {
+      display: none;
+    }
+
+    .card-detail {
+      width: 100% !important;
+      border-left: none;
+      border-top: 1px solid #e0e6ed;
+      border-radius: 0 0 8px 8px;
+    }
+  }
+}
+
+// Thêm CSS cho các nút thao tác
+.action-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &.btn-edit {
+      color: #3498db;
+
+      &:hover {
+        color: #2980b9;
+      }
+    }
+
+    &.btn-delete {
+      color: #e74c3c;
+
+      &:hover {
+        color: #c0392b;
+      }
+    }
+  }
+}
+
+// CSS cho dx-tree-list
+::ng-deep {
+  .dx-treelist {
+    .dx-treelist-rowsview {
+      .dx-data-row {
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        &.dx-state-focused {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+      }
+    }
+  }
+}

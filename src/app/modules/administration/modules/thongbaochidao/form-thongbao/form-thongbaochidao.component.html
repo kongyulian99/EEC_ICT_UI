@@ -1,0 +1,80 @@
+<div class="p-2">
+    <form (submit)="save($event)">
+        <div class="row">
+            <div class="col-12">
+                <div class="my-2">
+                    <label for="">Tên thông báo (<span style="color: red;">*</span>)</label>
+                    <dx-text-box [(value)]="detailThongBao.Ten">
+                        <dx-validator>
+                            <dxi-validation-rule type="required" message="Bắt buộc phải nhập">
+                            </dxi-validation-rule>
+                        </dx-validator>
+                    </dx-text-box>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="my-2">
+                    <label for="">Nội dung</label>
+                    <dx-text-area [(value)]="detailThongBao.NoiDung" placeholder="Nhập trích yếu..."
+                        [autoResizeEnabled]="true" [maxLength]="1024" [maxHeight]="400"
+                        [readOnly]="false"></dx-text-area>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="my-2">
+                    <label for="">Ngày thông báo</label>
+                    <dx-date-box [(value)]="detailThongBao.NgayThongBao" displayFormat="dd/MM/yyyy" ></dx-date-box>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="my-2">
+                    <label for="">Hạn xử lý</label>
+                    <dx-date-box [(value)]="detailThongBao.HanXuLy" displayFormat="dd/MM/yyyy" ></dx-date-box>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="my-2">
+                    <label for="">Đơn vị nhận</label>
+                    <app-dropdown-donvi-multiplechoose [thuocQuanLy]="true" [(maDonVi)]="detailThongBao.ListMaDonViNhan"></app-dropdown-donvi-multiplechoose>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="my-2">
+                    <label for="">File</label>
+                    <br>
+                    <label for="fileUpload" class="btn btn-outline-primary">Chọn file</label>
+                    <input (change)="onFileChange($event)" type="file" id="fileUpload" style="display: none;" />
+                    <!-- <div *ngIf="uploadFile" class="filename">
+                    <span>{{ uploadFile.name }}</span>
+                </div> -->
+                    <div *ngIf="loading" class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <br>
+                    <a href="{{prefixLinkDinhKem}}{{detailThongBao.TaiLieuDinhKem}}" target="_blank">{{detailThongBao.TaiLieuDinhKem}}</a>
+                </div>
+            </div>
+
+        </div>
+
+        <hr />
+        <div>
+            <dx-button id="button" text="Lưu" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type"
+                [useSubmitBehavior]="true">
+            </dx-button>
+        </div>
+    </form>
+</div>

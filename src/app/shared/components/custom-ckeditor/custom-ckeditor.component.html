@@ -1,0 +1,5 @@
+<div class="w-100">
+  <ckeditor [editor]="Editor" [config]="config" *ngIf="isLayoutReady" [(ngModel)]="Content" (blur)="onBlur()">
+  </ckeditor>
+  <!-- <div *ngIf="isValidate" class="validator">{{message}}</div> -->
+</div>

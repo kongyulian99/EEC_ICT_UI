@@ -1,0 +1,68 @@
+<app-generic-page pageTitle="Phân quyền nhóm người dùng">
+  <ng-container body>
+    <div class="px-4 full-block">
+      <div class="row">
+        <div class="col-3">
+          <div>
+            <div class="name-block">NHÓM NGƯỜI DÙNG</div>
+          </div>
+          <div *ngFor="let gr of dmGroup">
+            <div class="table-row-block">
+              <span>
+                <dx-check-box [value]="selectedGroupId == gr.ID" (onValueChanged)="selectGroupCheckBox($event, gr.ID)">
+                </dx-check-box>
+              </span>
+              {{ gr.cGroupName }}
+            </div>
+          </div>
+        </div>
+        <div class="col-9">
+          <div class="role-block">
+            <div class="role-left-block">
+              <div class="name-block">CHỨC NĂNG</div>
+            </div>
+            <div class="role-right-block">
+              <div class="permission-block">
+                <div *ngFor="let per of dmPermission" class="permission-item-block name-block">{{per.cPermissionName}}</div>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngFor="let roleCap1 of dmRoleExPermission">
+            <div class="role-block table-row-block">
+              <div class="role-left-block">
+                <div>{{ roleCap1.cRoleName }}</div>
+              </div>
+              <div class="role-right-block">
+                <div class="permission-block">
+                  <div *ngFor="let per of dmPermission" class="permission-item-block">
+                    <dx-check-box *ngIf="checkExistPermissionInRole(roleCap1.permissions, per.ID)"
+                      [value]="selectedGroupData && selectedGroupData[roleCap1.fkRoleId] && selectedGroupData[roleCap1.fkRoleId][per.ID]"
+                      (onValueChanged)="changePermission($event, roleCap1.fkRoleId, per.ID)"></dx-check-box>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div *ngFor="let roleCap2 of roleCap1.children" class="role-block table-row-block">
+              <div class="role-left-block">
+                <div class="pl-4">{{ roleCap2.cRoleName }}</div>
+              </div>
+              <div class="role-right-block">
+                <div class="permission-block">
+                  <div *ngFor="let per of dmPermission" class="permission-item-block">
+                    <dx-check-box *ngIf="checkExistPermissionInRole(roleCap2.permissions, per.ID)"
+                      [value]="selectedGroupData && selectedGroupData[roleCap2.fkRoleId] && selectedGroupData[roleCap2.fkRoleId][per.ID]"
+                      (onValueChanged)="changePermission($event, roleCap2.fkRoleId, per.ID)"></dx-check-box>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</app-generic-page>

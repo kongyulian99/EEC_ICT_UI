@@ -1,0 +1,130 @@
+$mainColor: #337ab7;
+/* > Process Styles */
+.process-wrap {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+}
+.process-main {
+    justify-content: flex-end;
+    width: 100%;
+    min-width: 320px;
+    display: flex;
+}
+.status-bar-block {
+    position: relative;
+    width: 33.3%;
+}
+.status-bar-block .process-step:before {
+    content: '\0021';
+    padding-bottom: 3px;
+}
+// .status-bar-block:first-child .process-step:before {
+//   content: '\0021';
+// }
+// .status-bar-block:nth-child(2) .process-step:before {
+//   content: '\0021';
+// }
+// .status-bar-block:last-child .process-step:before {
+//   content: '\0021';
+// }
+.process-main .status-bar-block:not(:first-child):before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 95%;
+    height: 4px;
+    top: 27px;
+    left: calc(-50%);
+    right: 0;
+    background: #ebebeb;
+    -o-transition: 0.5s;
+    -ms-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+}
+.process-step-cont {
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    align-content: space-between;
+}
+.process-step {
+    border: 0px #ebebeb solid;
+    border-radius: 100%;
+    line-height: 0;
+    background: #959595;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    display: flex;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    font-weight: 700;
+    margin-bottom: 7px;
+    z-index: 4;
+    cursor: pointer;
+}
+.process-label {
+    color: #959595;
+    // font-weight: 600;
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+.show-step .status-bar-block:first-child .process-step {
+    background-color: $mainColor;
+}
+.show-step .status-bar-block:first-child .process-label {
+    color: $mainColor;
+}
+.show-step .status-bar-block:first-child .process-step:before {
+    content: '\21BA';
+}
+.status-bar-block.active + .status-bar-block:not(.active):before{
+    background: $mainColor !important;
+}
+.status-bar-block.active + .status-bar-block:not(.active) .process-step{
+    background-color: $mainColor;
+}
+.status-bar-block.active + .status-bar-block:not(.active) .process-label{
+    color: $mainColor;
+}
+.status-bar-block.active + .status-bar-block:not(.active) .process-step:before {
+    // content: '\21BA';
+    content: '\21BA';
+}
+.status-bar-block.active .process-step:before {
+    content: '\2713' !important;
+    // padding: 7px;
+}
+.status-bar-block.active .process-step {
+    background-color: $mainColor;
+}
+.status-bar-block.active .process-label {
+    color: $mainColor;
+}
+.status-bar-block.active:before {
+    background: $mainColor !important;
+}
+.status-bar-block.active:last-child {
+    &::before {
+        background-color: red !important;
+    }
+    .process-step {
+        background: red !important;
+        &::before {
+            content: '\2715' !important;
+            margin-top: 1px;
+        }
+    }
+
+}
+
