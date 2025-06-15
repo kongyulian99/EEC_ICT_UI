@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { catchError} from 'rxjs/operators';
 import { ResponseData } from '../models';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class GroupService extends BaseService {
@@ -12,7 +13,7 @@ export class GroupService extends BaseService {
         this.httpOptions = this.httpOptions.set('Content-Type', 'application/json');
     }
     processCommand(command, data) {
-        return this.http.post<ResponseData>(`/api/Group/CommandProcess`, {
+        return this.http.post<ResponseData>(`${environment.apiUrl}/api/Group/CommandProcess`, {
             Command: command,
             Data: JSON.stringify(data)
         }, { headers: this.httpOptions })

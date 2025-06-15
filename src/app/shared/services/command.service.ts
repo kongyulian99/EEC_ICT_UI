@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { ResponseData } from '../models';
+import { environment } from 'src/environments/environment';
 // import { CommandAssign } from '../models/command-assign';
 @Injectable({
     providedIn: 'root' // ADDED providedIn root here.
@@ -17,17 +18,17 @@ export class CommandService extends BaseService {
     }
     selectAll() {
         return this.http
-            .get<ResponseData>(`/api/commands/SelectAll?pageindex=0&pagesize=0&filter=`, { headers: this.httpOptions })
+            .get<ResponseData>(`${environment.apiUrl}/api/commands/SelectAll?pageindex=0&pagesize=0&filter=`, { headers: this.httpOptions })
             .pipe(catchError(this.handleError));
     }
     selectByFunctionId(functionId: string) {
         return this.http
-            .get<ResponseData>(`/api/commands/SelectByFunctionId/${functionId}?pageindex=0&pagesize=0&filter=`, { headers: this.httpOptions })
+            .get<ResponseData>(`${environment.apiUrl}/api/commands/SelectByFunctionId/${functionId}?pageindex=0&pagesize=0&filter=`, { headers: this.httpOptions })
             .pipe(catchError(this.handleError));
     }
     addCommandToFunction(functionId: string, commandAssign: CommandAssign) {
         return this.http
-            .post<ResponseData>(`/api/commands/addcommandtofunction/${functionId}`, commandAssign, { headers: this.httpOptions })
+            .post<ResponseData>(`${environment.apiUrl}/api/commands/addcommandtofunction/${functionId}`, commandAssign, { headers: this.httpOptions })
             .pipe(catchError(this.handleError));
     }
     removeCommandInFunction(functionId: string, ids: number[]) {
@@ -37,7 +38,7 @@ export class CommandService extends BaseService {
         }
         query = query.slice(0, -1);
         return this.http
-            .post<ResponseData>(`/api/commands/removecommandinfunction/${functionId}?${query}`, { headers: this.httpOptions })
+            .post<ResponseData>(`${environment.apiUrl}/api/commands/removecommandinfunction/${functionId}?${query}`, { headers: this.httpOptions })
             .pipe(catchError(this.handleError));
     }
 }

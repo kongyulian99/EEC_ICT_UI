@@ -28,7 +28,6 @@
     "@popperjs/core": "^2.10.2",
     "@types/jwt-decode": "^3.1.0",
     "@types/leaflet": "^1.9.3",
-    "@wiris/mathtype-ckeditor5": "^8.13.2",
     "alertifyjs": "^1.13.1",
     "autoprefixer": "10.4.5",
     "bootstrap": "^5.1.3",

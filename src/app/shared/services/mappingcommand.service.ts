@@ -3,11 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { ResponseData } from '../models';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root', // ADDED providedIn root here.
 })
 export class MappingCommandService extends BaseService {
-  url = '/api/dm-khoidonvi/';
+    url = `${environment.apiUrl}/api/MappingCommand/`;
   private httpOptions = new HttpHeaders();
 
   constructor(private http: HttpClient) {
@@ -17,7 +18,7 @@ export class MappingCommandService extends BaseService {
 
 
   processCommand(command, data) {
-    return this.http.post<ResponseData>(`/api/MappingCommand/CommandProcess`, {
+    return this.http.post<ResponseData>(`${this.url}/CommandProcess`, {
       Command: command,
       Data: JSON.stringify(data)
     }, { headers: this.httpOptions })

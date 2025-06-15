@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { ResponseData } from '../models';
-
+import { environment } from 'src/environments/environment';
 /**
  * Interface cho ExamInfo
  */
@@ -22,7 +22,7 @@ export interface ExamInfo {
 })
 export class ExamsService extends BaseService {
   private httpOptions = new HttpHeaders();
-  private apiUrl = '/api/Exam';
+  private apiUrl = `${environment.apiUrl}/api/Exam`;
 
   constructor(private http: HttpClient) {
     super();

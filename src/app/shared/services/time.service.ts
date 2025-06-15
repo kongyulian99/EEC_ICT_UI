@@ -16,7 +16,7 @@ export class TimeService extends BaseService {
     }
 
     getCurrentTime() {
-        return this.http.get<ResponseData>(`/api/time/getcurrenttime`, { headers: this.httpOptions })
+        return this.http.get<ResponseData>(`${environment.apiUrl}/api/time/getcurrenttime`, { headers: this.httpOptions })
             .pipe(catchError(this.handleError));
     }
 }

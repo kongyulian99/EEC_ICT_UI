@@ -7,6 +7,7 @@ import { BaseService } from './base.service';
 import { SystemConstants } from '../constants/systems.constant';
 import { User, UserLoginPayload } from '../interfaces/user.interface';
 import { ResponseData } from '../models';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root' // ADDED providedIn root here.
@@ -27,15 +28,15 @@ export class AuthenService extends BaseService {
     //   UserName: username,
     //   Password: password
     // };
-    return this.http.post<ResponseData>(`/api/Auth/Login`, user, { headers: this.httpOptions })
+    return this.http.post<ResponseData>(`${environment.apiUrl}/api/Auth/Login`, user, { headers: this.httpOptions })
       .pipe(catchError(this.handleError));
   }
 
   refreshToken(refresh: string) {
     return this.http
-    .post<ResponseData>(`/api/Auth/refreshtoken`, { RefrestToken: refresh },
-      // { headers: this.httpOptions }).pipe(catchError(this.handleError));
+    .post<ResponseData>(`${environment.apiUrl}/api/Auth/refreshtoken`, { RefrestToken: refresh },
       { headers: this.httpOptions })
+      .pipe(catchError(this.handleError));
       // .pipe(map((response: ResponseData)=>{
       //   if(response.ReturnStatus.Code != 1){
       //     this.notificationService.showError('Hết phiên đăng nhập!');
@@ -57,7 +58,7 @@ export class AuthenService extends BaseService {
 
   // logout() {
   //   const RefreshToken = this.user.refresh_token + SystemConstants.KEY_SECRET;
-  //   return this.http.post<ResponseData>(`/api/users/logout/${RefreshToken}`,
+  //   return this.http.post<ResponseData>(`${environment.apiUrl}/api/users/logout/${RefreshToken}`,
   //     { headers: this.httpOptions })
   //     .pipe(catchError(this.handleError));
   // }

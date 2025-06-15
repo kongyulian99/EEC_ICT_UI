@@ -4,6 +4,7 @@ import { BaseService } from './base.service';
 import { catchError} from 'rxjs/operators';
 import { PermissionUpdateRequest } from '../models/permission-update';
 import { ResponseData } from '../models';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService extends BaseService {
@@ -13,7 +14,7 @@ export class PermissionService extends BaseService {
         this.httpOptions = this.httpOptions.set('Content-Type', 'application/json');
     }
     processCommand(command, data) {
-        return this.http.post<ResponseData>(`/api/Permission/CommandProcess`, {
+        return this.http.post<ResponseData>(`${environment.apiUrl}/api/Permission/CommandProcess`, {
             Command: command,
             Data: JSON.stringify(data)
         }, { headers: this.httpOptions })

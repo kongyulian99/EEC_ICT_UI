@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { ResponseData } from '../models';
+import { environment } from 'src/environments/environment';
 
 /**
  * Interface cho TopicInfo
@@ -21,7 +22,7 @@ export interface TopicInfo {
 })
 export class TopicsService extends BaseService {
   private httpOptions = new HttpHeaders();
-  private apiUrl = '/api/Topic';
+  private apiUrl = `${environment.apiUrl}/api/Topic`;
 
   constructor(private http: HttpClient) {
     super();

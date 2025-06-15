@@ -16,7 +16,7 @@ export class ApikeyService extends BaseService {
     }
 
     processCommand(command, data) {
-        return this.http.post<ResponseData>(`/api/apikey/CommandProcess`, {
+        return this.http.post<ResponseData>(`${environment.apiUrl}/api/apikey/CommandProcess`, {
             Command: command,
             Data: JSON.stringify(data)
         }, { headers: this.httpOptions })
