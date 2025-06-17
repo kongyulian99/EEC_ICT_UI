@@ -8,108 +8,180 @@
   ></dx-load-panel>
 
   <!-- Thông tin chung -->
-  <div class="mb-4">
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label fw-bold">Loại câu hỏi <span class="text-danger">*</span></label>
-        <dx-select-box
-          [(value)]="editingQuestion.Question_Type"
-          [items]="[
-            { value: questionTypes.MULTIPLE_CHOICE, text: 'Trắc nghiệm' },
-            { value: questionTypes.TRUE_FALSE, text: 'Đúng/Sai' },
-            { value: questionTypes.FILL_IN_THE_BLANK, text: 'Điền vào chỗ trống' }
-          ]"
-          displayExpr="text"
-          valueExpr="value"
-          (onValueChanged)="onQuestionTypeChanged($event)"
-          [stylingMode]="'filled'"
-        ></dx-select-box>
+  <div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Loại câu hỏi <span class="text-danger">*</span></label>
+          <dx-select-box
+            [(value)]="editingQuestion.Question_Type"
+            [items]="[
+              { value: questionTypes.MULTIPLE_CHOICE, text: 'Trắc nghiệm' },
+              { value: questionTypes.TRUE_FALSE, text: 'Đúng/Sai' },
+              { value: questionTypes.FILL_IN_THE_BLANK, text: 'Điền vào chỗ trống' }
+            ]"
+            displayExpr="text"
+            valueExpr="value"
+            (onValueChanged)="onQuestionTypeChanged($event)"
+            [stylingMode]="'filled'"
+          ></dx-select-box>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Chủ đề <span class="text-danger">*</span></label>
+          <dx-select-box
+            [(value)]="editingQuestion.Topic_Id"
+            [items]="topics"
+            displayExpr="Name"
+            valueExpr="Id"
+            [stylingMode]="'filled'"
+            [searchEnabled]="true"
+            placeholder="Chọn chủ đề"
+          >
+            <dx-validator>
+              <dxi-validation-rule type="required" message="Vui lòng chọn chủ đề"></dxi-validation-rule>
+            </dx-validator>
+          </dx-select-box>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Độ khó <span class="text-danger">*</span></label>
+          <dx-select-box
+            [(value)]="editingQuestion.Difficulty_Level"
+            [items]="difficultyLevels"
+            displayExpr="text"
+            valueExpr="value"
+            [stylingMode]="'filled'"
+          >
+            <dx-validator>
+              <dxi-validation-rule type="required" message="Vui lòng chọn độ khó"></dxi-validation-rule>
+            </dx-validator>
+          </dx-select-box>
+        </div>
+        <div class="col-12 mb-3">
+          <label class="form-label">Nội dung câu hỏi <span class="text-danger">*</span></label>
+          <app-custom-ckeditor
+            [(Content)]="editingQuestion.Content"
+            [placeholder]="'Nhập nội dung câu hỏi'"
+            [isValidate]="true"
+            [message]="'Nội dung câu hỏi là bắt buộc'"
+            (ContentChange)="onQuestionContentChanged($event)"
+          ></app-custom-ckeditor>
+          <small class="text-muted" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.FILL_IN_THE_BLANK">
+            Sử dụng cú pháp <strong>[[đáp án]]</strong> để đánh dấu chỗ trống và đáp án. Ví dụ: Thủ đô của Việt Nam là [[Hà Nội]].
+          </small>
+        </div>
       </div>
-      <div class="col-md-6 mb-3">
-        <label class="form-label fw-bold">Chủ đề <span class="text-danger">*</span></label>
-        <dx-select-box
-          [(value)]="editingQuestion.Topic_Id"
-          [items]="topics"
-          displayExpr="Name"
-          valueExpr="Id"
-          [stylingMode]="'filled'"
-          [searchEnabled]="true"
-          placeholder="Chọn chủ đề"
-        >
-          <dx-validator>
-            <dxi-validation-rule type="required" message="Vui lòng chọn chủ đề"></dxi-validation-rule>
-          </dx-validator>
-        </dx-select-box>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label class="form-label fw-bold">Độ khó <span class="text-danger">*</span></label>
-        <dx-select-box
-          [(value)]="editingQuestion.Difficulty_Level"
-          [items]="difficultyLevels"
-          displayExpr="text"
-          valueExpr="value"
-          [stylingMode]="'filled'"
-        >
-          <dx-validator>
-            <dxi-validation-rule type="required" message="Vui lòng chọn độ khó"></dxi-validation-rule>
-          </dx-validator>
-        </dx-select-box>
-      </div>
-      <div class="col-12 mb-3">
-        <label class="form-label fw-bold">Nội dung câu hỏi <span class="text-danger">*</span></label>
-        <app-custom-ckeditor
-          [(Content)]="editingQuestion.Content"
-          [placeholder]="'Nhập nội dung câu hỏi'"
-          [isValidate]="true"
-          [message]="'Nội dung câu hỏi là bắt buộc'"
-        ></app-custom-ckeditor>
+    </div>
+  </div>
+
+  <!-- Xem trước câu hỏi điền vào chỗ trống -->
+  <div class="card mb-4 border-0 shadow-sm" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.FILL_IN_THE_BLANK">
+    <div class="card-body">
+      <h6 class="mb-3 fw-bold">Xem trước câu hỏi</h6>
+      <div class="preview-container">
+        <div class="fill-blank-preview" [innerHTML]="previewFillInBlankQuestion()"></div>
+        <div class="mt-3 d-flex justify-content-between align-items-center">
+          <small class="text-info">
+            <i class="fas fa-info-circle me-1"></i>
+            Chỗ trống sẽ được hiển thị như ô nhập liệu trong bài kiểm tra
+          </small>
+          <div class="badge bg-info" *ngIf="getBlankCount() > 0">
+            {{getBlankCount()}} chỗ trống
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Hướng dẫn:</strong> Đánh dấu đáp án bằng cú pháp <strong>[[đáp án]]</strong>. Học sinh sẽ chỉ thấy chỗ trống để điền vào.
+          </div>
+          <div class="mt-2" *ngIf="getAnswers().length > 0">
+            <h6 class="fw-bold mb-2">Các đáp án:</h6>
+            <ul class="list-group">
+              <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let answer of getAnswers(); let i = index">
+                <div>
+                  <span class="badge bg-primary me-2">{{getOptionLabel(i)}}</span> {{answer}}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Xem trước cấu trúc dữ liệu JSON -->
+        <div class="mt-4">
+          <h6 class="fw-bold mb-2">Cấu trúc dữ liệu JSON mới:</h6>
+          <div class="card">
+            <div class="card-body">
+              <pre class="mb-0"><code>{{getPreviewJsonData() | json}}</code></pre>
+            </div>
+          </div>
+          <small class="text-muted mt-2 d-block">
+            <i class="fas fa-info-circle me-1"></i>
+            Dữ liệu này sẽ được lưu vào trường Question_Data_Json của câu hỏi.
+          </small>
+        </div>
+
+        <!-- Xem trước theo cấu trúc mới -->
+        <div class="mt-4">
+          <h6 class="fw-bold mb-2">Xem trước theo cấu trúc mới:</h6>
+          <div class="card">
+            <div class="card-body">
+              <div class="fill-blank-preview-new" [innerHTML]="previewSegments()"></div>
+            </div>
+          </div>
+          <small class="text-muted mt-2 d-block">
+            <i class="fas fa-info-circle me-1"></i>
+            Xem trước này hiển thị các đoạn văn bản và chỗ trống theo cấu trúc dữ liệu mới.
+          </small>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Form câu hỏi trắc nghiệm -->
-  <div class="question-options mb-4" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.MULTIPLE_CHOICE">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold mb-0">Các lựa chọn</h5>
-      <dx-button
-        hint="Thêm lựa chọn"
-        [icon]="dxButtonConfig.add_icon"
-        [type]="dxButtonConfig.add_type"
-        (onClick)="addOption()"
-        [text]="'Thêm lựa chọn'"
-        [stylingMode]="'contained'"
-      ></dx-button>
-    </div>
-
-    <div class="option-list">
-      <div class="option-item p-3 mb-2 border rounded" *ngFor="let option of multipleChoiceData.options; let i = index" [ngClass]="{'correct-answer': multipleChoiceData.correctOption === i}">
-        <div class="d-flex align-items-center">
-          <div class="option-radio me-3">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="correctOption"
-              [id]="'option' + i"
-              [checked]="multipleChoiceData.correctOption === i"
-              (change)="multipleChoiceData.correctOption = i"
-            >
-            <span class="correct-answer-label" *ngIf="multipleChoiceData.correctOption === i">Đáp án đúng</span>
-          </div>
-          <div class="option-content flex-grow-1">
-            <dx-text-box
-              [(value)]="multipleChoiceData.options[i]"
-              [placeholder]="'Lựa chọn ' + (i + 1)"
-              [stylingMode]="'filled'"
-            ></dx-text-box>
-          </div>
-          <div class="option-actions ms-2">
-            <dx-button
-              [icon]="dxButtonConfig.delete_icon"
-              [type]="dxButtonConfig.delete_type"
-              (onClick)="removeOption(i)"
-              [disabled]="multipleChoiceData.options.length <= 2"
-              [stylingMode]="'contained'"
-            ></dx-button>
+  <div class="card mb-4 border-0 shadow-sm" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.MULTIPLE_CHOICE">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0">Các lựa chọn</h6>
+        <dx-button
+          [hint]="'Thêm lựa chọn'"
+          [icon]="'plus'"
+          [type]="'default'"
+          [text]="'Thêm lựa chọn'"
+          (onClick)="addOption()"
+        ></dx-button>
+      </div>
+      <div class="option-list">
+        <div class="option-item p-3 mb-2 border rounded" *ngFor="let option of multipleChoiceData.options; let i = index; trackBy: trackByOption" [ngClass]="{'correct-answer': multipleChoiceData.correctOption === i}">
+          <div class="d-flex align-items-center">
+            <div class="option-radio me-3">
+              <div class="d-flex align-items-center">
+                <input
+                  type="radio"
+                  name="correctOption"
+                  [checked]="multipleChoiceData.correctOption === i"
+                  (change)="setCorrectOption(i)"
+                  class="form-check-input me-2"
+                />
+                <span class="option-label">{{ getOptionLabel(i) }}</span>
+              </div>
+              <span class="correct-answer-label" *ngIf="multipleChoiceData.correctOption === i">Đáp án đúng</span>
+            </div>
+            <div class="option-content flex-grow-1">
+              <dx-text-box
+                [value]="option"
+                (onValueChanged)="onMultipleChoiceAnswerChanged(i, $event)"
+                [placeholder]="'Lựa chọn ' + getOptionLabel(i)"
+                [stylingMode]="'filled'"
+              ></dx-text-box>
+            </div>
+            <div class="option-actions ms-2">
+              <dx-button
+                [icon]="'trash'"
+                [type]="'danger'"
+                [stylingMode]="'text'"
+                (onClick)="removeOption(i)"
+                [disabled]="multipleChoiceData.options.length <= 2"
+              ></dx-button>
+            </div>
           </div>
         </div>
       </div>
@@ -117,71 +189,33 @@
   </div>
 
   <!-- Form câu hỏi đúng/sai -->
-  <div class="true-false-options mb-4" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.TRUE_FALSE">
-    <h5 class="fw-bold mb-3">Đáp án đúng</h5>
-    <div class="d-flex">
-      <div class="form-check form-check-inline me-4">
-        <input
-          class="form-check-input"
-          type="radio"
-          id="answerTrue"
-          name="trueFalseAnswer"
-          [checked]="trueFalseData.correctAnswer"
-          (change)="trueFalseData.correctAnswer = true"
-        >
-        <label class="form-check-label" for="answerTrue">Đúng</label>
-        <span class="correct-answer-label ms-2" *ngIf="trueFalseData.correctAnswer">Đáp án đúng</span>
-      </div>
-      <div class="form-check form-check-inline">
-        <input
-          class="form-check-input"
-          type="radio"
-          id="answerFalse"
-          name="trueFalseAnswer"
-          [checked]="!trueFalseData.correctAnswer"
-          (change)="trueFalseData.correctAnswer = false"
-        >
-        <label class="form-check-label" for="answerFalse">Sai</label>
-        <span class="correct-answer-label ms-2" *ngIf="!trueFalseData.correctAnswer">Đáp án đúng</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Form câu hỏi điền vào chỗ trống -->
-  <div class="fill-blank-options mb-4" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.FILL_IN_THE_BLANK">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold mb-0">Các đáp án đúng</h5>
-      <dx-button
-        hint="Thêm đáp án"
-        [icon]="dxButtonConfig.add_icon"
-        [type]="dxButtonConfig.add_type"
-        (onClick)="addAnswer()"
-        [text]="'Thêm đáp án'"
-        [stylingMode]="'contained'"
-      ></dx-button>
-    </div>
-
-    <div class="answer-list">
-      <div class="answer-item p-3 mb-2 border rounded" *ngFor="let answer of fillInTheBlankData.correctAnswers; let i = index">
-        <div class="d-flex align-items-center">
-          <div class="answer-label me-3">
-            <span class="correct-answer-label">Đáp án đúng {{i + 1}}</span>
+  <div class="card mb-4 border-0 shadow-sm" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.TRUE_FALSE">
+    <div class="card-body">
+      <h6 class="fw-bold mb-3">Đáp án đúng</h6>
+      <div class="true-false-options">
+        <div class="true-false-container">
+          <div class="true-false-option" [ngClass]="{'selected': trueFalseData.correctAnswer === true}" (click)="setTrueFalseAnswer({value: true})">
+            <div class="option-content">
+              <div class="radio-indicator">
+                <div class="indicator-dot" *ngIf="trueFalseData.correctAnswer === true"></div>
+              </div>
+              <span class="option-text">Đúng</span>
+            </div>
+            <div class="option-badge" *ngIf="trueFalseData.correctAnswer === true">
+              <span class="correct-answer-label">Đáp án đúng</span>
+            </div>
           </div>
-          <div class="answer-content flex-grow-1">
-            <dx-text-box
-              [(value)]="fillInTheBlankData.correctAnswers[i]"
-              [placeholder]="'Đáp án ' + (i + 1)"
-              [stylingMode]="'filled'"
-            ></dx-text-box>
-          </div>
-          <div class="answer-actions ms-2">
-            <dx-button
-              [icon]="dxButtonConfig.delete_icon"
-              [type]="dxButtonConfig.delete_type"
-              (onClick)="removeAnswer(i)"
-              [disabled]="fillInTheBlankData.correctAnswers.length <= 1"
-              [stylingMode]="'contained'"
-            ></dx-button>
+
+          <div class="true-false-option" [ngClass]="{'selected': trueFalseData.correctAnswer === false}" (click)="setTrueFalseAnswer({value: false})">
+            <div class="option-content">
+              <div class="radio-indicator">
+                <div class="indicator-dot" *ngIf="trueFalseData.correctAnswer === false"></div>
+              </div>
+              <span class="option-text">Sai</span>
+            </div>
+            <div class="option-badge" *ngIf="trueFalseData.correctAnswer === false">
+              <span class="correct-answer-label">Đáp án đúng</span>
+            </div>
           </div>
         </div>
       </div>
@@ -189,29 +223,31 @@
   </div>
 
   <!-- Giải thích -->
-  <div class="mb-4">
-    <label class="form-label fw-bold">Giải thích</label>
-    <app-custom-ckeditor
-      [(Content)]="editingQuestion.Explanation"
-      [placeholder]="'Nhập giải thích cho câu hỏi'"
-    ></app-custom-ckeditor>
+  <div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+      <label class="form-label">Giải thích</label>
+      <app-custom-ckeditor
+        [(Content)]="editingQuestion.Explanation"
+        [placeholder]="'Nhập giải thích cho câu hỏi'"
+      ></app-custom-ckeditor>
+    </div>
   </div>
 
   <!-- Nút tác vụ -->
   <div class="d-flex justify-content-end mt-4">
     <dx-button
-      text="Hủy"
-      [type]="dxButtonConfig.default_type"
+      [text]="'Hủy'"
+      [type]="'normal'"
+      [stylingMode]="'outlined'"
       (onClick)="cancelQuestion()"
       class="me-2"
-      [stylingMode]="'outlined'"
     ></dx-button>
     <dx-button
-      text="Lưu"
-      [icon]="dxButtonConfig.save_icon"
-      [type]="dxButtonConfig.save_type"
-      (onClick)="saveQuestion()"
+      [text]="'Lưu'"
+      [icon]="'save'"
+      [type]="'default'"
       [stylingMode]="'contained'"
+      (onClick)="saveQuestion()"
     ></dx-button>
   </div>
 </div>

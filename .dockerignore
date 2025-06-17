@@ -1,0 +1,14 @@
+# .dockerignore
+node_modules
+.git
+.gitignore
+.editorconfig
+.angular
+src
+e2e
+karma.conf.js
+tsconfig.json
+tslint.json
+.vscode
+README.md
+ng-e2e/

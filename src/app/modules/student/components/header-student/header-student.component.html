@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg">
+  <a class="navbar-brand" href="#">
+    <i class="fa fa-graduation-cap mr-1"></i> IGCSE-HUB
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <i class="fa fa-bars"></i>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/student/dashboard" routerLinkActive="active">
+          <i class="fa fa-home mr-1"></i> Trang chủ
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/student/test" routerLinkActive="active">
+          <i class="fa fa-file-text mr-1"></i> Đề thi
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/student/results" routerLinkActive="active">
+          <i class="fa fa-chart-bar mr-1"></i> Kết quả
+        </a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown" ngbDropdown>
+        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="userDropdown" ngbDropdownToggle>
+          <i class="fa fa-user-circle mr-1"></i> {{ userFullName }}
+        </a>
+        <div class="dropdown-menu dropdown-user" ngbDropdownMenu aria-labelledby="userDropdown">
+          <a class="dropdown-item" routerLink="/student/profile">
+            <i class="fa fa-fw fa-user"></i> Thông tin cá nhân
+          </a>
+          <a class="dropdown-item" href="javascript:void(0)" (click)="onChangePassword()">
+            <i class="fa fa-fw fa-key"></i> Đổi mật khẩu
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="javascript:void(0)" (click)="onLoggedout()">
+            <i class="fa fa-fw fa-sign-out"></i> Đăng xuất
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>

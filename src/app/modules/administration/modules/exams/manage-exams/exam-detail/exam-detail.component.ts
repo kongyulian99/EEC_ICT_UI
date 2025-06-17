@@ -272,7 +272,7 @@ export class ExamDetailComponent implements OnInit {
             this.loadQuestions();
             // Cập nhật tổng số câu hỏi
             this.exam.Total_Questions = this.questions.length + 1;
-            this.saveExam();
+            // this.saveExam();
           } else {
             this.notificationService.showError(response.ReturnStatus.Message);
           }
@@ -409,9 +409,9 @@ export class ExamDetailComponent implements OnInit {
   }
 
   // Quay lại trang danh sách
-  goBack(): void {
-    this.router.navigate(['/administration/exams/manage']);
-  }
+  // goBack(): void {
+  //   this.router.navigate(['/administration/exams/manage']);
+  // }
 
   // Lấy tên loại câu hỏi
   getQuestionTypeName(type: number): string {

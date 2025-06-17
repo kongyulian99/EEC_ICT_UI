@@ -1,0 +1,180 @@
+.cellAction-container {
+  .cursor-pointer {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f8f9fa;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .dx-datagrid {
+    .dx-datagrid-header-panel {
+      padding: 10px;
+      background-color: #f8f9fa;
+    }
+
+    .dx-datagrid-headers {
+      background-color: #f8f9fa;
+      border-bottom: 2px solid #dee2e6;
+    }
+
+    .dx-row {
+      &.dx-data-row {
+        &:hover {
+          background-color: #f8f9fa;
+        }
+      }
+
+      &.dx-row-alt {
+        background-color: #f8f9fa;
+      }
+    }
+
+    .dx-datagrid-pager {
+      padding: 10px;
+      background-color: #f8f9fa;
+    }
+  }
+}
+
+// Style cho thanh tìm kiếm và lọc
+.search-box {
+  position: relative;
+
+  i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+  }
+
+  input {
+    padding-left: 35px;
+    border-radius: 20px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      border-color: #80bdff;
+    }
+  }
+}
+
+.filter-box, .sort-box {
+  select {
+    border-radius: 20px;
+    border: 1px solid #dee2e6;
+    padding: 8px 15px;
+    transition: all 0.3s ease;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      border-color: #80bdff;
+    }
+  }
+}
+
+// Style cho card đề thi
+.exam-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  .badge {
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .card-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .exam-info {
+    .info-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      color: #6c757d;
+      font-size: 0.9rem;
+
+      i {
+        width: 20px;
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .card-footer {
+    padding: 1rem 1.5rem;
+
+    .btn {
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+
+// Style cho phân trang
+.pagination {
+  .page-item {
+    margin: 0 2px;
+
+    .page-link {
+      border-radius: 20px;
+      padding: 8px 16px;
+      color: #2c3e50;
+      border: 1px solid #dee2e6;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+      }
+    }
+
+    &.active .page-link {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    &.disabled .page-link {
+      color: #6c757d;
+      pointer-events: none;
+      background-color: #fff;
+      border-color: #dee2e6;
+    }
+  }
+}

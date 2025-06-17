@@ -1,0 +1,406 @@
+// Màn hình thông tin đề thi
+.exam-info-screen {
+  // max-width: 600px;
+  margin: 0 auto;
+  // padding: 2rem;
+  text-align: center;
+
+  .exam-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .exam-description {
+    color: #666;
+    margin-bottom: 2rem;
+  }
+
+  .exam-details {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+
+    .detail-item {
+      text-align: center;
+
+      .label {
+        font-size: 0.875rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+      }
+
+      .value {
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .start-button {
+    padding: 0.75rem 2rem;
+    font-size: 1.125rem;
+    border-radius: 0.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+
+  .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+}
+
+// Màn hình làm bài
+.exam-taking-screen {
+  .exam-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 2rem;
+
+    .timer {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #dc3545;
+    }
+  }
+
+  .question-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+
+    .question-header {
+      margin-bottom: 1.5rem;
+
+      .question-number {
+        font-size: 0.875rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+      }
+
+      .question-type {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background-color: #e9ecef;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        color: #495057;
+        margin-bottom: 1rem;
+      }
+
+      .question-content {
+        font-size: 1.125rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+
+  .card {
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .exam-timer {
+    font-weight: bold;
+    color: #dc3545;
+  }
+
+  .question-content {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  // Kiểu dáng cho câu hỏi điền vào chỗ trống
+  .fill-blank-question {
+    line-height: 2;
+    position: relative;
+
+    .fill-blank-input {
+      display: inline-block;
+      width: 180px;
+      margin: 0 8px;
+      vertical-align: middle;
+      position: relative;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid #007bff;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      &:hover::before {
+        opacity: 1;
+      }
+
+      // Kiểu dáng khi đã có đáp án
+      &.has-answer {
+        ::ng-deep .dx-texteditor {
+          border-color: #28a745;
+          background-color: rgba(40, 167, 69, 0.05);
+
+          &.dx-state-focused {
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+          }
+
+          &.dx-state-hover {
+            border-color: #218838;
+            background-color: rgba(40, 167, 69, 0.1);
+          }
+        }
+
+        ::ng-deep .dx-texteditor-input {
+          color: #28a745;
+        }
+
+        ::ng-deep .dx-label {
+          color: #28a745;
+        }
+
+        &::before {
+          border-top-color: #28a745;
+        }
+      }
+
+      ::ng-deep .dx-texteditor {
+        display: inline-block;
+        border: 2px solid #007bff;
+        border-radius: 6px;
+        background-color: rgba(0, 123, 255, 0.05);
+        padding: 2px 5px;
+        box-shadow: 0 2px 4px rgba(0, 123, 255, 0.15);
+        transition: all 0.3s ease;
+
+        &.dx-state-focused {
+          border-color: #0056b3;
+          background-color: #fff;
+          box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+          transform: translateY(-2px);
+        }
+
+        &.dx-state-hover {
+          border-color: #0069d9;
+          background-color: rgba(0, 123, 255, 0.1);
+        }
+      }
+
+      ::ng-deep .dx-placeholder {
+        color: #6c757d;
+        font-style: italic;
+        font-weight: normal;
+      }
+
+      ::ng-deep .dx-texteditor-input {
+        text-align: left;
+        font-weight: bold;
+        color: #0056b3;
+        padding: 5px 8px;
+        font-size: 1rem;
+      }
+
+      ::ng-deep .dx-label {
+        color: #007bff;
+        font-weight: 500;
+        font-size: 0.85rem;
+      }
+    }
+
+    // Kiểu dáng cho các đoạn văn bản
+    span {
+      vertical-align: middle;
+    }
+  }
+
+  // Kiểu dáng cho câu hỏi trắc nghiệm
+  .option-list {
+    .option-item {
+      transition: all 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+        transform: translateX(5px);
+      }
+
+      &.selected {
+        background-color: rgba(0, 123, 255, 0.1);
+        border-color: #007bff;
+        box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+      }
+
+      .radio-indicator {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #007bff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .indicator-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #007bff;
+        }
+      }
+
+      .option-label {
+        cursor: pointer;
+      }
+    }
+  }
+
+  // Kiểu dáng cho câu hỏi đúng/sai
+  .true-false-options {
+    display: flex;
+    gap: 20px;
+
+    .true-false-option {
+      flex: 1;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #dee2e6;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+      }
+
+      &.selected {
+        background-color: rgba(0, 123, 255, 0.1);
+        border-color: #007bff;
+        box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+      }
+
+      .option-content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .radio-indicator {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border: 2px solid #007bff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #007bff;
+          }
+        }
+
+        .option-text {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  // Thanh điều hướng câu hỏi
+  .question-navigation {
+    margin-bottom: 20px;
+
+    .question-number {
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: bold;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .status-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Nút điều hướng
+.navigation-buttons {
+  button {
+    transition: transform 0.2s;
+
+    &:hover:not(:disabled) {
+      transform: translateX(3px);
+    }
+
+    &:first-child:hover:not(:disabled) {
+      transform: translateX(-3px);
+    }
+  }
+}
+
+// Kiểu dáng chung
+.cursor-pointer {
+  cursor: pointer;
+}
+
+// Các phần tử trong trang thông tin
+.exam-timer {
+  font-weight: 600;
+  color: #dc3545;
+
+  i {
+    margin-right: 5px;
+  }
+}
+
+.question-number {
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.status-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .true-false-options {
+    flex-direction: column;
+  }
+}

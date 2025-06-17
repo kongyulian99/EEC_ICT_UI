@@ -1,7 +1,7 @@
-<app-generic-page [pageTitle]="isNewExam ? 'Thêm mới đề thi' : 'Chi tiết đề thi'">
+<app-generic-page [pageTitle]="isNewExam ? 'Thêm mới đề thi' : 'Chi tiết đề thi'" [loading]="isLoading" [haveBackButton]="true">
   <ng-container buttons>
-    <dx-button text="Lưu" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type" (onClick)="saveExam()"></dx-button>
-    <dx-button text="Quay lại" icon="arrowleft" (onClick)="goBack()"></dx-button>
+    <dx-button text="Lưu" [icon]="'save'" [type]="'default'" (onClick)="saveExam()"></dx-button>
+    <!-- <dx-button text="Quay lại" icon="arrowleft" (onClick)="goBack()"></dx-button> -->
   </ng-container>
   <ng-container body>
     <div class="container-fluid">
@@ -61,7 +61,12 @@
       <div class="card" *ngIf="!isNewExam">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Danh sách câu hỏi</h5>
-          <dx-button text="Thêm câu hỏi" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (onClick)="addQuestion()"></dx-button>
+          <dx-button
+            text="Thêm câu hỏi"
+            [icon]="'plus'"
+            [type]="'default'"
+            (onClick)="addQuestion()">
+          </dx-button>
         </div>
         <div class="card-body">
           <dx-data-grid
@@ -73,7 +78,6 @@
             [showRowLines]="true"
             [rowAlternationEnabled]="true"
             [hoverStateEnabled]="true"
-            [height]="'calc(100vh - 500px)'"
           >
             <!-- Cấu hình phân trang -->
             <dxo-paging [pageSize]="10"></dxo-paging>
@@ -97,7 +101,7 @@
 
             <!-- Cấu hình cột -->
             <dxi-column dataField="Id" caption="ID" [width]="70" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Content" caption="Nội dung câu hỏi" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column cellTemplate="cellContent" caption="Nội dung câu hỏi" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
             <dxi-column dataField="Topic_Id" caption="Chủ đề" [width]="150" [allowFiltering]="true" [allowSorting]="true">
               <dxo-lookup
                 [dataSource]="topics"
@@ -126,10 +130,17 @@
             <dxi-column dataField="Created_At" caption="Ngày tạo" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
 
             <!-- Cột thao tác -->
-            <dxi-column type="buttons" [width]="100" caption="Thao tác">
-              <dxi-button name="edit" icon="edit" (onClick)="editQuestion.bind(this)"></dxi-button>
-              <dxi-button name="delete" icon="trash" [onClick]="deleteQuestion.bind(this)"></dxi-button>
+            <dxi-column cellTemplate="cellAction" [width]="100" caption="Thao tác" [showInColumnChooser]="false">
             </dxi-column>
+
+            <div *dxTemplate="let row of 'cellContent'" class="cellContent-container p-2">
+              <app-view-ckeditor [data]="row.data.Content"></app-view-ckeditor>
+            </div>
+
+            <div *dxTemplate="let row of 'cellAction'" class="cellAction-container d-flex justify-content-around align-items-center p-2">
+              <a class="dx-icon-edit cursor-pointer" name="edit" icon="edit" (click)="editQuestion(row.data)" hint="Chỉnh sửa"></a>
+              <a class="dx-icon-trash cursor-pointer" name="delete" icon="trash" (click)="deleteQuestion(row.data)" hint="Xóa"></a>
+            </div>
 
             <!-- Cấu hình loading -->
             <dxo-load-panel [enabled]="true"></dxo-load-panel>
@@ -142,18 +153,16 @@
 
 <!-- Popup thêm/sửa câu hỏi -->
 <dx-popup
-  [width]="800"
-  [height]="600"
   [showTitle]="true"
   [title]="questionPopupTitle"
   [(visible)]="questionPopupVisible"
-  [dragEnabled]="false"
+  [dragEnabled]="true"
   [closeOnOutsideClick]="false"
   [showCloseButton]="true"
   [resizeEnabled]="true"
 >
   <div *dxTemplate="let data of 'content'">
-    <dx-scroll-view [height]="500" [width]="'100%'">
+    <dx-scroll-view [width]="'100%'">
       <app-question-detail
         [editingQuestion]="editingQuestion"
         [topics]="topics"

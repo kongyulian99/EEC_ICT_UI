@@ -1,0 +1,226 @@
+<!-- Màn hình thông tin đề thi -->
+<div class="exam-info-screen" *ngIf="!isStarted">
+  <app-generic-page [pageTitle]="'Thông tin đề thi'" [loading]="isLoading" [haveBackButton]="true">
+    <ng-container body>
+      <div class="container">
+        <div class="card">
+          <div class="card-body text-center">
+            <h3 class="mb-4">{{exam.Title}}</h3>
+            <div class="exam-details mb-4">
+              <p><strong>Thời gian làm bài:</strong> {{exam.Duration_Minutes}} phút</p>
+              <p><strong>Số câu hỏi:</strong> {{questions.length}}</p>
+              <p class="text-muted">{{exam.Description}}</p>
+            </div>
+            <dx-button
+              text="Bắt đầu làm bài"
+              [type]="'success'"
+              [icon]="'play'"
+              (onClick)="startExam()"
+            ></dx-button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </app-generic-page>
+</div>
+
+<!-- Màn hình làm bài -->
+<div class="exam-taking-screen" *ngIf="isStarted">
+  <app-generic-page [pageTitle]="'Làm bài kiểm tra'" [loading]="isLoading" [haveBackButton]="true">
+    <ng-container buttons>
+      <dx-button text="Nộp bài" [icon]="'check'" [type]="'success'" (onClick)="submitExam()"></dx-button>
+    </ng-container>
+    <ng-container body>
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Phần làm bài -->
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                  <span class="badge bg-primary me-2">Câu {{currentQuestionIndex + 1}}/{{questions.length}}</span>
+                  <span class="badge bg-secondary">{{getQuestionTypeLabel(currentQuestion.Question_Type)}}</span>
+                </h5>
+                <div class="exam-timer">
+                  <i class="fas fa-clock me-2"></i>
+                  <span>{{formatTime(remainingTime)}}</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <!-- Nội dung câu hỏi -->
+                <div class="question-content mb-4 p-3 border rounded bg-light">
+                  <!-- Nội dung câu hỏi thông thường -->
+                  <div *ngIf="currentQuestion.Question_Type !== questionTypes.FILL_IN_THE_BLANK">
+                    <app-view-ckeditor [data]="currentQuestion.Content"></app-view-ckeditor>
+                  </div>
+
+                  <!-- Nội dung câu hỏi điền vào chỗ trống với input inline -->
+                  <div *ngIf="currentQuestion.Question_Type === questionTypes.FILL_IN_THE_BLANK" class="fill-blank-question">
+                    <ng-container *ngFor="let segment of getFillInBlankSegments(currentQuestion); let i = index">
+                      <!-- Hiển thị đoạn văn bản với innerHTML để giữ định dạng HTML -->
+                      <span [innerHTML]="sanitizeHtml(segment)"></span>
+
+                      <!-- Hiển thị ô nhập liệu sau mỗi đoạn (trừ đoạn cuối) -->
+                      <ng-container *ngIf="i < getFillInBlankAnswers(currentQuestion).length">
+                        <dx-text-box
+                          class="fill-blank-input"
+                          [ngClass]="{
+                            'has-answer': hasAnswered(currentQuestion.Id, i)
+                          }"
+                          [value]="userAnswers[currentQuestion.Id][i] || ''"
+                          placeholder="Nhập đáp án..."
+                          (onValueChanged)="updateBlankAnswer(currentQuestion.Id, i, $event.value)"
+                          [stylingMode]="'filled'"
+                          [showClearButton]="true"
+                        ></dx-text-box>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </div>
+
+                <!-- Phần trả lời -->
+                <div class="question-answer mt-4" *ngIf="currentQuestion.Question_Type !== questionTypes.FILL_IN_THE_BLANK">
+                  <h6 class="mb-3 text-primary">Chọn đáp án:</h6>
+
+                  <!-- Câu hỏi trắc nghiệm -->
+                  <div *ngIf="currentQuestion.Question_Type === questionTypes.MULTIPLE_CHOICE">
+                    <div class="option-list">
+                      <div
+                        class="option-item p-3 mb-3 border rounded"
+                        *ngFor="let option of getMultipleChoiceOptions(currentQuestion); let j = index"
+                        [ngClass]="{'selected': userAnswers[currentQuestion.Id] === j}"
+                        (click)="setMultipleChoiceAnswer(currentQuestion.Id, j)"
+                      >
+                        <div class="d-flex align-items-center">
+                          <div class="radio-indicator me-3">
+                            <div class="indicator-dot" *ngIf="userAnswers[currentQuestion.Id] === j"></div>
+                          </div>
+                          <label class="mb-0 option-label w-100 cursor-pointer">
+                            <span class="option-prefix fw-bold">{{getOptionLabel(j)}}.</span> {{option}}
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Câu hỏi đúng/sai -->
+                  <div *ngIf="currentQuestion.Question_Type === questionTypes.TRUE_FALSE">
+                    <div class="true-false-options">
+                      <div class="true-false-option" [ngClass]="{'selected': userAnswers[currentQuestion.Id] === true}" (click)="setTrueFalseAnswer(currentQuestion.Id, true)">
+                        <div class="option-content">
+                          <div class="radio-indicator">
+                            <div class="indicator-dot" *ngIf="userAnswers[currentQuestion.Id] === true"></div>
+                          </div>
+                          <span class="option-text">Đúng</span>
+                        </div>
+                      </div>
+
+                      <div class="true-false-option" [ngClass]="{'selected': userAnswers[currentQuestion.Id] === false}" (click)="setTrueFalseAnswer(currentQuestion.Id, false)">
+                        <div class="option-content">
+                          <div class="radio-indicator">
+                            <div class="indicator-dot" *ngIf="userAnswers[currentQuestion.Id] === false"></div>
+                          </div>
+                          <span class="option-text">Sai</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Nút điều hướng -->
+                <div class="navigation-buttons mt-4 d-flex justify-content-between">
+                  <dx-button
+                    text="Câu trước"
+                    [icon]="'chevronleft'"
+                    [type]="'default'"
+                    [disabled]="currentQuestionIndex === 0"
+                    (onClick)="previousQuestion()"
+                  ></dx-button>
+                  <dx-button
+                    text="Câu tiếp theo"
+                    [icon]="'chevronright'"
+                    [type]="'default'"
+                    [disabled]="currentQuestionIndex === questions.length - 1"
+                    (onClick)="nextQuestion()"
+                  ></dx-button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thanh điều hướng -->
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">Danh sách câu hỏi</h5>
+              </div>
+              <div class="card-body">
+                <div class="question-navigation">
+                  <div class="row g-2">
+                    <div class="col-3" *ngFor="let question of questions; let i = index">
+                      <div
+                        class="question-number p-2 text-center rounded cursor-pointer"
+                        [ngClass]="{
+                          'bg-primary text-white': currentQuestionIndex === i,
+                          'bg-success text-white': isQuestionAnswered(question.Id),
+                          'bg-light': !isQuestionAnswered(question.Id) && currentQuestionIndex !== i
+                        }"
+                        (click)="goToQuestion(i)"
+                      >
+                        {{i + 1}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <div class="d-flex align-items-center mb-2">
+                    <div class="status-dot bg-primary me-2"></div>
+                    <span>Câu hiện tại</span>
+                  </div>
+                  <div class="d-flex align-items-center mb-2">
+                    <div class="status-dot bg-success me-2"></div>
+                    <span>Đã trả lời</span>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <div class="status-dot bg-light me-2"></div>
+                    <span>Chưa trả lời</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </app-generic-page>
+</div>
+
+<!-- Popup xác nhận nộp bài -->
+<dx-popup
+  [showTitle]="true"
+  title="Xác nhận nộp bài"
+  [(visible)]="submitPopupVisible"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [showCloseButton]="true"
+>
+  <div *dxTemplate="let data of 'content'">
+    <div class="p-3">
+      <p>Bạn có chắc chắn muốn nộp bài kiểm tra này?</p>
+      <div class="d-flex justify-content-end mt-3">
+        <dx-button
+          text="Hủy"
+          [type]="'normal'"
+          [stylingMode]="'outlined'"
+          (onClick)="submitPopupVisible = false"
+          class="me-2"
+        ></dx-button>
+        <dx-button
+          text="Xác nhận nộp bài"
+          [type]="'success'"
+          (onClick)="confirmSubmit()"
+        ></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
