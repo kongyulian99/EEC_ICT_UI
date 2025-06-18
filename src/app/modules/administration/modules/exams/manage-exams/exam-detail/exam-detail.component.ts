@@ -1,25 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared';
-import { ExamInfo, ExamsService } from 'src/app/shared/services/exam.service';
-import { QuestionInfo, QuestionService } from 'src/app/shared/services/question.service';
+import { ExamsService } from 'src/app/shared/services/exam.service';
+import { QuestionService } from 'src/app/shared/services/question.service';
 import { TopicInfo, TopicsService } from 'src/app/shared/services/topics.service';
 import { confirm } from 'devextreme/ui/dialog';
 import { dxButtonConfig } from 'src/app/shared/config';
 import { QuestionType } from 'src/app/shared/enums/enum';
-
-interface MultipleChoiceData {
-  options: string[];
-  correctOption: number;
-}
-
-interface TrueFalseData {
-  correctAnswer: boolean;
-}
-
-interface FillInTheBlankData {
-  correctAnswers: string[];
-}
+import { FillInTheBlankData, MultipleChoiceData, QuestionInfo, TrueFalseData } from 'src/app/shared/interfaces/question.interface';
+import { ExamInfo } from 'src/app/shared/interfaces/exam.interface';
 
 @Component({
   selector: 'app-exam-detail',

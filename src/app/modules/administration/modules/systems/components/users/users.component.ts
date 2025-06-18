@@ -55,16 +55,19 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this.getInitial();
   }
+
   loadData() {
     this.loading = true;
-    this.userService.processCommand('USER_LIST', { Keyword: this.textSearch, MaDonVi: this.maDonVi }).subscribe({
+    this.userService.getAllUsers().subscribe({
       next: (response: any) => {
-        if (response.ReturnStatus.Code == 1) {
-          if (response.ReturnData.length > 0) {
+        console.log('API Response:', response);
+        if (response.ReturnStatus && response.ReturnStatus.Code == 1) {
+          if (response.ReturnData && response.ReturnData.length > 0) {
             this.allData = response.ReturnData;
             this.paging();
-            this.focusKey = this.listData[0].ID;
+            this.focusKey = this.listData[0].Id;
           } else {
+            this.allData = [];
             this.listData = [];
             this.focusKey = 0;
             this.currentEntity = {};
@@ -75,20 +78,26 @@ export class UsersComponent implements OnInit {
             }, 10);
             this.state = 'detail';
           }
-          this.totalRows = response.ReturnData.length;
+          this.totalRows = response.ReturnData ? response.ReturnData.length : 0;
         } else {
           this.notificationService.showError('Dữ liệu tải lỗi!');
           this.totalRows = 0;
+          this.allData = [];
+          this.listData = [];
         }
         this.loading = false;
       },
-      error: _ => {
+      error: (err) => {
+        console.error('API Error:', err);
         this.notificationService.showError('Hệ thống xảy ra lỗi!');
         this.totalRows = 0;
+        this.allData = [];
+        this.listData = [];
         this.loading = false;
       }
     });
   }
+
   getInitial() {
     const paramsFromRouter = this.route.snapshot.queryParamMap;
     let queryParams: any = {};
@@ -101,6 +110,7 @@ export class UsersComponent implements OnInit {
       this.loadData();
     });
   }
+
   getParams() {
     const queryParams = this.route.snapshot.queryParamMap;
     const queryPageSize = queryParams.get('pageSize');
@@ -115,98 +125,112 @@ export class UsersComponent implements OnInit {
     this.textSearch = queryText && queryText.length > 0 ? queryText : '';
     this.maDonVi = queryMaDonVi && queryMaDonVi.length > 0 ? queryMaDonVi : '';
   }
+
   // pagination
   paging() {
     const fromIndex = this.pageSize * (this.pageIndex - 1);
     const toIndex = fromIndex + this.pageSize;
     this.listData = this.allData.slice(fromIndex, toIndex);
+    console.log('Dữ liệu hiển thị:', this.listData);
   }
+
+  onFocusedRowChanged(e: any) {
+    console.log('Focused row changed:', e);
+    if (e && e.row && e.row.data) {
+      this.currentEntity = clone(e.row.data);
+      this.state = 'detail';
+    } else {
+      this.currentEntity = {};
+    }
+  }
+
   pageChanged(event: any) {
     if (this.totalRows > 0) {
       this.router.navigate(['./administration/systems/users'], { queryParams: { pageIndex: event.page }, queryParamsHandling: 'merge' })
         .then(() => this.paging());
     }
   }
+
   pageSizeChanged(event: any) {
     if (this.totalRows > 0) {
       this.router.navigate(['./administration/systems/users'], { queryParams: { pageSize: event.pageSize, pageIndex: 1 }, queryParamsHandling: 'merge' })
         .then(() => this.paging());
     }
   }
+
   onFilter() {
     this.router.navigate(['./administration/systems/users'], { queryParams: { textSearch: this.textSearch, maDonVi: this.maDonVi, pageIndex: 1 }, queryParamsHandling: 'merge' })
       .then(() => this.loadData());
   }
+
   add() {
     this.detail.entity = {};
     this.state = 'insert';
     this.detail.validationEntity.instance.reset();
   }
+
   edit() {
     this.state = 'edit';
   }
+
   cancel() {
     this.detail.entity = clone(this.currentEntity);
     this.state = 'detail';
   }
+
   save() {
     const check = this.detail.validationEntity.instance.validate();
     if (!check.isValid || this.detail.existName) {
       this.notificationService.showError('Thông tin nhập không hợp lệ!');
       return;
     }
-    const body = clone({
-      ...this.detail.entity,
-      DonViQuanLyTrucTiep: this.detail.entity.DonViQuanLyTrucTiep.join(',')
-    });
 
+    const body = clone(this.detail.entity);
 
     if (this.state == 'insert') {
-      let salt = this.makeSalt(8);
-      body.cSalt = salt;
-      body.cStatus = 1;
-      this.userService.processCommand('USER_ADD', body)
+      this.userService.createUser(body)
         .subscribe(
           (res: any) => {
-            if (res.ReturnStatus.Code === 0) {
-              this.detail.entity.ID = res.ReturnData;
+            if (res.ReturnStatus.Code === 1) {
+              this.detail.entity.Id = res.ReturnData;
               this.listData.unshift(this.detail.entity);
               this.allData.unshift(this.detail.entity);
-              this.focusKey = res.ReturnData.Data;
+              this.focusKey = res.ReturnData;
               this.state = 'edit';
               this.totalRows++;
+              this.notificationService.showSuccess('Thêm mới thành công!');
             } else {
               this.notificationService.showError('Không thành công!');
             }
           }
-        )
-
+        );
     } else {
-      this.userService.processCommand('USER_UPDATE', body)
+      this.userService.updateUser(body)
         .subscribe(
           (res: any) => {
-            if (res.ReturnStatus.Code === 0) {
+            if (res.ReturnStatus.Code === 1) {
               this.notificationService.showSuccess('Cập nhật thành công!');
-              const index1 = this.listData.findIndex(o => o.ID == body.ID)
+              const index1 = this.listData.findIndex(o => o.Id == body.Id);
               this.listData[index1] = this.detail.entity;
-              const index2 = this.allData.findIndex(o => o.ID == body.ID)
+              const index2 = this.allData.findIndex(o => o.Id == body.Id);
               this.allData[index2] = this.detail.entity;
               this.state = 'detail';
             } else {
               this.notificationService.showError('Không thành công!');
             }
           }
-        )
+        );
     }
   }
-  delete(id: number, name: string) {
-    this.notificationService.showConfirmation("Bạn có chắc chắn muốn xóa user '" + name + "'?", () => {
-      this.userService.processCommand('USER_DELETE', { ID: id }).subscribe({
+
+  delete(id: number, username: string) {
+    this.notificationService.showConfirmation("Bạn có chắc chắn muốn xóa user '" + username + "'?", () => {
+      this.userService.deleteUser(id).subscribe({
         next: (response: any) => {
-          if (response.ReturnStatus.Code == 0) {
-            this.listData = this.listData.filter(o => o.ID != id);
-            this.allData = this.allData.filter(o => o.ID != id);
-            this.notificationService.showSuccess("Đã xóa thành công user '" + name + "'!");
+          if (response.ReturnStatus.Code == 1) {
+            this.listData = this.listData.filter(o => o.Id != id);
+            this.allData = this.allData.filter(o => o.Id != id);
+            this.notificationService.showSuccess("Đã xóa thành công user '" + username + "'!");
           } else {
             this.notificationService.showError('Không thành công!');
           }
@@ -214,44 +238,26 @@ export class UsersComponent implements OnInit {
         error: _ => {
           this.notificationService.showError('Lỗi hệ thống!')
         }
-      })
-    })
+      });
+    });
   }
 
   toggleDetail() {
     this.isShowDetail = !this.isShowDetail;
   }
-  onFocusedRowChanged(e: any) {
-    this.currentEntity = this.listData.length > 0 ? clone(this.listData.filter(x => x.ID == e)[0]) : {};
-    this.state = 'detail'
-  }
 
-
-
-
-  makeSalt(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
-  }
-
-
-  resetPassword (username) {
-    this.notificationService.showConfirmation('Chắc chắn thay đổi mật khẩu người dùng ' + username + ' về mật khẩu mặc định Abc123?', () => {
-      this.userService.processCommand('USER_RESET_PASSWORD', { cUserName: username })
+  resetPassword(userId: number) {
+    this.notificationService.showConfirmation('Chắc chắn thay đổi mật khẩu người dùng về mật khẩu mặc định?', () => {
+      this.userService.updatePassword(userId, 'Abc123')
         .subscribe(
           (res: any) => {
-            if (res.ReturnStatus.Code === 0) {
-              this.notificationService.showSuccess('Thay đổi mật khẩu thành công về mật khẩu Abc123 thành công');
+            if (res.ReturnStatus.Code === 1) {
+              this.notificationService.showSuccess('Đặt lại mật khẩu thành công!');
+            } else {
+              this.notificationService.showError('Không thành công!');
             }
           }
-        )
-    })
+        );
+    });
   }
 }

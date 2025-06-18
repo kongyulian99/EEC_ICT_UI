@@ -119,156 +119,65 @@
   }
 
   .exam-timer {
+    font-size: 1.2rem;
     font-weight: bold;
-    color: #dc3545;
+    color: #007bff;
   }
 
   .question-content {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
   }
 
   // Kiểu dáng cho câu hỏi điền vào chỗ trống
   .fill-blank-question {
-    line-height: 2;
-    position: relative;
+    line-height: 2.5;
+  }
 
-    .fill-blank-input {
-      display: inline-block;
-      width: 180px;
-      margin: 0 8px;
-      vertical-align: middle;
-      position: relative;
+  .fill-blank-input {
+    display: inline-block;
+    width: 150px;
+    margin: 0 5px;
+    vertical-align: middle;
+  }
 
-      &::before {
-        content: "";
-        position: absolute;
-        top: -5px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 6px solid #007bff;
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-
-      &:hover::before {
-        opacity: 1;
-      }
-
-      // Kiểu dáng khi đã có đáp án
-      &.has-answer {
-        ::ng-deep .dx-texteditor {
-          border-color: #28a745;
-          background-color: rgba(40, 167, 69, 0.05);
-
-          &.dx-state-focused {
-            border-color: #28a745;
-            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
-          }
-
-          &.dx-state-hover {
-            border-color: #218838;
-            background-color: rgba(40, 167, 69, 0.1);
-          }
-        }
-
-        ::ng-deep .dx-texteditor-input {
-          color: #28a745;
-        }
-
-        ::ng-deep .dx-label {
-          color: #28a745;
-        }
-
-        &::before {
-          border-top-color: #28a745;
-        }
-      }
-
-      ::ng-deep .dx-texteditor {
-        display: inline-block;
-        border: 2px solid #007bff;
-        border-radius: 6px;
-        background-color: rgba(0, 123, 255, 0.05);
-        padding: 2px 5px;
-        box-shadow: 0 2px 4px rgba(0, 123, 255, 0.15);
-        transition: all 0.3s ease;
-
-        &.dx-state-focused {
-          border-color: #0056b3;
-          background-color: #fff;
-          box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-          transform: translateY(-2px);
-        }
-
-        &.dx-state-hover {
-          border-color: #0069d9;
-          background-color: rgba(0, 123, 255, 0.1);
-        }
-      }
-
-      ::ng-deep .dx-placeholder {
-        color: #6c757d;
-        font-style: italic;
-        font-weight: normal;
-      }
-
-      ::ng-deep .dx-texteditor-input {
-        text-align: left;
-        font-weight: bold;
-        color: #0056b3;
-        padding: 5px 8px;
-        font-size: 1rem;
-      }
-
-      ::ng-deep .dx-label {
-        color: #007bff;
-        font-weight: 500;
-        font-size: 0.85rem;
-      }
-    }
-
-    // Kiểu dáng cho các đoạn văn bản
-    span {
-      vertical-align: middle;
-    }
+  .fill-blank-input.has-answer {
+    border-color: #28a745;
   }
 
   // Kiểu dáng cho câu hỏi trắc nghiệm
   .option-list {
     .option-item {
-      transition: all 0.2s;
       cursor: pointer;
+      transition: all 0.2s;
 
       &:hover {
-        background-color: rgba(0, 123, 255, 0.05);
-        transform: translateX(5px);
+        background-color: #f0f0f0;
       }
 
       &.selected {
-        background-color: rgba(0, 123, 255, 0.1);
-        border-color: #007bff;
-        box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+        background-color: #e3f2fd;
+        border-color: #007bff !important;
       }
 
       .radio-indicator {
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        border: 2px solid #007bff;
+        border: 2px solid #adb5bd;
         display: flex;
         align-items: center;
         justify-content: center;
+      }
 
-        .indicator-dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background-color: #007bff;
-        }
+      .option-item.selected .radio-indicator {
+        border-color: #007bff;
+      }
+
+      .indicator-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #007bff;
       }
 
       .option-label {
@@ -281,51 +190,33 @@
   .true-false-options {
     display: flex;
     gap: 20px;
+  }
 
-    .true-false-option {
-      flex: 1;
-      padding: 15px;
-      border-radius: 5px;
-      border: 1px solid #dee2e6;
-      cursor: pointer;
-      transition: all 0.2s;
+  .true-false-option {
+    flex: 1;
+    padding: 15px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
 
-      &:hover {
-        background-color: rgba(0, 123, 255, 0.05);
-      }
+    &:hover {
+      background-color: #f0f0f0;
+    }
 
-      &.selected {
-        background-color: rgba(0, 123, 255, 0.1);
-        border-color: #007bff;
-        box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
-      }
+    &.selected {
+      background-color: #e3f2fd;
+      border-color: #007bff;
+    }
 
-      .option-content {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    .option-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
-        .radio-indicator {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          border: 2px solid #007bff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          .indicator-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #007bff;
-          }
-        }
-
-        .option-text {
-          font-weight: 500;
-        }
-      }
+    .option-text {
+      font-weight: 500;
     }
   }
 
@@ -336,11 +227,10 @@
     .question-number {
       cursor: pointer;
       transition: all 0.2s;
-      font-weight: bold;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border: 1px solid #dee2e6;
 
       &:hover {
-        transform: scale(1.1);
+        background-color: #e9ecef !important;
       }
     }
   }
@@ -349,7 +239,6 @@
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    border: 1px solid rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -403,4 +292,81 @@
   .true-false-options {
     flex-direction: column;
   }
+}
+
+/* Styles cho kết quả bài thi */
+.score-display {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.score-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 8px solid;
+
+  &.passed {
+    border-color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+  }
+
+  &.failed {
+    border-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+  }
+}
+
+.score-value {
+  font-size: 3rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+.result-status {
+  font-size: 1.5rem;
+  font-weight: bold;
+
+  i {
+    margin-right: 8px;
+  }
+}
+
+/* Animation cho loading */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner-border {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: text-bottom;
+  border: 0.25em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin .75s linear infinite;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

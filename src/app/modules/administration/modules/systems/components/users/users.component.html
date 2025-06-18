@@ -2,7 +2,6 @@
   <ng-container main-filters>
     <dx-text-box style="width: 700px;" mode="search" [showClearButton]="false" [placeholder]="placeholderSearch"
       [(value)]="textSearch" (onEnterKey)="onFilter()">
-      <!-- <dxi-button name="filter" location="after" [options]="optionsBtnFilter"></dxi-button> -->
     </dx-text-box>
   </ng-container>
 
@@ -19,17 +18,25 @@
     <div class="view-card-body">
       <div class="card-content">
         <div class="content">
-          <dx-data-grid id="gridContainer" [keyExpr]="'ID'" [dataSource]="listData" [showBorders]="true"
-            [showColumnLines]="true" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow" [hoverStateEnabled]="true"
-            [focusedRowEnabled]="true" [focusedRowKey]="focusKey" [paging]="{ enabled: false }"
-            noDataText="Không có dữ liệu" [wordWrapEnabled]="true" (focusedRowKeyChange)="onFocusedRowChanged($event)">
+          <dx-data-grid
+            [dataSource]="listData"
+            [showBorders]="true"
+            [showColumnLines]="true"
+            [hoverStateEnabled]="true"
+            [focusedRowEnabled]="true"
+            [focusedRowKey]="focusKey"
+            [paging]="{ enabled: false }"
+            noDataText="Không có dữ liệu"
+            [wordWrapEnabled]="true"
+            (onFocusedRowChanged)="onFocusedRowChanged($event)">
+
             <dxo-scrolling mode="standard" rowRenderingMode="standard"></dxo-scrolling>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
 
             <dxi-column cellTemplate="cellIndex" caption="TT" [width]="50" alignment="center"
               cssClass="vertical-middle"> </dxi-column>
-            <dxi-column dataField="cUserName" caption="Tài khoản đăng nhập" cssClass="vertical-middle"></dxi-column>
-            <dxi-column dataField="cUserFullName" caption="Tên người dùng" cssClass="vertical-middle"></dxi-column>
+            <dxi-column dataField="Username" caption="Tài khoản đăng nhập" cssClass="vertical-middle"></dxi-column>
+            <dxi-column dataField="Full_Name" caption="Tên người dùng" cssClass="vertical-middle"></dxi-column>
             <dxi-column cellTemplate="cellAction" [width]="60" alignment="center" [showInColumnChooser]="false"
               cssClass="vertical-middle"></dxi-column>
 
@@ -39,10 +46,9 @@
             <div appPermission appRole="USER_MANAGEMENT" permissionCode="DELETE" class="rowAction"
               *dxTemplate="let row of 'cellAction'">
               <div class="d-flex flex-row">
-                <span class="dx-icon-refresh mr-1 text-primary" (click)="resetPassword(row.data.cUserName)"></span>
-                <span class="dx-icon-close" (click)="delete(row.data.ID, row.data.cUserName)"></span>
+                <span class="dx-icon-refresh mr-1 text-primary" (click)="resetPassword(row.data.Id)"></span>
+                <span class="dx-icon-close" (click)="delete(row.data.Id, row.data.Username)"></span>
               </div>
-
             </div>
           </dx-data-grid>
         </div>

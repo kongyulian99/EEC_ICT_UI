@@ -1,10 +1,14 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, SecurityContext } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { QuestionService, QuestionInfo } from 'src/app/shared/services/question.service';
+import { QuestionService } from 'src/app/shared/services/question.service';
 import { ExamsService } from 'src/app/shared';
 import { interval, Subscription } from 'rxjs';
 import { QuestionType } from 'src/app/shared/enums/enum';
 import { DomSanitizer } from '@angular/platform-browser';
+import { QuestionInfo } from 'src/app/shared/interfaces/question.interface';
+import { UserExamAttemptService } from 'src/app/shared/services/user-attempt.service';
+import { ScoreExamRequest, ScoreExamResponse, UserAnswer, ScoreCompleteExamResponse } from 'src/app/shared/interfaces/user-exam-attempt.interface';
+import { NotificationService, SystemConstants, User } from 'src/app/shared';
 
 @Component({
   selector: 'app-test-detail',
@@ -16,12 +20,27 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   isLoading = false;
   isStarted = false;
   submitPopupVisible = false;
+  isSubmitting = false;
+  isCompleted = false;
 
   // Dữ liệu đề thi
   exam: any;
   questions: QuestionInfo[] = [];
   currentQuestionIndex = 0;
   userAnswers: { [key: number]: any } = {};
+
+  // Dữ liệu người dùng
+  currentUser: User = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER) || '{}');
+  userId: number = 0;
+
+  // Dữ liệu lần làm bài
+  attemptId?: number;
+  attemptNumber?: number;
+  startTime?: Date;
+
+  // Dữ liệu kết quả
+  examResult?: ScoreCompleteExamResponse;
+  resultPopupVisible = false;
 
   // Đồng hồ đếm ngược
   remainingTime = 0;
@@ -39,12 +58,16 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private examService: ExamsService,
     private questionService: QuestionService,
+    private userExamAttemptService: UserExamAttemptService,
+    private notificationService: NotificationService,
     private sanitizer: DomSanitizer
-  ) {}
+  ) {
+    // Lấy ID người dùng từ thông tin đăng nhập và chuyển đổi sang kiểu number
+    this.userId = this.currentUser && this.currentUser.Id ? parseInt(this.currentUser.Id.toString(), 10) : 0;
+  }
 
   ngOnInit() {
     this.loadExamData();
-    // Không cần lắng nghe sự kiện cho input inline nữa
   }
 
   ngAfterViewInit() {
@@ -55,7 +78,6 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
-    // Không cần xóa lắng nghe sự kiện khi component bị hủy nữa
   }
 
   // Lấy dữ liệu đề thi
@@ -172,9 +194,31 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Bắt đầu làm bài
   startExam() {
-    this.isStarted = true;
-    this.remainingTime = this.exam.Duration_Minutes * 60;
-    this.startTimer();
+    this.isLoading = true;
+
+    // Tạo lần làm bài mới
+    this.userExamAttemptService.createUserExamAttempt(this.userId, this.exam.Id).subscribe({
+      next: (response) => {
+        if (response.ReturnStatus.Code === 1) {
+          this.attemptId = response.ReturnData.NewAttemptId;
+          this.attemptNumber = response.ReturnData.AttemptNumber;
+          this.startTime = new Date();
+
+          this.isStarted = true;
+          this.remainingTime = this.exam.Duration_Minutes * 60;
+          this.startTimer();
+          this.notificationService.showSuccess('Bắt đầu làm bài thành công!');
+        } else {
+          this.notificationService.showError('Không thể bắt đầu làm bài: ' + response.ReturnStatus.Message);
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Lỗi khi tạo lần làm bài:', error);
+        this.notificationService.showError('Lỗi khi bắt đầu làm bài');
+        this.isLoading = false;
+      }
+    });
   }
 
   // Bắt đầu đồng hồ đếm ngược
@@ -287,14 +331,119 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Xử lý nộp bài
   submitExam() {
-    this.submitPopupVisible = true;
+    // this.submitPopupVisible = true;
+    this.notificationService.showConfirmation('Bạn có chắc chắn muốn nộp bài kiểm tra này?', () => {
+      this.confirmSubmit();
+    });
   }
 
   confirmSubmit() {
-    // TODO: Implement submit exam logic
     this.submitPopupVisible = false;
-    // Sau khi nộp bài thành công, chuyển hướng về trang kết quả
-    this.router.navigate(['/student/exam-result', this.exam.Id]);
+    this.isLoading = true;
+    this.isSubmitting = true;
+
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
+
+    // Chuẩn bị dữ liệu câu trả lời
+    const answers: UserAnswer[] = this.prepareUserAnswers();
+
+    // Tạo yêu cầu chấm điểm
+    const scoreRequest: ScoreExamRequest = {
+      UserId: this.userId,
+      ExamId: this.exam.Id,
+      AttemptId: this.attemptId,
+      Answers: answers
+    };
+
+    // Gửi yêu cầu chấm điểm
+    this.userExamAttemptService.scoreExamWithAnswers(scoreRequest).subscribe({
+      next: (response) => {
+        if (response.ReturnStatus.Code === 1) {
+          // Lấy kết quả chi tiết
+          this.getDetailedResult();
+        } else {
+          this.notificationService.showError('Không thể chấm điểm bài làm: ' + response.ReturnStatus.Message);
+          this.isLoading = false;
+          this.isSubmitting = false;
+        }
+      },
+      error: (error) => {
+        console.error('Lỗi khi chấm điểm bài làm:', error);
+        this.notificationService.showError('Lỗi khi chấm điểm bài làm');
+        this.isLoading = false;
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+  // Chuẩn bị dữ liệu câu trả lời để gửi lên server
+  private prepareUserAnswers(): UserAnswer[] {
+    const answers: UserAnswer[] = [];
+
+    this.questions.forEach(question => {
+      const answer = this.userAnswers[question.Id];
+      let answerJson = '';
+
+      if (question.Question_Type === this.questionTypes.MULTIPLE_CHOICE) {
+        // Đối với câu hỏi trắc nghiệm
+        answerJson = JSON.stringify({ selected_option_id: answer !== null ? answer : -1 });
+      } else if (question.Question_Type === this.questionTypes.TRUE_FALSE) {
+        // Đối với câu hỏi đúng/sai
+        answerJson = JSON.stringify({ is_true: answer === true });
+      } else if (question.Question_Type === this.questionTypes.FILL_IN_THE_BLANK) {
+        // Đối với câu hỏi điền vào chỗ trống
+        answerJson = JSON.stringify({ answers: answer || [] });
+      }
+
+      answers.push({
+        QuestionId: question.Id,
+        AnswerGivenJson: answerJson,
+        TimeSpentSeconds: 0 // Có thể tính toán thời gian làm từng câu nếu cần
+      });
+    });
+
+    return answers;
+  }
+
+  // Lấy kết quả chi tiết sau khi chấm điểm
+  private getDetailedResult() {
+    this.userExamAttemptService.scoreCompleteExam(
+      this.userId,
+      this.exam.Id,
+      this.attemptNumber || 1
+    ).subscribe({
+      next: (response) => {
+        if (response.ReturnStatus.Code === 1) {
+          this.examResult = response.ReturnData;
+          this.isCompleted = true;
+          this.resultPopupVisible = true;
+          this.notificationService.showSuccess('Đã hoàn thành bài kiểm tra!');
+        } else {
+          this.notificationService.showError('Không thể lấy kết quả chi tiết: ' + response.ReturnStatus.Message);
+        }
+        this.isLoading = false;
+        this.isSubmitting = false;
+      },
+      error: (error) => {
+        console.error('Lỗi khi lấy kết quả chi tiết:', error);
+        this.notificationService.showError('Lỗi khi lấy kết quả chi tiết');
+        this.isLoading = false;
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+  // Chuyển đến trang kết quả
+  goToResultPage() {
+    this.resultPopupVisible = false;
+    this.router.navigate(['/student/exam-result', this.exam.Id], {
+      queryParams: {
+        attemptId: this.attemptId,
+        attemptNumber: this.attemptNumber
+      }
+    });
   }
 
   // Lấy danh sách các đoạn văn bản từ câu hỏi

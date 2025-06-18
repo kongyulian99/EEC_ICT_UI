@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef } from '@angular/core';
-import { QuestionInfo } from 'src/app/shared/services/question.service';
+import { QuestionInfo } from 'src/app/shared/interfaces/question.interface';
 import { TopicInfo } from 'src/app/shared/services/topics.service';
 import { Enum_DifficutyLevel, QuestionType } from 'src/app/shared/enums/enum';
 import { dxButtonConfig } from 'src/app/shared/config';

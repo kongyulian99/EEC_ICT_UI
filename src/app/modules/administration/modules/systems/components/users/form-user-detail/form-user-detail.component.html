@@ -3,7 +3,10 @@
     <div>
       <label class="fw-bold mb-0">Họ và tên:</label>
       <div class="mt-0">
-        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cUserFullName">
+        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.Full_Name">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+          </dx-validator>
         </dx-text-box>
       </div>
     </div>
@@ -11,17 +14,11 @@
     <div class="mt-2">
       <label class="fw-bold mb-0">Tên đăng nhập:</label>
       <div class="mt-0">
-        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cUserName">
+        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.Username">
           <dx-validator>
             <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
-            <!-- <dxi-validation-rule type="custom" message="Tên đăng nhập đã tồn tại!" [ignoreEmptyValue]="true"
-                            [validationCallback]="validationExitingUser"></dxi-validation-rule> -->
-            <!-- <dxi-validation-rule type="stringLength" [min]="6"
-                            message="Mật khẩu có độ dài lớn hơn 6 ký tự"></dxi-validation-rule> -->
           </dx-validator>
         </dx-text-box>
-
-
       </div>
     </div>
 
@@ -29,44 +26,61 @@
       <div class="mt-2">
         <label class="fw-bold mb-0">Mật khẩu</label>
         <div class="mt-0">
-          <dx-text-box [(value)]="entity.cPassword" mode="password">
+          <dx-text-box [(value)]="entity.Password" mode="password">
             <dx-validator>
               <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
               <dxi-validation-rule type="custom"
                 message="Mật khâu phải có ít nhất 8 ký tự, có ký tự số, chữ cái và ký tự đặc biệt"
                 [ignoreEmptyValue]="true" [validationCallback]="validationPasswordCheck"></dxi-validation-rule>
             </dx-validator>
-
           </dx-text-box>
         </div>
       </div>
     </ng-container>
 
-    <!-- <div class="mt-2">
-      <label class="fw-bold mb-0">Đơn vị quản lý trực tiếp</label>
-      <div class="mt-0">
-        <app-dropdown-donvi-multiplechoice [readOnly]="state != 'edit' && state != 'insert'" [(maDonVi)]="entity.DonViQuanLyTrucTiep" [isValidate]="true"></app-dropdown-donvi-multiplechoice>
-      </div>
-    </div> -->
-
-    <div class="mt-2">
-      <label class="fw-bold mb-0">Giới tính</label>
-      <div class="mt-0">
-        <dx-select-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cGioiTinh"
-          [dataSource]="listGioiTinh" displayExpr="label" valueExpr="value"></dx-select-box>
-      </div>
-    </div>
-    <div class="mt-2">
-      <label class="fw-bold mb-0">Số điện thoại</label>
-      <div class="mt-0">
-        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cSDT"></dx-text-box>
-      </div>
-    </div>
-
     <div class="mt-2">
       <label class="fw-bold mb-0">Email</label>
       <div class="mt-0">
-        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.cEmail"></dx-text-box>
+        <dx-text-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.Email">
+          <dx-validator>
+            <dxi-validation-rule type="email" message="Email không hợp lệ"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </div>
+    </div>
+
+    <div class="mt-2">
+      <label class="fw-bold mb-0">Quyền quản trị</label>
+      <div class="mt-0">
+        <dx-check-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.Is_Admin" text="Là quản trị viên"></dx-check-box>
+      </div>
+    </div>
+
+    <div class="mt-2">
+      <label class="fw-bold mb-0">Trạng thái</label>
+      <div class="mt-0">
+        <dx-check-box [readOnly]="state != 'edit' && state != 'insert'" [(value)]="entity.Is_Active" text="Đang hoạt động"></dx-check-box>
+      </div>
+    </div>
+
+    <div class="mt-2" *ngIf="state !== 'insert'">
+      <label class="fw-bold mb-0">Thời gian tạo:</label>
+      <div class="mt-0">
+        <dx-text-box [readOnly]="true" [value]="entity.Created_At | date:'dd/MM/yyyy HH:mm'"></dx-text-box>
+      </div>
+    </div>
+
+    <div class="mt-2" *ngIf="state !== 'insert'">
+      <label class="fw-bold mb-0">Cập nhật lần cuối:</label>
+      <div class="mt-0">
+        <dx-text-box [readOnly]="true" [value]="entity.Updated_At | date:'dd/MM/yyyy HH:mm'"></dx-text-box>
+      </div>
+    </div>
+
+    <div class="mt-2" *ngIf="state !== 'insert' && entity.Last_Login">
+      <label class="fw-bold mb-0">Đăng nhập lần cuối:</label>
+      <div class="mt-0">
+        <dx-text-box [readOnly]="true" [value]="entity.Last_Login | date:'dd/MM/yyyy HH:mm'"></dx-text-box>
       </div>
     </div>
 

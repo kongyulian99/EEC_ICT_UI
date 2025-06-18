@@ -4,21 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { ResponseData } from '../models';
 import { environment } from 'src/environments/environment';
-/**
- * Interface cho QuestionInfo
- */
-export interface QuestionInfo {
-  Id: number;
-  Topic_Id: number;
-  Exam_Id: number;
-  Question_Type: number;
-  Content: string;
-  Question_Data_Json: string;
-  Explanation: string;
-  Difficulty_Level: number;
-  Created_At: Date;
-  Updated_At: Date;
-}
+import { QuestionInfo } from '../interfaces/question.interface';
 
 @Injectable({
   providedIn: 'root'

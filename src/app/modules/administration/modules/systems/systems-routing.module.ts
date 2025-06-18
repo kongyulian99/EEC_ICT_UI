@@ -20,48 +20,7 @@ const routes: Routes = [
         component: UsersComponent,
         data: {
             RoleCode: 'USER_MANAGEMENT'
-        },
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'roles',
-        component: RolesComponent,
-        data: {
-            RoleCode: 'ROLE_MANAGEMENT'
-        },
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'group',
-        component: GroupComponent,
-        data: {
-            RoleCode: 'GROUP_MANAGEMENT'
-        },
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'actions',
-        component: ActionsComponent,
-        data: {
-            RoleCode: 'ACTION_MANAGEMENT'
-        },
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'grantgroup',
-        component: GrantGroupComponent,
-        data: {
-            RoleCode: 'GRANTGROUP'
-        },
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'mappingcommand',
-        component: MappingCommandComponent,
-        data: {
-            RoleCode: 'LOG_MANAGEMENT'
-        },
-        canActivate: [AuthGuard]
+        }
     }
 ];
 

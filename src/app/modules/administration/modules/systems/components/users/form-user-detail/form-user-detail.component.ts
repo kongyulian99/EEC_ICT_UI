@@ -34,39 +34,50 @@ export class FormUserDetailComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['entity']) {
-      this.entity = {
-        ...this.entity,
-        DonViQuanLyTrucTiep: this.entity.DonViQuanLyTrucTiep?.split(',')
-      }
-      if (this.state != 'insert' && this.entity.ID) {
-        this.userService.processCommand('USER_GET_INFOGROUP', { ID: this.entity.ID })
+      if (this.state != 'insert' && this.entity.Id) {
+        this.userService.getUserById(this.entity.Id)
           .subscribe(
             (res: any) => {
-              if (res.ReturnStatus.Code === 0) {
-                this.listGroupInUser = res.ReturnData;
-                this.listGroupNotInUser = this.allGroup.filter(x => this.listGroupInUser.findIndex(el => el.fkGroupId == x.ID) < 0)
-                                          .map(el => ({ ...el, fkGroupId: el.ID, check: false }))
+              if (res.ReturnStatus.Code === 1) {
+                this.entity = res.ReturnData;
+                // this.loadUserGroups();
               }
             }
-          )
+          );
       }
     }
   }
 
   ngOnInit(): void {
-    this.loadAllDanhMuc();
+    // this.loadAllGroups();
   }
 
-  loadAllDanhMuc () {
-    this.groupService.processCommand('GROUP_LIST', { Keyword: ""})
-      .subscribe(
-        (res: any) => {
-          if (res.ReturnStatus.Code === 0) {
-            this.allGroup = res.ReturnData;
-          }
-        }
-      )
+  loadAllGroups() {
+    // this.groupService.processCommand('GROUP_LIST', { Keyword: ""})
+    //   .subscribe(
+    //     (res: any) => {
+    //       if (res.ReturnStatus.Code === 0) {
+    //         this.allGroup = res.ReturnData;
+    //         if (this.state != 'insert' && this.entity.Id) {
+    //           this.loadUserGroups();
+    //         }
+    //       }
+    //     }
+    //   );
   }
+
+  // loadUserGroups() {
+  //   this.userService.processCommand('USER_GET_INFOGROUP', { ID: this.entity.Id })
+  //     .subscribe(
+  //       (res: any) => {
+  //         if (res.ReturnStatus.Code === 0) {
+  //           this.listGroupInUser = res.ReturnData;
+  //           this.listGroupNotInUser = this.allGroup.filter(x => this.listGroupInUser.findIndex(el => el.fkGroupId == x.ID) < 0)
+  //                                     .map(el => ({ ...el, fkGroupId: el.ID, check: false }));
+  //         }
+  //       }
+  //     );
+  // }
 
   validationExitingUser(e){
     if (this.state == 'insert') {
@@ -96,7 +107,7 @@ export class FormUserDetailComponent implements OnInit {
     this.popupVisible = true;
   }
   saveGroupForm() {
-    let list = this.listGroupNotInUser.filter(el => el.check).map(el => ({ fkUserId: this.entity.ID, fkGroupId: el.fkGroupId, cGroupName: el.cGroupName }))
+    let list = this.listGroupNotInUser.filter(el => el.check).map(el => ({ fkUserId: this.entity.Id, fkGroupId: el.fkGroupId, cGroupName: el.cGroupName }));
 
     this.userService.processCommand('USER_ADD_INFOGROUP', list)
       .subscribe(
@@ -108,12 +119,12 @@ export class FormUserDetailComponent implements OnInit {
             this.listGroupInUser = [ ...this.listGroupInUser, ...listAddID];
           }
         }
-      )
+      );
   }
 
 
   deleteGroup (groupId) {
-    this.userService.processCommand('USER_DELETE_INFOGROUP', {  ID: groupId })
+    this.userService.processCommand('USER_DELETE_INFOGROUP', { ID: groupId })
       .subscribe(
         (res: any) => {
           if (res.ReturnStatus.Code === 0) {

@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit {
       ID: '1',
       cRoleName: 'System Management',
       cIconCss: 'fa-cogs',
-      cUrl: '/administration/system',
+      cUrl: '/administration/systems',
       cParentId: null,
       IsActive: false,
       expand: false,
@@ -30,7 +30,7 @@ export class SidebarComponent implements OnInit {
           ID: '11',
           cRoleName: 'Dashboard',
           cIconCss: 'fa-dashboard',
-          cUrl: '/administration/system/dashboard',
+          cUrl: '/administration/systems/dashboard',
           cParentId: '1',
           IsActive: false
         },
@@ -38,7 +38,7 @@ export class SidebarComponent implements OnInit {
           ID: '12',
           cRoleName: 'Settings',
           cIconCss: 'fa-wrench',
-          cUrl: '/administration/system/settings',
+          cUrl: '/administration/systems/settings',
           cParentId: '1',
           IsActive: false
         },
@@ -46,7 +46,15 @@ export class SidebarComponent implements OnInit {
           ID: '13',
           cRoleName: 'Reports',
           cIconCss: 'fa-bar-chart',
-          cUrl: '/administration/system/reports',
+          cUrl: '/administration/systems/reports',
+          cParentId: '1',
+          IsActive: false
+        },
+        {
+          ID: '14',
+          cRoleName: 'Users',
+          cIconCss: 'fa-users',
+          cUrl: '/administration/systems/users',
           cParentId: '1',
           IsActive: false
         }
