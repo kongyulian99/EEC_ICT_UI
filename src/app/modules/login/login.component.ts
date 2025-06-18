@@ -54,12 +54,16 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(this.user));
 
                 setTimeout(() => {
-                    this.router.navigate(['administration']).then(()=>{
-                        this.loading = false;
-                    });
-                    // this.router.navigate(['/administration/dashboard']).then(()=>{
-                    //     this.loading = false;
-                    // });
+                    // Kiểm tra xem người dùng có phải là admin không
+                    if (this.user.Is_Admin) {
+                        this.router.navigate(['administration']).then(() => {
+                            this.loading = false;
+                        });
+                    } else {
+                        this.router.navigate(['student']).then(() => {
+                            this.loading = false;
+                        });
+                    }
                 }, 1000);
                 this.notificationService.showSuccess('Login successfully!');
             } else {
