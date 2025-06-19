@@ -78,7 +78,7 @@ export class UsersComponent implements OnInit {
             }, 10);
             this.state = 'detail';
           }
-          this.totalRows = response.ReturnData ? response.ReturnData.length : 0;
+          this.totalRows = response.ReturnData ? response.ReturnData?.length : 0;
         } else {
           this.notificationService.showError('Dữ liệu tải lỗi!');
           this.totalRows = 0;

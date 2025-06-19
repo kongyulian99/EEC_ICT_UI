@@ -18,7 +18,7 @@ export class PermissionDirective implements OnInit {
         const roles = user.Roles;
 
         let check = false;
-        for (let i = 0; i < roles.length; i++) {
+        for (let i = 0; i < roles?.length; i++) {
             let role = roles[i];
             if (role.cRoleCode == this.appRole
                 && role.permissions.findIndex((per: any) => per.cPermissionCode === this.permissionCode) > -1

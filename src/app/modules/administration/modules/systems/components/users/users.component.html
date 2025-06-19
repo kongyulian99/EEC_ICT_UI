@@ -10,7 +10,7 @@
   </ng-container>
 
   <ng-container buttons>
-    <dx-button appPermission appRole="USER_MANAGEMENT" permissionCode="ADD" text="Thêm mới"
+    <dx-button text="Thêm mới"
       [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()"></dx-button>
   </ng-container>
 
@@ -43,8 +43,7 @@
             <div *dxTemplate="let row of 'cellIndex'" style="text-align: center;">
               <span>{{ pageSize * (pageIndex - 1) + (row.rowIndex + 1) }}</span>
             </div>
-            <div appPermission appRole="USER_MANAGEMENT" permissionCode="DELETE" class="rowAction"
-              *dxTemplate="let row of 'cellAction'">
+            <div class="rowAction" *dxTemplate="let row of 'cellAction'">
               <div class="d-flex flex-row">
                 <span class="dx-icon-refresh mr-1 text-primary" (click)="resetPassword(row.data.Id)"></span>
                 <span class="dx-icon-close" (click)="delete(row.data.Id, row.data.Username)"></span>
@@ -76,8 +75,8 @@
           </dx-scroll-view>
         </div>
         <div class="detail-footer">
-          <dx-button appPermission appRole="USER_MANAGEMENT" permissionCode="UPDATE" *ngIf="state=='detail'"
-            [icon]="dxButtonConfig.edit_icon" [type]="dxButtonConfig.edit_type" text="Sửa" (click)="edit()"></dx-button>
+          <dx-button *ngIf="state=='detail'" [icon]="dxButtonConfig.edit_icon" [type]="dxButtonConfig.edit_type"
+            text="Sửa" (click)="edit()"></dx-button>
           <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type"
             text="Lưu" (click)="save()"></dx-button>
           <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.cancel_icon" [type]="dxButtonConfig.cancel_type"
