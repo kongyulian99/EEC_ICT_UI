@@ -61,8 +61,8 @@ export class UsersComponent implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (response: any) => {
         console.log('API Response:', response);
-        if (response.ReturnStatus && response.ReturnStatus.Code == 1) {
-          if (response.ReturnData && response.ReturnData.length > 0) {
+        if (response.ReturnStatus.Code == 1) {
+          if (response.ReturnData?.length > 0) {
             this.allData = response.ReturnData;
             this.paging();
             this.focusKey = this.listData[0].Id;
