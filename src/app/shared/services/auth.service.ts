@@ -28,6 +28,7 @@ export class AuthenService extends BaseService {
     //   UserName: username,
     //   Password: password
     // };
+    console.log(environment.apiUrl);
     return this.http.post<ResponseData>(`${environment.apiUrl}/api/Auth/Login`, user, { headers: this.httpOptions })
       .pipe(catchError(this.handleError));
   }
