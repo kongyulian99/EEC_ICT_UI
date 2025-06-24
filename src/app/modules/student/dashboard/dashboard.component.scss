@@ -1,0 +1,302 @@
+// Các style cho trang dashboard
+
+.dashboard-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-content {
+  padding-top: 8px;
+}
+
+// Tổng quan
+.stats-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: #f8f9fa;
+  .stats-value {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: #222;
+  }
+  .stats-label {
+    font-size: 0.95rem;
+    color: #888;
+    font-weight: 500;
+  }
+  &:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
+}
+
+// Card
+.card {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  border-radius: 10px;
+  margin-bottom: 18px;
+  .card-header {
+    padding: 10px 18px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #f8f9fa;
+    h5, h6 { font-weight: 600; font-size: 1.1rem; margin: 0; }
+  }
+  .card-body { padding: 18px; }
+}
+
+// Biểu đồ
+.chart-container {
+  min-height: 220px;
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  padding: 10px 8px 0 8px;
+}
+
+// Line chart
+.progress-chart {
+  padding: 0;
+  margin-bottom: 10px;
+}
+.line-chart-container {
+  position: relative;
+  display: flex;
+  height: 170px;
+  border-left: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fcfcfc;
+}
+.y-axis {
+  width: 28px;
+  height: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  padding-right: 3px;
+  text-align: right;
+}
+.y-axis-label {
+  font-size: 11px;
+  color: #aaa;
+  height: 19%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.horizontal-grid {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #f0f0f0;
+  z-index: 1;
+}
+.x-axis {
+  display: flex;
+  position: relative;
+  height: 18px;
+  margin-left: 28px;
+  margin-top: 2px;
+}
+.x-axis-label {
+  position: absolute;
+  font-size: 10px;
+  color: #aaa;
+  transform: translateX(-50%) rotate(35deg);
+  transform-origin: top left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
+}
+.data-points {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+.data-point {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, 50%);
+  z-index: 3;
+  .point-marker {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #007bff;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s;
+  }
+  .point-tooltip {
+    position: absolute;
+    display: none;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    &:after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: #222 transparent transparent transparent;
+    }
+  }
+  &:hover {
+    .point-marker {
+      width: 12px;
+      height: 12px;
+      background-color: #0056b3;
+      border-color: #007bff;
+    }
+    .point-tooltip {
+      display: block;
+    }
+  }
+}
+.line-path {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+// Bar chart
+.distribution-chart {
+  padding: 0;
+  margin-bottom: 10px;
+}
+.bar-chart-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 170px;
+  margin-top: 10px;
+  background: #fcfcfc;
+  border-bottom: 1px solid #e0e0e0;
+}
+.bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 60px;
+}
+.bar-label {
+  font-size: 10px;
+  color: #aaa;
+  text-align: center;
+  margin-top: 7px;
+  transform: rotate(35deg);
+  transform-origin: top left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
+}
+.bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 120px;
+}
+.bar {
+  width: 70%;
+  background: linear-gradient(180deg, #20c997 80%, #fff 100%);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  transition: all 0.2s;
+  .bar-tooltip {
+    position: absolute;
+    display: none;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    margin-bottom: 4px;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: #222 transparent transparent transparent;
+    }
+  }
+  &:hover {
+    background: linear-gradient(180deg, #15a67a 80%, #fff 100%);
+    .bar-tooltip { display: block; }
+  }
+}
+.bar-value {
+  font-size: 11px;
+  color: #888;
+  margin-top: 3px;
+}
+
+// Table
+.table {
+  margin-bottom: 0;
+  th {
+    font-weight: 600;
+    color: #444;
+    font-size: 0.98rem;
+  }
+  td {
+    vertical-align: middle;
+    font-size: 0.97rem;
+  }
+}
+
+// Badge
+.badge {
+  padding: 5px 10px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  border-radius: 4px;
+}
+
+// Responsive
+@media (max-width: 767px) {
+  .dashboard-container { padding: 8px; }
+  .card-body { padding: 10px !important; }
+  .stats-card .stats-value { font-size: 1.3rem; }
+  .stats-card .stats-label { font-size: 0.8rem; }
+  .x-axis-label, .bar-label { max-width: 40px; font-size: 9px; }
+  .bar-wrapper { max-width: 40px; }
+}

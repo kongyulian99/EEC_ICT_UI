@@ -134,6 +134,8 @@
                 displayExpr="text"
               ></dxo-lookup>
             </dxi-column>
+            <dxi-column dataField="Score" caption="Điểm số" [width]="100" [allowFiltering]="true" [allowSorting]="true">
+            </dxi-column>
             <dxi-column dataField="Difficulty_Level" caption="Độ khó" [width]="100" [allowFiltering]="true" [allowSorting]="true">
               <dxo-lookup
                 [dataSource]="difficultyLevels"

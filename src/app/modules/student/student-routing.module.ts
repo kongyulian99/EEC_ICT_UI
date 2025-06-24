@@ -20,6 +20,10 @@ const routes: Routes = [
       {
         path: 'test-detail',
         component: TestDetailComponent
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent
       }
     ]
   },

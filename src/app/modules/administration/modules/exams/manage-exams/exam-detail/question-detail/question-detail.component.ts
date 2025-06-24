@@ -55,6 +55,10 @@ export class QuestionDetailComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    // Khởi tạo giá trị mặc định cho điểm số nếu chưa có
+    if (!this.editingQuestion.Score) {
+      this.editingQuestion.Score = 1.0; // Giá trị mặc định là 1 điểm
+    }
     this.initQuestionData();
   }
 

@@ -5,7 +5,15 @@ import { BaseService } from './base.service';
 import { ResponseData } from '../models';
 import { environment } from 'src/environments/environment';
 import { ExamInfo } from '../interfaces/exam.interface';
-import { ScoreCompleteExamResponse, ScoreExamRequest, ScoreExamResponse, UserExamAttemptInfo } from '../interfaces/user-exam-attempt.interface';
+import {
+  ScoreExamRequest,
+  ScoreExamResponse,
+  UserExamAttemptInfo,
+  UserExamHistoryRequest,
+  UserExamHistoryItem,
+  ScoreProgressRequest,
+  ScoreDistributionRequest
+} from '../interfaces/user-exam-attempt.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -83,45 +91,122 @@ export class UserExamAttemptService extends BaseService {
   }
 
   /**
-   * Chấm điểm cho một lần làm bài thi
-   * @param userId ID của người dùng
-   * @param examId ID của bài thi
-   * @param attemptNumber Số thứ tự lần làm bài
-   */
-  scoreUserExamAttempt(userId: number, examId: number, attemptNumber: number) {
-    const model: Partial<UserExamAttemptInfo> = {
-      User_Id: userId,
-      Exam_Id: examId,
-      Attempt_Number: attemptNumber
-    };
-    return this.http.post<ResponseData<{FinalScore: number, Passed: boolean}>>(
-      `${this.apiUrl}/Score`,
-      model,
-      { headers: this.httpOptions }
-    ).pipe(catchError(this.handleError));
-  }
-
-  /**
-   * Chấm điểm tổng thể cho bài kiểm tra và trả về kết quả chi tiết
-   * @param userId ID của người dùng
-   * @param examId ID của bài thi
-   * @param attemptNumber Số thứ tự lần làm bài
-   */
-  scoreCompleteExam(userId: number, examId: number, attemptNumber: number) {
-    return this.http.get<ResponseData<ScoreCompleteExamResponse>>(
-      `${this.apiUrl}/ScoreExam/${userId}/${examId}/${attemptNumber}`,
-      { headers: this.httpOptions }
-    ).pipe(catchError(this.handleError));
-  }
-
-  /**
-   * Chấm điểm bài thi dựa trên danh sách câu trả lời của người dùng
+   * Chấm điểm bài thi và trả về kết quả chi tiết.
+   * Hỗ trợ hai phương thức chấm điểm:
+   * 1. Chấm điểm theo thông tin lần làm bài có sẵn (sử dụng userId, examId, attemptNumber)
+   * 2. Chấm điểm từ danh sách câu trả lời mới gửi lên (sử dụng danh sách answers)
    * @param request Thông tin yêu cầu chấm điểm
    */
-  scoreExamWithAnswers(request: ScoreExamRequest) {
+  scoreExam(request: ScoreExamRequest) {
     return this.http.post<ResponseData<ScoreExamResponse>>(
-      `${this.apiUrl}/ScoreWithAnswers`,
+      `${this.apiUrl}/Score`,
       request,
+      { headers: this.httpOptions }
+    ).pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Lấy lịch sử làm bài của người dùng với thông tin chi tiết
+   * @param request Thông tin yêu cầu lịch sử làm bài
+   */
+  getUserExamHistory(request: UserExamHistoryRequest) {
+    let url = `${this.apiUrl}/History?userId=${request.UserId}`;
+
+    if (request.ExamId) {
+      url += `&examId=${request.ExamId}`;
+    }
+
+    if (request.LimitRecentAttempts) {
+      url += `&limitRecentAttempts=${request.LimitRecentAttempts}`;
+    }
+
+    return this.http.get<ResponseData<{
+      Summary: {
+        TotalAttempts: number;
+        TotalExams: number;
+        TotalPassed: number;
+        TotalFailed: number;
+        AverageScore: number;
+        LastAttemptDate?: Date;
+      };
+      History: UserExamHistoryItem[];
+    }>>(
+      url,
+      { headers: this.httpOptions }
+    ).pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Lấy thông tin tiến độ điểm số của người dùng theo thời gian
+   * @param request Thông tin yêu cầu tiến độ điểm số
+   */
+  getUserScoreProgress(request: ScoreProgressRequest) {
+    let url = `${this.apiUrl}/ScoreProgress?userId=${request.UserId}`;
+
+    if (request.ExamId) {
+      url += `&examId=${request.ExamId}`;
+    }
+
+    if (request.FromDate) {
+      url += `&fromDate=${request.FromDate.toISOString()}`;
+    }
+
+    if (request.ToDate) {
+      url += `&toDate=${request.ToDate.toISOString()}`;
+    }
+
+    if (request.GroupByDay !== undefined) {
+      url += `&groupByDay=${request.GroupByDay}`;
+    }
+
+    return this.http.get<ResponseData<{
+      ProgressData: any[];
+      Summary: {
+        AttemptCount: number;
+        FirstScore: number;
+        LastScore: number;
+        HighestScore: number;
+        LowestScore: number;
+        Improvement: number;
+        ImprovementPercentage: number;
+      };
+    }>>(
+      url,
+      { headers: this.httpOptions }
+    ).pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Lấy thông tin phân bố điểm số của người dùng hoặc tất cả người dùng
+   * @param request Thông tin yêu cầu phân bố điểm số
+   */
+  getScoreDistribution(request: ScoreDistributionRequest) {
+    let url = `${this.apiUrl}/ScoreDistribution?userId=${request.UserId}`;
+
+    if (request.ExamId) {
+      url += `&examId=${request.ExamId}`;
+    }
+
+    if (request.NumRanges) {
+      url += `&numRanges=${request.NumRanges}`;
+    }
+
+    if (request.UsePercentage !== undefined) {
+      url += `&usePercentage=${request.UsePercentage}`;
+    }
+
+    return this.http.get<ResponseData<{
+      Distribution: any[];
+      Summary: {
+        TotalAttempts: number;
+        AverageScore: number;
+        PassedCount: number;
+        PassRate: number;
+        ExamId?: number;
+        UserId?: number;
+      };
+    }>>(
+      url,
       { headers: this.httpOptions }
     ).pipe(catchError(this.handleError));
   }

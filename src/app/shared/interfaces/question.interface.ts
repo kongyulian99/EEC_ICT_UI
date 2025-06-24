@@ -10,6 +10,7 @@ export interface QuestionInfo {
   Question_Data_Json: string;
   Explanation: string;
   Difficulty_Level: number;
+  Score: number;
   Created_At: Date;
   Updated_At: Date;
 }

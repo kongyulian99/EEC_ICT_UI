@@ -11,73 +11,54 @@ export class AuthGuard {
   constructor(private router: Router, private authService: AuthenService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    // Kiểm tra xem user đã đăng nhập chưa
     if (this.authService.isAuthenticated()) {
+      // Lấy thông tin người dùng từ localStorage
       const user: any = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER) as string);
 
+      // Lấy route data
+      const targetModule = route.data['targetModule'] as string ?? '';
 
-      //const functionCode = route.data['functionCode'] as string ?? '';
-      const roles = user.Roles;
+      // Kiểm tra quyền admin
+      const isAdmin = user.Is_Admin === true;
 
-      const roleCode = route.data['RoleCode'] as string ?? '';
-
-      if (roleCode && roleCode.length > 0) {
-
-        for (let i = 0; i < roles.length; i++) {
-          let role = roles[i];
-          if (role.cRoleCode == roleCode
-            && role.permissions.findIndex((per: any) => per.cPermissionCode === 'DISPLAY') > -1
-          ) {
-            return true;
-          }
+      // Xử lý chuyển hướng dựa vào quyền và module đích
+      if (targetModule) {
+        // Nếu đã chỉ định cụ thể module cần truy cập
+        if (targetModule === 'admin' && !isAdmin) {
+          // Nếu cố gắng truy cập module admin nhưng không có quyền
+          this.router.navigate(['/student/dashboard']);
+          return false;
+        } else if (targetModule === 'student' && isAdmin) {
+          // Nếu admin cố gắng truy cập module student
+          // Vẫn cho phép - admin có thể xem module student
+          return true;
         }
-        
-        this.router.navigate(['/access-denied'], {
-          queryParams: { redirect: state.url }
-        });
-        return false;
-      } else {
+        // Các trường hợp khác - cho phép truy cập
         return true;
-      }
-      /*
-      if (roles.indexOf('root') === -1) {  // Nếu không phải quyền root thì phải check quyền truy cập
-        const permissions = user.permissions;
-        const functionsCode = functionCode.split(',');
-        // console.log(permissions);
-
-        for (let i = 0; i < functionsCode.length; i++) {
-          if (functionsCode[i].indexOf("_UPDATE") !== -1) {
-            if (permissions && permissions.indexOf(functionCode) !== -1) {
-              return true;
-            }
+      } else {
+        // Nếu không chỉ định module cụ thể, chuyển hướng về module phù hợp
+        if (isAdmin) {
+          // Nếu URL hiện tại không bắt đầu bằng /administration thì chuyển hướng
+          if (!state.url.startsWith('/administration')) {
+            this.router.navigate(['/administration/dashboard']);
+            return false;
           }
-          if (functionsCode[i].indexOf("_CREATE") !== -1) {
-            if (permissions && permissions.indexOf(functionCode) !== -1) {
-              return true;
-            }
-          }
-          if ((permissions && permissions.indexOf(functionsCode[i] + '_' + SystemConstants.VIEW_ACTION) !== -1) || functionCode === 'DASHBOARD') {
-            return true;
-          } else if (permissions && permissions.indexOf(functionsCode[i] + '_' + SystemConstants.VIEW_ACTION) === -1 && functionCode === SystemConstants.GIAMSAT) {
-            this.router.navigate(['/administration/dashboard'], {
-              // queryParams: { redirect: state.url }
-            });
+        } else {
+          // Nếu URL hiện tại không bắt đầu bằng /student thì chuyển hướng
+          if (!state.url.startsWith('/student')) {
+            this.router.navigate(['/student/dashboard']);
             return false;
           }
         }
-        this.router.navigate(['/access-denied'], {
-          queryParams: { redirect: state.url }
-        });
-        return false;
-      } else { return true; }
-       */
+        return true;
+      }
     } else {
+      // Nếu chưa đăng nhập, chuyển hướng đến trang login
       this.router.navigate(['/login'], {
-        // queryParams: { redirect: state.url }
+        queryParams: { returnUrl: state.url }
       });
       return false;
     }
-    // this.router.navigate(['/access-denied']);
-    // // console.log('login');
-    // return false;
   }
 }
