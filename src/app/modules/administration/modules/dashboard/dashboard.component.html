@@ -1,1 +1,178 @@
-dashboard module
+<app-generic-page pageTitle="Dashboard" [loading]="loading">
+  <ng-container main-filters>
+    <div class="date-range-filter">
+      <dx-date-box
+        [value]="startDate"
+        [max]="endDate"
+        type="date"
+        placeholder="Từ ngày"
+        displayFormat="dd/MM/yyyy"
+        (onValueChanged)="onStartDateChanged($event)">
+      </dx-date-box>
+      <dx-date-box
+        [value]="endDate"
+        [min]="startDate"
+        type="date"
+        placeholder="Đến ngày"
+        displayFormat="dd/MM/yyyy"
+        (onValueChanged)="onEndDateChanged($event)">
+      </dx-date-box>
+      <dx-button
+        text="Áp dụng"
+        type="default"
+        [icon]="'refresh'"
+        (onClick)="refreshDashboard()">
+      </dx-button>
+    </div>
+  </ng-container>
+
+  <ng-container body>
+    <div class="dashboard-container">
+      <!-- Hàng đầu tiên - KPI Cards -->
+      <div class="kpi-cards">
+        <div class="kpi-card" [ngClass]="{'loading': loading}">
+          <div class="kpi-icon">
+            <i class="dx-icon dx-icon-user"></i>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-value">{{summaryData.totalUsers || 0}}</div>
+            <div class="kpi-label">Total Users</div>
+          </div>
+        </div>
+        <div class="kpi-card" [ngClass]="{'loading': loading}">
+          <div class="kpi-icon">
+            <i class="dx-icon dx-icon-file"></i>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-value">{{summaryData.totalExams || 0}}</div>
+            <div class="kpi-label">Total Exams</div>
+          </div>
+        </div>
+        <div class="kpi-card" [ngClass]="{'loading': loading}">
+          <div class="kpi-icon">
+            <i class="dx-icon dx-icon-event"></i>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-value">{{summaryData.totalAttempts || 0}}</div>
+            <div class="kpi-label">Total Attempts</div>
+          </div>
+        </div>
+        <div class="kpi-card" [ngClass]="{'loading': loading}">
+          <div class="kpi-icon">
+            <i class="dx-icon dx-icon-check"></i>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-value">{{summaryData.passRate | number:'1.1-1'}}%</div>
+            <div class="kpi-label">Pass Rate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hàng thứ hai - Biểu đồ -->
+      <div class="chart-row">
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Exam Attempts Over Time</h3>
+          </div>
+          <div class="chart-body">
+            <dx-chart
+              [dataSource]="attemptsByDateData"
+              [rotated]="false">
+              <dxo-size [height]="330"></dxo-size>
+              <dxo-legend [visible]="true" horizontalAlignment="center" verticalAlignment="bottom"></dxo-legend>
+              <dxo-argument-axis
+                argumentType="datetime"
+                [tickInterval]="{ days: 1 }"
+                [valueMarginsEnabled]="false">
+                <dxo-label format="dd/MM"></dxo-label>
+              </dxo-argument-axis>
+              <dxi-series
+                name="Attempts"
+                argumentField="date"
+                valueField="attempts"
+                type="bar"
+                color="#5B9BD5">
+              </dxi-series>
+              <dxi-series
+                name="Passed"
+                argumentField="date"
+                valueField="passed"
+                type="bar"
+                color="#70AD47">
+              </dxi-series>
+              <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+            </dx-chart>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Score Distribution</h3>
+          </div>
+          <div class="chart-body">
+            <dx-pie-chart
+              [dataSource]="scoreDistributionData"
+              [palette]="['#5B9BD5', '#ED7D31', '#A5A5A5', '#FFC000', '#70AD47']">
+              <dxo-size [height]="330"></dxo-size>
+              <dxo-legend
+                [visible]="true"
+                horizontalAlignment="center"
+                verticalAlignment="bottom">
+              </dxo-legend>
+              <dxi-series argumentField="rangeLabel" valueField="count">
+                <dxo-label
+                  [visible]="true"
+                  format="fixedPoint"
+                  [customizeText]="customizeLabel">
+                </dxo-label>
+              </dxi-series>
+              <dxo-tooltip
+                [enabled]="true"
+                [customizeTooltip]="customizePieTooltip">
+              </dxo-tooltip>
+            </dx-pie-chart>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hàng thứ ba - Bảng dữ liệu -->
+      <div class="data-row">
+        <div class="data-container">
+          <div class="data-header">
+            <h3>Top Exams</h3>
+          </div>
+          <div class="data-body">
+            <dx-data-grid
+              [dataSource]="topExamsData"
+              [showBorders]="true"
+              [columnAutoWidth]="true">
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              <dxi-column dataField="title" caption="Exam Title"></dxi-column>
+              <dxi-column dataField="attempts" caption="Attempts" alignment="center"></dxi-column>
+              <dxi-column dataField="avgScore" caption="Avg Score" alignment="center" format="fixedPoint"></dxi-column>
+              <dxi-column dataField="passRate" caption="Pass Rate" alignment="center" format="percent"></dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
+
+        <div class="data-container">
+          <div class="data-header">
+            <h3>Recent Activities</h3>
+          </div>
+          <div class="data-body">
+            <dx-data-grid
+              [dataSource]="recentActivitiesData"
+              [showBorders]="true"
+              [columnAutoWidth]="true">
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              <dxi-column dataField="timestamp" caption="Time" dataType="datetime" format="dd/MM/yyyy HH:mm" [width]="150"></dxi-column>
+              <dxi-column dataField="user" caption="User"></dxi-column>
+              <dxi-column dataField="activity" caption="Activity"></dxi-column>
+              <dxi-column dataField="details" caption="Details"></dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</app-generic-page>

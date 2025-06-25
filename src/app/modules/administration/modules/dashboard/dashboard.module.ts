@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
-import { DxButtonModule, DxChartModule, DxCheckBoxModule, DxDateBoxModule, DxNumberBoxModule, DxPieChartModule, DxPopupModule, DxScrollViewModule, DxSelectBoxModule, DxTagBoxModule, DxTextAreaModule, DxTextBoxModule, DxToolbarModule, DxTreeListModule } from 'devextreme-angular';
-import { SummaryComponent } from './summary/summary.component';
+import { DxButtonModule, DxChartModule, DxDataGridModule, DxDateBoxModule, DxPieChartModule, DxScrollViewModule } from 'devextreme-angular';
 import { ComponentsSharedModule, PipesModule, SharedDirectivesModule } from 'src/app/shared';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
   declarations: [
@@ -14,23 +14,16 @@ import { ComponentsSharedModule, PipesModule, SharedDirectivesModule } from 'src
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    DxToolbarModule,
-    DxButtonModule,
-    SharedDirectivesModule,
     ComponentsSharedModule,
-    PipesModule,
+    DxButtonModule,
+    DxDateBoxModule,
     DxChartModule,
     DxPieChartModule,
-    DxSelectBoxModule,
-    DxTagBoxModule,
-    DxTreeListModule,
-    DxCheckBoxModule,
+    DxDataGridModule,
     DxScrollViewModule,
-    DxDateBoxModule,
-    DxTextAreaModule,
-    DxNumberBoxModule,
-    DxPopupModule,
-    DxTextBoxModule,
-  ]
+    SharedDirectivesModule,
+    PipesModule,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DashboardModule { }

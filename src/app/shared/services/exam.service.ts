@@ -78,4 +78,30 @@ export class ExamsService extends BaseService {
     return this.http.delete<ResponseData<number>>(`${this.apiUrl}/Delete/${id}`, { headers: this.httpOptions })
       .pipe(catchError(this.handleError));
   }
+
+  /**
+   * Lấy danh sách top bài thi theo số lượt làm bài
+   * @param startDate Ngày bắt đầu
+   * @param endDate Ngày kết thúc
+   * @param limit Số lượng kết quả tối đa
+   */
+  getTopExams(startDate: Date, endDate: Date, limit: number = 5) {
+    let url = `${this.apiUrl}/TopExams?limit=${limit}`;
+
+    if (startDate) {
+      url += `&fromDate=${startDate.toISOString()}`;
+    }
+
+    if (endDate) {
+      url += `&toDate=${endDate.toISOString()}`;
+    }
+
+    return this.http.get<ResponseData<{
+      id: number;
+      title: string;
+      attempts: number;
+      avgScore: number;
+      passRate: number;
+    }[]>>(url, { headers: this.httpOptions }).pipe(catchError(this.handleError));
+  }
 }

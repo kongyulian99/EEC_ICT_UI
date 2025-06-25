@@ -210,4 +210,78 @@ export class UserExamAttemptService extends BaseService {
       { headers: this.httpOptions }
     ).pipe(catchError(this.handleError));
   }
+
+  /**
+   * Lấy tổng quan dữ liệu cho dashboard
+   * @param startDate Ngày bắt đầu
+   * @param endDate Ngày kết thúc
+   */
+  getDashboardSummary(startDate: Date, endDate: Date) {
+    let url = `${this.apiUrl}/DashboardSummary`;
+
+    if (startDate) {
+      url += `?fromDate=${startDate.toISOString()}`;
+    }
+
+    if (endDate) {
+      url += startDate ? `&toDate=${endDate.toISOString()}` : `?toDate=${endDate.toISOString()}`;
+    }
+
+    return this.http.get<ResponseData<{
+      TotalAttempts: number;
+      TotalPassed: number;
+      TotalFailed: number;
+      PassRate: number;
+      AverageScore: number;
+    }>>(url, { headers: this.httpOptions }).pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Lấy dữ liệu số lần làm bài theo ngày
+   * @param startDate Ngày bắt đầu
+   * @param endDate Ngày kết thúc
+   */
+  getAttemptsByDate(startDate: Date, endDate: Date) {
+    let url = `${this.apiUrl}/AttemptsByDate`;
+
+    if (startDate) {
+      url += `?fromDate=${startDate.toISOString()}`;
+    }
+
+    if (endDate) {
+      url += startDate ? `&toDate=${endDate.toISOString()}` : `?toDate=${endDate.toISOString()}`;
+    }
+
+    return this.http.get<ResponseData<{
+      date: Date;
+      attempts: number;
+      passed: number;
+      failed: number;
+    }[]>>(url, { headers: this.httpOptions }).pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Lấy danh sách hoạt động gần đây
+   * @param startDate Ngày bắt đầu
+   * @param endDate Ngày kết thúc
+   * @param limit Số lượng kết quả tối đa
+   */
+  getRecentActivities(startDate: Date, endDate: Date, limit: number = 10) {
+    let url = `${this.apiUrl}/RecentActivities?limit=${limit}`;
+
+    if (startDate) {
+      url += `&fromDate=${startDate.toISOString()}`;
+    }
+
+    if (endDate) {
+      url += `&toDate=${endDate.toISOString()}`;
+    }
+
+    return this.http.get<ResponseData<{
+      timestamp: Date;
+      user: string;
+      activity: string;
+      details: string;
+    }[]>>(url, { headers: this.httpOptions }).pipe(catchError(this.handleError));
+  }
 }
