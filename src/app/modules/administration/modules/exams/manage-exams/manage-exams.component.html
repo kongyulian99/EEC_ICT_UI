@@ -48,15 +48,15 @@
             <dxi-column dataField="Total_Questions" caption="Question Count" [width]="100" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
             <dxi-column dataField="Created_At" caption="Created Date" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
             <dxi-column dataField="Updated_At" caption="Updated Date" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-
-            <!-- Actions column -->
-            <dxi-column type="buttons" [width]="gridConfig.actionWidth" caption="Actions">
-              <dxi-button name="edit" icon="edit" (onClick)="editExam.bind(this)"></dxi-button>
-              <dxi-button name="delete" icon="trash" [onClick]="deleteExam.bind(this)"></dxi-button>
-            </dxi-column>
+            <dxi-column dataField="Create_User_Name" caption="Create User" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column cellTemplate="cellAction" caption="Action" [width]="60"></dxi-column>
 
             <div *dxTemplate="let row of 'cellTitle'" class="text-left kehoach-container">
               <a [routerLink]="['/administration/exams/detail']" [queryParams]="{id: row.data.Id}">{{ row.data.Title }}</a>
+            </div>
+            <div *dxTemplate="let row of 'cellAction'" class="d-flex justify-content-around">
+              <a class="fa fa-edit" style="cursor: pointer; color: #007bff;" (click)="editExam(row.data)"></a>
+              <a class="fa fa-trash" style="cursor: pointer; color: #dc3545;" (click)="deleteExam(row.data)"></a>
             </div>
 
             <!-- Loading configuration -->

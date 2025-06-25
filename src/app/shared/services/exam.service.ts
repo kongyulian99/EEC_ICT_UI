@@ -5,6 +5,7 @@ import { BaseService } from './base.service';
 import { ResponseData } from '../models';
 import { environment } from 'src/environments/environment';
 import { ExamInfo } from '../interfaces/exam.interface';
+import { SystemConstants } from '../constants';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,9 @@ import { ExamInfo } from '../interfaces/exam.interface';
 export class ExamsService extends BaseService {
   private httpOptions = new HttpHeaders();
   private apiUrl = `${environment.apiUrl}/api/Exam`;
-
+  user = JSON.parse(
+    localStorage.getItem(SystemConstants.CURRENT_USER) as string
+  );
   constructor(private http: HttpClient) {
     super();
     this.httpOptions = this.httpOptions.set('Content-Type', 'application/json');
@@ -57,6 +60,7 @@ export class ExamsService extends BaseService {
    * @param Exam Topic information (ExamInfo)
    */
   createExam(Exam: Partial<ExamInfo>) {
+    Exam.Create_User_Id = this.user.Id;
     return this.http.post<ResponseData<number>>(`${this.apiUrl}/Create`, Exam, { headers: this.httpOptions })
       .pipe(catchError(this.handleError));
   }

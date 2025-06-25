@@ -26,30 +26,14 @@ export class SidebarComponent implements OnInit {
       IsActive: false,
       expand: false,
       children: [
-        {
-          ID: '11',
-          cRoleName: 'Dashboard',
-          cIconCss: 'fa-dashboard',
-          cUrl: '/administration/systems/dashboard',
-          cParentId: '1',
-          IsActive: false
-        },
-        {
-          ID: '12',
-          cRoleName: 'Settings',
-          cIconCss: 'fa-wrench',
-          cUrl: '/administration/systems/settings',
-          cParentId: '1',
-          IsActive: false
-        },
-        {
-          ID: '13',
-          cRoleName: 'Reports',
-          cIconCss: 'fa-bar-chart',
-          cUrl: '/administration/systems/reports',
-          cParentId: '1',
-          IsActive: false
-        },
+        // {
+        //   ID: '12',
+        //   cRoleName: 'Settings',
+        //   cIconCss: 'fa-wrench',
+        //   cUrl: '/administration/systems/settings',
+        //   cParentId: '1',
+        //   IsActive: false
+        // },
         {
           ID: '14',
           cRoleName: 'Users',
@@ -132,6 +116,15 @@ export class SidebarComponent implements OnInit {
           IsActive: false
         }
       ]
+    },
+    {
+      ID: '5',
+      cRoleName: 'Dashboard',
+      cIconCss: 'fa-bar-chart',
+      cUrl: '/administration/dashboard',
+      cParentId: null,
+      IsActive: false,
+      expand: false
     }
   ];
 
