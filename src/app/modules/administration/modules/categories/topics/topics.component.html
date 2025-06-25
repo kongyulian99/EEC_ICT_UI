@@ -9,13 +9,13 @@
   </ng-container>
 
   <ng-container extra-filters>
-    <!-- Có thể thêm các bộ lọc bổ sung ở đây nếu cần -->
+    <!-- Additional filters can be added here if needed -->
   </ng-container>
 
   <ng-container buttons>
-    <dx-button text="Thêm mới" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()"></dx-button>
-    <dx-button text="Mở rộng tất cả" [icon]="'expand'" [type]="'default'" (click)="expandAll()" class="ml-2"></dx-button>
-    <dx-button text="Thu gọn tất cả" [icon]="'collapse'" [type]="'default'" (click)="collapseAll()" class="ml-2"></dx-button>
+    <dx-button text="Add New" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()"></dx-button>
+    <dx-button text="Expand All" [icon]="'expand'" [type]="'default'" (click)="expandAll()" class="ml-2"></dx-button>
+    <dx-button text="Collapse All" [icon]="'collapse'" [type]="'default'" (click)="collapseAll()" class="ml-2"></dx-button>
   </ng-container>
 
   <ng-container body>
@@ -35,19 +35,20 @@
             [focusedRowKey]="focusKey"
             (onFocusedRowChanged)="onFocusedRowChanged($event)"
             (onRowClick)="onRowClick($event)"
-            noDataText="Không có dữ liệu">
+            noDataText="No data available">
 
             <dxo-selection mode="single" [recursive]="false"></dxo-selection>
             <dxo-scrolling mode="standard" rowRenderingMode="standard"></dxo-scrolling>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
             <dxo-paging [enabled]="false"></dxo-paging>
 
-            <dxi-column dataField="Id" caption="Mã chủ đề" [width]="80" alignment="center"></dxi-column>
-            <dxi-column dataField="Name" caption="Tên chủ đề"></dxi-column>
-            <dxi-column dataField="Description" caption="Mô tả"></dxi-column>
-            <dxi-column dataField="Created_At" caption="Ngày tạo" dataType="datetime" format="dd/MM/yyyy HH:mm" [width]="180"></dxi-column>
-            <dxi-column dataField="Updated_At" caption="Ngày cập nhật" dataType="datetime" format="dd/MM/yyyy HH:mm" [width]="180"></dxi-column>
-            <dxi-column caption="Thao tác" [width]="100" cellTemplate="actionTemplate"></dxi-column>
+            <dxi-column dataField="DisplayIndex" caption="No." [width]="80" alignment="center"></dxi-column>
+            <!-- <dxi-column dataField="Id" caption="Topic Code" [width]="80" alignment="center"></dxi-column> -->
+            <dxi-column dataField="Name" caption="Topic Name"></dxi-column>
+            <dxi-column dataField="Description" caption="Description"></dxi-column>
+            <dxi-column dataField="Created_At" caption="Created Date" dataType="datetime" format="dd/MM/yyyy HH:mm" [width]="180"></dxi-column>
+            <dxi-column dataField="Updated_At" caption="Updated Date" dataType="datetime" format="dd/MM/yyyy HH:mm" [width]="180"></dxi-column>
+            <dxi-column caption="Actions" [width]="100" cellTemplate="actionTemplate"></dxi-column>
 
             <div *dxTemplate="let cell of 'actionTemplate'">
               <div class="action-buttons">
@@ -74,7 +75,7 @@
             <i *ngIf="state === 'detail'" class="fa fa-info-circle mr-2"></i>
             <i *ngIf="state === 'insert'" class="fa fa-plus-circle mr-2"></i>
             <i *ngIf="state === 'edit'" class="fa fa-edit mr-2"></i>
-            {{ state === 'detail' ? 'CHI TIẾT' : state === 'insert' ? 'THÊM MỚI' : 'CẬP NHẬT' }}
+            {{ state === 'detail' ? 'DETAILS' : state === 'insert' ? 'ADD NEW' : 'UPDATE' }}
           </p>
         </div>
         <div class="detail-content">
@@ -82,17 +83,17 @@
             <div class="form-container">
               <dx-form id="form" [formData]="currentEntity" labelLocation="top">
                 <dxi-item *ngIf="currentEntity.Id" dataField="Id" [editorOptions]="{ disabled: true }">
-                  <dxo-label text="Mã chủ đề"></dxo-label>
-                  <dxi-validation-rule type="required" message="Mã chủ đề là bắt buộc"></dxi-validation-rule>
+                  <dxo-label text="Topic Code"></dxo-label>
+                  <dxi-validation-rule type="required" message="Topic code is required"></dxi-validation-rule>
                 </dxi-item>
 
                 <dxi-item dataField="Name" [editorOptions]="{
                     disabled: state === 'detail',
                     stylingMode: 'filled',
-                    placeholder: 'Nhập tên chủ đề'
+                    placeholder: 'Enter topic name'
                   }">
-                  <dxo-label text="Tên chủ đề"></dxo-label>
-                  <dxi-validation-rule type="required" message="Tên chủ đề là bắt buộc"></dxi-validation-rule>
+                  <dxo-label text="Topic Name"></dxo-label>
+                  <dxi-validation-rule type="required" message="Topic name is required"></dxi-validation-rule>
                   <dxi-validation-rule type="pattern" [pattern]="namePattern" [message]="namePatternMessage"></dxi-validation-rule>
                 </dxi-item>
 
@@ -101,9 +102,9 @@
                     height: 100,
                     disabled: state === 'detail',
                     stylingMode: 'filled',
-                    placeholder: 'Nhập mô tả cho chủ đề'
+                    placeholder: 'Enter topic description'
                   }">
-                  <dxo-label text="Mô tả"></dxo-label>
+                  <dxo-label text="Description"></dxo-label>
                 </dxi-item>
 
                 <dxi-item dataField="Parent_Id" editorType="dxSelectBox"
@@ -113,10 +114,10 @@
                     valueExpr: 'Id',
                     disabled: state === 'detail',
                     stylingMode: 'filled',
-                    placeholder: 'Chọn chủ đề cha',
+                    placeholder: 'Select parent topic',
                     searchEnabled: true
                   }">
-                  <dxo-label text="Thuộc chủ đề"></dxo-label>
+                  <dxo-label text="Parent Topic"></dxo-label>
                 </dxi-item>
 
                 <dxi-item *ngIf="state === 'detail' && currentEntity.Created_At" dataField="Created_At" editorType="dxDateBox"
@@ -126,7 +127,7 @@
                     disabled: true,
                     stylingMode: 'filled'
                   }">
-                  <dxo-label text="Ngày tạo"></dxo-label>
+                  <dxo-label text="Created Date"></dxo-label>
                 </dxi-item>
 
                 <dxi-item *ngIf="state === 'detail' && currentEntity.Updated_At" dataField="Updated_At" editorType="dxDateBox"
@@ -136,7 +137,7 @@
                     disabled: true,
                     stylingMode: 'filled'
                   }">
-                  <dxo-label text="Ngày cập nhật"></dxo-label>
+                  <dxo-label text="Updated Date"></dxo-label>
                 </dxi-item>
               </dx-form>
             </div>
@@ -144,11 +145,11 @@
         </div>
         <div class="detail-footer">
           <dx-button *ngIf="state=='detail'" [icon]="dxButtonConfig.edit_icon" [type]="dxButtonConfig.edit_type"
-            text="Sửa" (click)="edit()"></dx-button>
+            text="Edit" (click)="edit()"></dx-button>
           <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type"
-            text="Lưu" (click)="save()"></dx-button>
+            text="Save" (click)="save()"></dx-button>
           <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.cancel_icon" [type]="dxButtonConfig.cancel_type"
-            text="Hủy" (click)="cancel()"></dx-button>
+            text="Cancel" (click)="cancel()"></dx-button>
         </div>
       </div>
     </div>

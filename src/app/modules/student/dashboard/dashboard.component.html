@@ -1,70 +1,70 @@
 <div class="dashboard-container">
   <!-- Header -->
   <!-- <div class="dashboard-header mb-4">
-    <h2 class="mb-0">Trang chủ</h2>
+    <h2 class="mb-0">Home</h2>
   </div> -->
 
   <!-- Loading Spinner -->
   <div class="text-center py-5" *ngIf="isLoading">
     <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Đang tải...</span>
+      <span class="visually-hidden">Loading...</span>
     </div>
   </div>
 
   <!-- Main Content -->
   <div class="dashboard-content" *ngIf="!isLoading">
-    <!-- Tổng quan -->
+    <!-- Overview -->
     <div class="card mb-4" *ngIf="historySummary">
       <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Tổng quan</h5>
+        <h5 class="mb-0">Overview</h5>
       </div>
       <div class="card-body">
         <div class="row g-3">
           <div class="col-6 col-md-3">
             <div class="stats-card text-center p-3 bg-light rounded">
               <div class="stats-value">{{historySummary.TotalExams}}</div>
-              <div class="stats-label">Bài thi đã làm</div>
+              <div class="stats-label">Exams Taken</div>
             </div>
           </div>
           <div class="col-6 col-md-3">
             <div class="stats-card text-center p-3 bg-light rounded">
               <div class="stats-value">{{historySummary.TotalAttempts}}</div>
-              <div class="stats-label">Lần làm bài</div>
+              <div class="stats-label">Total Attempts</div>
             </div>
           </div>
           <div class="col-6 col-md-3">
             <div class="stats-card text-center p-3 bg-light rounded">
               <div class="stats-value text-success">{{historySummary.TotalPassed}}</div>
-              <div class="stats-label">Đã đạt</div>
+              <div class="stats-label">Passed</div>
             </div>
           </div>
           <div class="col-6 col-md-3">
             <div class="stats-card text-center p-3 bg-light rounded">
               <div class="stats-value">{{historySummary.AverageScore | number:'1.1-1'}}</div>
-              <div class="stats-label">Điểm TB (thang 10)</div>
+              <div class="stats-label">Average Score (out of 10)</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Thông báo không có dữ liệu -->
+    <!-- No data notification -->
     <div class="alert alert-info" *ngIf="!isLoading && (!examHistory || examHistory.length === 0)">
       <i class="fas fa-info-circle me-2"></i>
-      Bạn chưa tham gia bài thi nào. Hãy vào mục "Bài thi" để bắt đầu làm bài.
+      You haven't taken any exams yet. Go to "Exams" section to start taking tests.
     </div>
 
-    <!-- Biểu đồ thống kê -->
+    <!-- Statistics Charts -->
     <div class="row mb-4" *ngIf="examHistory && examHistory.length > 0">
       <div class="col-md-6 mb-4 mb-md-0">
         <div class="card h-100">
           <div class="card-header bg-light py-2">
-            <h6 class="mb-0">Tiến độ điểm số</h6>
+            <h6 class="mb-0">Score Progress</h6>
           </div>
           <div class="card-body">
             <div class="text-center py-4" *ngIf="isLoadingCharts">
               <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Đang tải...</span>
+                <span class="visually-hidden">Loading...</span>
               </div>
             </div>
             <div class="chart-container" *ngIf="!isLoadingCharts">
@@ -83,8 +83,8 @@
                           <div class="point-marker"></div>
                           <div class="point-tooltip">
                             <div><b>{{point.Date}}</b></div>
-                            <div>Điểm: <b>{{point.AverageScore | number:'1.1-1'}}</b></div>
-                            <div>Làm: {{point.AttemptCount}} lần</div>
+                            <div>Score: <b>{{point.AverageScore | number:'1.1-1'}}</b></div>
+                            <div>Attempts: {{point.AttemptCount}}</div>
                           </div>
                         </div>
                       </div>
@@ -102,15 +102,15 @@
                 </div>
                 <div class="progress-summary mt-2" *ngIf="progressSummary">
                   <div class="alert alert-info py-2 px-3 mb-0">
-                    <span class="me-2">Đầu: <b>{{progressSummary.FirstScore | number:'1.1-1'}}</b></span>
-                    <span class="me-2">Cuối: <b>{{progressSummary.LastScore | number:'1.1-1'}}</b></span>
-                    <span>Mức cải thiện: <b [ngClass]="{'text-success': progressSummary.Improvement > 0, 'text-danger': progressSummary.Improvement < 0}">{{progressSummary.Improvement | number:'1.1-1'}} điểm ({{progressSummary.ImprovementPercentage | number:'1.1-1'}}%)</b></span>
+                    <span class="me-2">First: <b>{{progressSummary.FirstScore | number:'1.1-1'}}</b></span>
+                    <span class="me-2">Last: <b>{{progressSummary.LastScore | number:'1.1-1'}}</b></span>
+                    <span>Improvement: <b [ngClass]="{'text-success': progressSummary.Improvement > 0, 'text-danger': progressSummary.Improvement < 0}">{{progressSummary.Improvement | number:'1.1-1'}} points ({{progressSummary.ImprovementPercentage | number:'1.1-1'}}%)</b></span>
                   </div>
                 </div>
               </div>
               <div *ngIf="!progressData || progressData.length === 0" class="text-muted text-center py-4">
                 <i class="fas fa-chart-line fa-3x mb-3"></i><br>
-                Chưa có đủ dữ liệu để hiển thị tiến độ điểm số
+                Not enough data to display score progress
               </div>
             </div>
           </div>
@@ -119,12 +119,12 @@
       <div class="col-md-6">
         <div class="card h-100">
           <div class="card-header bg-light py-2">
-            <h6 class="mb-0">Phân bố điểm số</h6>
+            <h6 class="mb-0">Score Distribution</h6>
           </div>
           <div class="card-body">
             <div class="text-center py-4" *ngIf="isLoadingCharts">
               <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Đang tải...</span>
+                <span class="visually-hidden">Loading...</span>
               </div>
             </div>
             <div class="chart-container" *ngIf="!isLoadingCharts">
@@ -137,7 +137,7 @@
                         <div class="bar" [style.height.%]="getBarHeight(item.Count, scoreDistribution)">
                           <div class="bar-tooltip">
                             <b>{{item.RangeLabel}}</b><br>
-                            Số lần: <b>{{item.Count}}</b>
+                            Count: <b>{{item.Count}}</b>
                           </div>
                         </div>
                         <div class="bar-value">{{item.Count}}</div>
@@ -147,15 +147,15 @@
                 </div>
                 <div class="distribution-summary mt-2" *ngIf="distributionSummary">
                   <div class="alert alert-info py-2 px-3 mb-0">
-                    <span class="me-2">Điểm TB: <b>{{distributionSummary.AverageScore | number:'1.1-1'}}</b></span>
-                    <span class="me-2">Tỷ lệ đạt: <b>{{distributionSummary.PassRate | number:'1.1-1'}}%</b></span>
-                    <span>Tổng số lần: <b>{{distributionSummary.TotalAttempts}}</b></span>
+                    <span class="me-2">Average Score: <b>{{distributionSummary.AverageScore | number:'1.1-1'}}</b></span>
+                    <span class="me-2">Pass Rate: <b>{{distributionSummary.PassRate | number:'1.1-1'}}%</b></span>
+                    <span>Total Attempts: <b>{{distributionSummary.TotalAttempts}}</b></span>
                   </div>
                 </div>
               </div>
               <div *ngIf="!scoreDistribution || scoreDistribution.length === 0" class="text-muted text-center py-4">
                 <i class="fas fa-chart-bar fa-3x mb-3"></i><br>
-                Chưa có đủ dữ liệu để hiển thị phân bố điểm số
+                Not enough data to display score distribution
               </div>
             </div>
           </div>
@@ -163,10 +163,10 @@
       </div>
     </div>
 
-    <!-- Lịch sử làm bài -->
+    <!-- Recent Exam History -->
     <div class="card" *ngIf="examHistory && examHistory.length > 0">
       <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Lịch sử làm bài gần đây</h5>
+        <h5 class="mb-0">Recent Exam History</h5>
       </div>
       <div class="card-body p-0">
         <div class="table-responsive">
@@ -174,13 +174,13 @@
             <thead class="table-light">
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Bài thi</th>
-                <th scope="col">Ngày làm</th>
-                <th scope="col">Thời gian</th>
-                <th scope="col">Điểm</th>
-                <th scope="col">KQ</th>
-                <th scope="col">Trạng thái</th>
-                <th scope="col">Thao tác</th>
+                <th scope="col">Exam</th>
+                <th scope="col">Date</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Score</th>
+                <th scope="col">Result</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -192,7 +192,7 @@
                 <td class="fw-bold">{{attempt.Score}}/10</td>
                 <td>
                   <span class="badge" [ngClass]="{'bg-success': attempt.Passed, 'bg-danger': !attempt.Passed}">
-                    {{attempt.Passed ? 'Đạt' : 'Chưa đạt'}}
+                    {{attempt.Passed ? 'Passed' : 'Failed'}}
                   </span>
                 </td>
                 <td>

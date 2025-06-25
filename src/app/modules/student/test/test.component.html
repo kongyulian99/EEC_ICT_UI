@@ -1,16 +1,16 @@
-<app-generic-page [pageTitle]="'Danh sách đề thi'" [loading]="isLoading">
+<app-generic-page [pageTitle]="'Exam List'" [loading]="isLoading">
   <ng-container body>
     <div class="container-fluid">
 
 
-      <!-- Danh sách đề thi -->
+      <!-- Exam List -->
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <div class="col" *ngFor="let exam of exams">
           <div class="card h-100 exam-card">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-start mb-3">
                 <h5 class="card-title mb-0">{{exam.Title}}</h5>
-                <span class="badge bg-primary">{{exam.Duration_Minutes}} phút</span>
+                <span class="badge bg-primary">{{exam.Duration_Minutes}} minutes</span>
               </div>
               <p class="card-text text-muted">{{exam.Description}}</p>
               <div class="exam-info">
@@ -20,13 +20,13 @@
                 </div>
                 <div class="info-item">
                   <i class="fas fa-question-circle"></i>
-                  <span>{{exam.Question_Count || 0}} câu hỏi</span>
+                  <span>{{exam.Question_Count || 0}} questions</span>
                 </div>
               </div>
             </div>
             <div class="card-footer bg-transparent border-top-0">
               <button class="btn btn-primary w-100" (click)="startExam(exam)">
-                <i class="fas fa-play me-2"></i>Bắt đầu làm bài
+                <i class="fas fa-play me-2"></i>Start Exam
               </button>
             </div>
           </div>

@@ -10,7 +10,7 @@
   </ng-container>
 
   <ng-container buttons>
-    <dx-button text="Thêm mới"
+    <dx-button text="Add New"
       [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()"></dx-button>
   </ng-container>
 
@@ -33,10 +33,10 @@
             <dxo-scrolling mode="standard" rowRenderingMode="standard"></dxo-scrolling>
             <dxo-header-filter [visible]="false"></dxo-header-filter>
 
-            <dxi-column cellTemplate="cellIndex" caption="TT" [width]="50" alignment="center"
+            <dxi-column cellTemplate="cellIndex" caption="No." [width]="50" alignment="center"
               cssClass="vertical-middle"> </dxi-column>
-            <dxi-column dataField="Username" caption="Tài khoản đăng nhập" cssClass="vertical-middle"></dxi-column>
-            <dxi-column dataField="Full_Name" caption="Tên người dùng" cssClass="vertical-middle"></dxi-column>
+            <dxi-column dataField="Username" caption="Username" cssClass="vertical-middle"></dxi-column>
+            <dxi-column dataField="Full_Name" caption="Full Name" cssClass="vertical-middle"></dxi-column>
             <dxi-column cellTemplate="cellAction" [width]="60" alignment="center" [showInColumnChooser]="false"
               cssClass="vertical-middle"></dxi-column>
 
@@ -64,7 +64,7 @@
 
       <div *ngIf="isShowDetail" class="card-detail">
         <div class="detail-header">
-          <p>{{ state === 'detail' ? 'CHI TIẾT' : state === 'insert' ? 'THÊM MỚI' : 'CẬP NHẬT' }}</p>
+          <p>{{ state === 'detail' ? 'DETAILS' : state === 'insert' ? 'ADD NEW' : 'UPDATE' }}</p>
           <dx-button [icon]="dxButtonConfig.close_icon" [type]="dxButtonConfig.cancel_type" (click)="toggleDetail()">
           </dx-button>
         </div>
@@ -76,11 +76,11 @@
         </div>
         <div class="detail-footer">
           <dx-button *ngIf="state=='detail'" [icon]="dxButtonConfig.edit_icon" [type]="dxButtonConfig.edit_type"
-            text="Sửa" (click)="edit()"></dx-button>
+            text="Edit" (click)="edit()"></dx-button>
           <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type"
-            text="Lưu" (click)="save()"></dx-button>
+            text="Save" (click)="save()"></dx-button>
           <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.cancel_icon" [type]="dxButtonConfig.cancel_type"
-            text="Hủy" (click)="cancel()"></dx-button>
+            text="Cancel" (click)="cancel()"></dx-button>
         </div>
       </div>
     </div>

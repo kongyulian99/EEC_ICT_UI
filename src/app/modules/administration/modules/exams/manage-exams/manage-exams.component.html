@@ -1,7 +1,7 @@
-<app-generic-page pageTitle="Quản lý đề thi">
+<app-generic-page pageTitle="Exam Management">
   <ng-container buttons>
-    <dx-button text="Thêm mới" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (onClick)="addExam()"></dx-button>
-    <dx-button text="Làm mới" icon="refresh" (onClick)="loadExams()"></dx-button>
+    <dx-button text="Add New" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (onClick)="addExam()"></dx-button>
+    <dx-button text="Refresh" icon="refresh" (onClick)="loadExams()"></dx-button>
   </ng-container>
   <ng-container body>
     <div class="container-fluid">
@@ -20,7 +20,7 @@
             [hoverStateEnabled]="true"
             [height]="'calc(100vh - 220px)'"
           >
-            <!-- Cấu hình phân trang -->
+            <!-- Pagination configuration -->
             <dxo-paging [pageSize]="gridConfig.pageSize"></dxo-paging>
             <dxo-pager
               [showPageSizeSelector]="true"
@@ -29,28 +29,28 @@
               [showNavigationButtons]="true"
             ></dxo-pager>
 
-            <!-- Cấu hình tìm kiếm -->
+            <!-- Search configuration -->
             <dxo-search-panel
               [visible]="true"
               [width]="240"
-              placeholder="Tìm kiếm..."
+              placeholder="Search..."
             ></dxo-search-panel>
 
-            <!-- Cấu hình lọc -->
+            <!-- Filter configuration -->
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="true"></dxo-header-filter>
 
-            <!-- Cấu hình cột -->
+            <!-- Column configuration -->
             <dxi-column dataField="Id" caption="ID" [width]="70" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column cellTemplate="cellTitle" caption="Tiêu đề" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Description" caption="Mô tả" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Duration_Minutes" caption="Thời gian (phút)" [width]="120" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Total_Questions" caption="Số câu hỏi" [width]="100" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Created_At" caption="Ngày tạo" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Updated_At" caption="Cập nhật" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column cellTemplate="cellTitle" caption="Title" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Description" caption="Description" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Duration_Minutes" caption="Duration (minutes)" [width]="120" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Total_Questions" caption="Question Count" [width]="100" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Created_At" caption="Created Date" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Updated_At" caption="Updated Date" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
 
-            <!-- Cột thao tác -->
-            <dxi-column type="buttons" [width]="gridConfig.actionWidth" caption="Thao tác">
+            <!-- Actions column -->
+            <dxi-column type="buttons" [width]="gridConfig.actionWidth" caption="Actions">
               <dxi-button name="edit" icon="edit" (onClick)="editExam.bind(this)"></dxi-button>
               <dxi-button name="delete" icon="trash" [onClick]="deleteExam.bind(this)"></dxi-button>
             </dxi-column>
@@ -59,7 +59,7 @@
               <a [routerLink]="['/administration/exams/detail']" [queryParams]="{id: row.data.Id}">{{ row.data.Title }}</a>
             </div>
 
-            <!-- Cấu hình loading -->
+            <!-- Loading configuration -->
             <dxo-load-panel [enabled]="true"></dxo-load-panel>
           </dx-data-grid>
         </div>

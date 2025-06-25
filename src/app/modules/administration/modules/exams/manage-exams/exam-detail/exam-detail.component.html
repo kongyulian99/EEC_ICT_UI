@@ -1,7 +1,7 @@
-<app-generic-page [pageTitle]="isNewExam ? 'Thêm mới đề thi' : 'Chi tiết đề thi'" [loading]="isLoading" [haveBackButton]="true">
+<app-generic-page [pageTitle]="isNewExam ? 'Add New Exam' : 'Exam Details'" [loading]="isLoading" [haveBackButton]="true">
   <ng-container buttons>
-    <dx-button text="Lưu" [icon]="'save'" [type]="'default'" (onClick)="saveExam()"></dx-button>
-    <!-- <dx-button text="Quay lại" icon="arrowleft" (onClick)="goBack()"></dx-button> -->
+    <dx-button text="Save" [icon]="'save'" [type]="'default'" (onClick)="saveExam()"></dx-button>
+    <!-- <dx-button text="Back" icon="arrowleft" (onClick)="goBack()"></dx-button> -->
   </ng-container>
   <ng-container body>
     <div class="container-fluid">
@@ -13,40 +13,40 @@
         [hideOnOutsideClick]="false"
       ></dx-load-panel>
 
-      <!-- Thông tin đề thi -->
+      <!-- Exam Information -->
       <div class="card mb-4">
         <div class="card-header">
-          <h5 class="mb-0">Thông tin đề thi</h5>
+          <h5 class="mb-0">Exam Information</h5>
         </div>
         <div class="card-body">
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+              <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
               <dx-text-box
                 [(value)]="exam.Title"
-                placeholder="Nhập tiêu đề đề thi"
+                placeholder="Enter exam title"
                 [showClearButton]="true"
               >
                 <dx-validator>
-                  <dxi-validation-rule type="required" message="Tiêu đề là bắt buộc"></dxi-validation-rule>
+                  <dxi-validation-rule type="required" message="Title is required"></dxi-validation-rule>
                 </dx-validator>
               </dx-text-box>
             </div>
             <div class="col-md-3 mb-3">
-              <label for="duration" class="form-label">Thời gian làm bài (phút) <span class="text-danger">*</span></label>
+              <label for="duration" class="form-label">Duration (minutes) <span class="text-danger">*</span></label>
               <dx-number-box
                 [(value)]="exam.Duration_Minutes"
                 [min]="1"
                 [showSpinButtons]="true"
               >
                 <dx-validator>
-                  <dxi-validation-rule type="required" message="Thời gian làm bài là bắt buộc"></dxi-validation-rule>
-                  <dxi-validation-rule type="range" [min]="1" message="Thời gian phải lớn hơn 0"></dxi-validation-rule>
+                  <dxi-validation-rule type="required" message="Duration is required"></dxi-validation-rule>
+                  <dxi-validation-rule type="range" [min]="1" message="Duration must be greater than 0"></dxi-validation-rule>
                 </dx-validator>
               </dx-number-box>
             </div>
             <div class="col-md-3 mb-3">
-              <label for="duration" class="form-label">Điểm qua bài <span class="text-danger">*</span></label>
+              <label for="duration" class="form-label">Passing Score <span class="text-danger">*</span></label>
               <dx-number-box
                 [(value)]="exam.Pass_Score"
                 [min]="1"
@@ -54,16 +54,16 @@
                 [showSpinButtons]="true"
               >
                 <dx-validator>
-                  <dxi-validation-rule type="required" message="Điểm qua bài là bắt buộc"></dxi-validation-rule>
-                  <dxi-validation-rule type="range" [min]="1" message="Điểm phải lớn hơn 0"></dxi-validation-rule>
+                  <dxi-validation-rule type="required" message="Passing score is required"></dxi-validation-rule>
+                  <dxi-validation-rule type="range" [min]="1" message="Score must be greater than 0"></dxi-validation-rule>
                 </dx-validator>
               </dx-number-box>
             </div>
             <div class="col-12 mb-3">
-              <label for="description" class="form-label">Mô tả</label>
+              <label for="description" class="form-label">Description</label>
               <dx-text-area
                 [(value)]="exam.Description"
-                placeholder="Nhập mô tả đề thi"
+                placeholder="Enter exam description"
                 [height]="100"
               ></dx-text-area>
             </div>
@@ -71,12 +71,12 @@
         </div>
       </div>
 
-      <!-- Danh sách câu hỏi -->
+      <!-- Question List -->
       <div class="card" *ngIf="!isNewExam">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Danh sách câu hỏi</h5>
+          <h5 class="mb-0">Question List</h5>
           <dx-button
-            text="Thêm câu hỏi"
+            text="Add Question"
             [icon]="'plus'"
             [type]="'default'"
             (onClick)="addQuestion()">
@@ -93,7 +93,7 @@
             [rowAlternationEnabled]="true"
             [hoverStateEnabled]="true"
           >
-            <!-- Cấu hình phân trang -->
+            <!-- Pagination configuration -->
             <dxo-paging [pageSize]="10"></dxo-paging>
             <dxo-pager
               [showPageSizeSelector]="true"
@@ -102,51 +102,51 @@
               [showNavigationButtons]="true"
             ></dxo-pager>
 
-            <!-- Cấu hình tìm kiếm -->
+            <!-- Search configuration -->
             <dxo-search-panel
               [visible]="true"
               [width]="240"
-              placeholder="Tìm kiếm..."
+              placeholder="Search..."
             ></dxo-search-panel>
 
-            <!-- Cấu hình lọc -->
+            <!-- Filter configuration -->
             <dxo-filter-row [visible]="true"></dxo-filter-row>
             <dxo-header-filter [visible]="true"></dxo-header-filter>
 
-            <!-- Cấu hình cột -->
+            <!-- Column configuration -->
             <dxi-column dataField="Id" caption="ID" [width]="70" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column cellTemplate="cellContent" caption="Nội dung câu hỏi" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Topic_Id" caption="Chủ đề" [width]="150" [allowFiltering]="true" [allowSorting]="true">
+            <dxi-column cellTemplate="cellContent" caption="Question Content" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Topic_Id" caption="Topic" [width]="150" [allowFiltering]="true" [allowSorting]="true">
               <dxo-lookup
                 [dataSource]="topics"
                 valueExpr="Id"
                 displayExpr="Name"
               ></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="Question_Type" caption="Loại câu hỏi" [width]="120" [allowFiltering]="true" [allowSorting]="true">
+            <dxi-column dataField="Question_Type" caption="Question Type" [width]="120" [allowFiltering]="true" [allowSorting]="true">
               <dxo-lookup
                 [dataSource]="[
-                  { value: questionTypes.MULTIPLE_CHOICE, text: 'Trắc nghiệm' },
-                  { value: questionTypes.TRUE_FALSE, text: 'Đúng/Sai' },
-                  { value: questionTypes.FILL_IN_THE_BLANK, text: 'Điền vào chỗ trống' }
+                  { value: questionTypes.MULTIPLE_CHOICE, text: 'Multiple Choice' },
+                  { value: questionTypes.TRUE_FALSE, text: 'True/False' },
+                  { value: questionTypes.FILL_IN_THE_BLANK, text: 'Fill in the Blank' }
                 ]"
                 valueExpr="value"
                 displayExpr="text"
               ></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="Score" caption="Điểm số" [width]="100" [allowFiltering]="true" [allowSorting]="true">
+            <dxi-column dataField="Score" caption="Score" [width]="100" [allowFiltering]="true" [allowSorting]="true">
             </dxi-column>
-            <dxi-column dataField="Difficulty_Level" caption="Độ khó" [width]="100" [allowFiltering]="true" [allowSorting]="true">
+            <dxi-column dataField="Difficulty_Level" caption="Difficulty" [width]="100" [allowFiltering]="true" [allowSorting]="true">
               <dxo-lookup
                 [dataSource]="difficultyLevels"
                 valueExpr="value"
                 displayExpr="text"
               ></dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="Created_At" caption="Ngày tạo" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
+            <dxi-column dataField="Created_At" caption="Created Date" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
 
-            <!-- Cột thao tác -->
-            <dxi-column cellTemplate="cellAction" [width]="100" caption="Thao tác" [showInColumnChooser]="false">
+            <!-- Actions column -->
+            <dxi-column cellTemplate="cellAction" [width]="100" caption="Actions" [showInColumnChooser]="false">
             </dxi-column>
 
             <div *dxTemplate="let row of 'cellContent'" class="cellContent-container p-2">
@@ -154,11 +154,11 @@
             </div>
 
             <div *dxTemplate="let row of 'cellAction'" class="cellAction-container d-flex justify-content-around align-items-center p-2">
-              <a class="dx-icon-edit cursor-pointer" name="edit" icon="edit" (click)="editQuestion(row.data)" hint="Chỉnh sửa"></a>
-              <a class="dx-icon-trash cursor-pointer" name="delete" icon="trash" (click)="deleteQuestion(row.data)" hint="Xóa"></a>
+              <a class="dx-icon-edit cursor-pointer" name="edit" icon="edit" (click)="editQuestion(row.data)" hint="Edit"></a>
+              <a class="dx-icon-trash cursor-pointer" name="delete" icon="trash" (click)="deleteQuestion(row.data)" hint="Delete"></a>
             </div>
 
-            <!-- Cấu hình loading -->
+            <!-- Loading configuration -->
             <dxo-load-panel [enabled]="true"></dxo-load-panel>
           </dx-data-grid>
         </div>
@@ -167,7 +167,7 @@
   </ng-container>
 </app-generic-page>
 
-<!-- Popup thêm/sửa câu hỏi -->
+<!-- Add/Edit Question Popup -->
 <dx-popup
   [showTitle]="true"
   [title]="questionPopupTitle"

@@ -22,21 +22,21 @@
         </div>
       </div>
       <div class="right-block">
-        <p><i class="fa fa-pencil-square" aria-hidden="true"></i>Thông tin đăng nhập</p>
+        <p><i class="fa fa-pencil-square" aria-hidden="true"></i>Login Information</p>
         <form role="form">
           <div class="form-content">
             <div class="form-group">
-              <input [(ngModel)]="username" [placeholder]="'Tài khoản'" class="form-control input-underline input-lg"
+              <input [(ngModel)]="username" [placeholder]="'Username'" class="form-control input-underline input-lg"
                 type="text" name="username" />
             </div>
 
             <div class="form-group">
-              <input [(ngModel)]="password" [placeholder]="'Mật khẩu'" class="form-control input-underline input-lg"
+              <input [(ngModel)]="password" [placeholder]="'Password'" class="form-control input-underline input-lg"
                 type="password" name="password" (keyup.enter)="onLoggedIn()" />
             </div>
           </div>
           <div class="submit">
-            <a (click)="onLoggedIn()" class="submit-button">Đăng nhập</a>
+            <a (click)="onLoggedIn()" class="submit-button">Login</a>
             <img *ngIf="loading" src="../../assets/images/loading_spiner.gif">
           </div>
           &nbsp;
@@ -58,7 +58,7 @@
           </div>
 
           <div class="contact">
-            <p class="title-left"><i class="fa fa-headset me-2 icon" aria-hidden="true"></i>Liên hệ với chúng tôi:</p>
+            <p class="title-left"><i class="fa fa-headset me-2 icon" aria-hidden="true"></i>Contact us:</p>
             <div class="left-contact">
               <p><a href="https://www.facebook.com/profile.php?id=61576715691782" target="_blank"><i class="fa fa-facebook-square"></i>IGCSE Fanpage</a></p>
             </div>
@@ -71,53 +71,53 @@
             <img src="/assets/images/Logo IGCSE.png" alt="Logo">
           </div>
 
-          <!-- Form đăng nhập -->
+          <!-- Login Form -->
           <div class="form-container" [ngClass]="{'slide-out': !isLoginForm}">
-            <header>Đăng nhập</header>
+            <header>Login</header>
             <form role="form">
               <div class="form-content">
                 <div class="input-field">
-                  <input [(ngModel)]="username" placeholder="Tên đăng nhập" class="form-control"
+                  <input [(ngModel)]="username" placeholder="Username" class="form-control"
                     type="text" name="username" />
                   <i class="fa fa-user"></i>
                 </div>
 
                 <div class="input-field">
-                  <input [(ngModel)]="password" placeholder="Mật khẩu" class="form-control"
+                  <input [(ngModel)]="password" placeholder="Password" class="form-control"
                     type="password" name="password" (keyup.enter)="onLoggedIn()" />
                   <i class="fa fa-lock"></i>
                 </div>
 
                 <div class="d-flex justify-content-end mb-2">
-                  <a href="javascript:void(0)" class="forgot-password">Quên mật khẩu?</a>
+                  <a href="javascript:void(0)" class="forgot-password">Forgot Password?</a>
                 </div>
               </div>
               <div class="submit-area">
-                <dx-button text="Đăng nhập" [icon]="dxButtonConfig.import_icon" [type]="dxButtonConfig.add_type"
+                <dx-button text="Login" [icon]="dxButtonConfig.import_icon" [type]="dxButtonConfig.add_type"
                   (onClick)="onLoggedIn()" class="login-button">
                   <span *ngIf="!loading" class="btn-content">
                     <i class="fa fa-sign-in me-2" aria-hidden="true"></i>
-                    <span>Đăng nhập</span>
+                    <span>Login</span>
                   </span>
                   <span *ngIf="loading" class="btn-content">
                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    <span>Đang xử lý...</span>
+                    <span>Processing...</span>
                   </span>
                 </dx-button>
-                <a class="register-link" href="javascript:void(0)" (click)="toggleForm()">Chưa có tài khoản? <span>Đăng ký ngay</span></a>
+                <a class="register-link" href="javascript:void(0)" (click)="toggleForm()">Don't have an account? <span>Register now</span></a>
               </div>
             </form>
           </div>
 
-          <!-- Form đăng ký -->
+          <!-- Registration Form -->
           <div class="form-container register-form" [ngClass]="{'slide-in': !isLoginForm}">
-            <header>Đăng ký tài khoản</header>
+            <header>Register Account</header>
             <form role="form">
               <div class="form-content">
                 <div class="row g-2">
                   <div class="col-12">
                     <div class="input-field">
-                      <input [(ngModel)]="registerData.username" placeholder="Tên đăng nhập" class="form-control"
+                      <input [(ngModel)]="registerData.username" placeholder="Username" class="form-control"
                         type="text" name="reg-username" />
                       <i class="fa fa-user"></i>
                     </div>
@@ -125,7 +125,7 @@
 
                   <div class="col-12">
                     <div class="input-field">
-                      <input [(ngModel)]="registerData.fullName" placeholder="Họ và tên" class="form-control"
+                      <input [(ngModel)]="registerData.fullName" placeholder="Full Name" class="form-control"
                         type="text" name="reg-fullname" />
                       <i class="fa fa-id-card"></i>
                     </div>
@@ -141,7 +141,7 @@
 
                   <div class="col-12">
                     <div class="input-field">
-                      <input [(ngModel)]="registerData.password" placeholder="Mật khẩu" class="form-control"
+                      <input [(ngModel)]="registerData.password" placeholder="Password" class="form-control"
                         type="password" name="reg-password" />
                       <i class="fa fa-lock"></i>
                     </div>
@@ -149,7 +149,7 @@
 
                   <div class="col-12">
                     <div class="input-field">
-                      <input [(ngModel)]="registerData.confirmPassword" placeholder="Xác nhận mật khẩu" class="form-control"
+                      <input [(ngModel)]="registerData.confirmPassword" placeholder="Confirm Password" class="form-control"
                         type="password" name="reg-confirm-password" />
                       <i class="fa fa-check-circle"></i>
                     </div>
@@ -157,18 +157,18 @@
                 </div>
               </div>
               <div class="submit-area">
-                <dx-button text="Đăng ký" [icon]="dxButtonConfig.import_icon" [type]="dxButtonConfig.add_type"
+                <dx-button text="Register" [icon]="dxButtonConfig.import_icon" [type]="dxButtonConfig.add_type"
                   (onClick)="onRegister()" class="login-button">
                   <span *ngIf="!registerLoading" class="btn-content">
                     <i class="fa fa-user-plus me-2" aria-hidden="true"></i>
-                    <span>Đăng ký</span>
+                    <span>Register</span>
                   </span>
                   <span *ngIf="registerLoading" class="btn-content">
                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    <span>Đang xử lý...</span>
+                    <span>Processing...</span>
                   </span>
                 </dx-button>
-                <a class="register-link" href="javascript:void(0)" (click)="toggleForm()">Đã có tài khoản? <span>Đăng nhập ngay</span></a>
+                <a class="register-link" href="javascript:void(0)" (click)="toggleForm()">Already have an account? <span>Login now</span></a>
               </div>
             </form>
           </div>

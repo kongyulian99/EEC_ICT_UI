@@ -5,19 +5,19 @@ import 'devextreme/localization/globalize/currency';
 import 'devextreme/localization/globalize/message';
 
 // DevExtreme messages (en messages already included)
-import viMessages from 'devextreme/localization/messages/vi.json';
+import enMessages from 'devextreme/localization/messages/en.json';
 
 // CLDR data
-import viCldrData from 'devextreme-cldr-data/vi.json';
+import enCldrData from 'devextreme-cldr-data/en.json';
 import supplementalCldrData from 'devextreme-cldr-data/supplemental.json';
 
 import Globalize from 'globalize';
 
 Globalize.load(
-    viCldrData,
+    enCldrData,
     supplementalCldrData
 );
 
-Globalize.loadMessages(viMessages);
+Globalize.loadMessages(enMessages);
 
-Globalize.locale('vi');
+Globalize.locale('en');

@@ -1,7 +1,7 @@
 <div class="view-form">
     <div class="view-form-body">
         <div class="form-group">
-            <label for="file-upload-multiple" class="custom-file-upload"> <i class="fa fa-cloud-upload"></i> Thêm ảnh </label>
+            <label for="file-upload-multiple" class="custom-file-upload"> <i class="fa fa-cloud-upload"></i> Add Image </label>
             <!-- <input (change)="onFileChange($event)" type="file" id="file-upload" /> -->
             <input type='file' (change)="readURL($event)" multiple accept="image/*" id="file-upload-multiple"  />
             <div class="container-images">
@@ -9,7 +9,7 @@
                     <div class="image">
                         <img class="img" [src]="item.fileBase64" alt="" />
                         <div class="middle">
-                            <div class="delete-function" (click)="deleteImgDetail(i)">Xóa</div>
+                            <div class="delete-function" (click)="deleteImgDetail(i)">Delete</div>
                         </div>
                     </div>
                     <div class="text">

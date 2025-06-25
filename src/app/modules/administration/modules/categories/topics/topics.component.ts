@@ -69,6 +69,9 @@ export class TopicsComponent implements OnInit {
             );
           }
 
+          // Đánh số phân cấp
+          this.assignHierarchicalIndex();
+
           this.updateParentTopicsList();
 
           if (this.treeData.length > 0) {
@@ -88,6 +91,28 @@ export class TopicsComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+
+  // Hàm đánh số phân cấp cho treeData
+  assignHierarchicalIndex() {
+    const map = new Map<number, any>();
+    this.treeData.forEach(item => map.set(item.Id, item));
+    // Xây dựng cây
+    const roots = this.treeData.filter(item => !item.Parent_Id);
+    let index = 1;
+    roots.forEach(root => {
+      root.DisplayIndex = `${index}`;
+      this.assignChildIndex(root, map, root.DisplayIndex);
+      index++;
+    });
+  }
+
+  assignChildIndex(parent: any, map: Map<number, any>, prefix: string) {
+    const children = this.treeData.filter(item => item.Parent_Id === parent.Id);
+    children.forEach((child, idx) => {
+      child.DisplayIndex = `${prefix}.${idx + 1}`;
+      this.assignChildIndex(child, map, child.DisplayIndex);
+    });
   }
 
   updateParentTopicsList() {

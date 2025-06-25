@@ -1,18 +1,17 @@
-
 <div class="dinhkem-wrapper">
   <div class="dinhkem dx-icon-attach" [ngClass]="{haveDinhkem: listDinhKem.length > 0}" (click)="toggleShowDinhKemForm()"></div>
   <!-- <dx-text-area class="content" [readOnly]="readOnly" [autoResizeEnabled]="true" [(value)]="displayValue"
     (onValueChanged)="handleUpdateDisplayValue()"></dx-text-area> -->
   <div *ngIf="isShowForm" class="dinhkem-box">
     <div class="d-flex" style="align-items: center; justify-content: space-between;">
-      <h6 class="text-left">Tài liệu đính kèm: </h6>
+      <h6 class="text-left">Attachments: </h6>
       <span class="dx-icon-close" (click)="toggleShowDinhKemForm()"></span>
     </div>
-    <ul>
+    <ul class="list-unstyled">
       <li *ngFor="let dinhKem of listDinhKem; index as i;" style="display: flex; align-items: center;">
         <span style="margin-right: 3px;">{{i+1}}.</span>
-        <a href="{{dinhKem.filePath}}" title="{{dinhKem.FileName}}" target="_blank">{{dinhKem.FileName}}</a>
-        <span title="Xoá" class="dx-icon-close" style="cursor: pointer;" (click)="handleDeleteDinhKem(dinhKem)"></span>
+        <a [href]="dinhKem.Url" target="_blank">{{dinhKem.FileName}}</a>
+        <span title="Delete" class="dx-icon-close" style="cursor: pointer;" (click)="handleDeleteDinhKem(dinhKem)"></span>
       </li>
     </ul>
     <div *ngIf="!readOnly">
