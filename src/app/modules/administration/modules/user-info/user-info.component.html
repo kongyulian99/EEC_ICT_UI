@@ -7,19 +7,19 @@
                 </div>
             </div>
         </dxi-item>
-        <!-- <dxi-item  
-            location="after" 
-            widget="dxButton" 
-            locateInMenu="never" 
-        > 
+        <!-- <dxi-item
+            location="after"
+            widget="dxButton"
+            locateInMenu="never"
+        >
             <div appPermission appFunction="USER" appCommand="CREATE" *dxTemplate>
-                <dx-button text="Thêm mới" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()"></dx-button>
-            </div> 
+                <dx-button text="Add New" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()"></dx-button>
+            </div>
         </dxi-item> -->
     </dx-toolbar>
 </div>
 <!-- <div class="view-card-body">
-    
+
 </div> -->
 <div style="width: 600px; margin: 20px auto; min-height: calc(100vh - 120px);">
     <div style="height: 600px; background-color: white; padding: 18px;">
@@ -27,10 +27,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="my-2">
-                        <label for="">Họ và tên (<span style="color: red;">*</span>)</label>
+                        <label for="">Full Name (<span style="color: red;">*</span>)</label>
                         <dx-text-box [(value)]="entity.cUserFullName">
                             <dx-validator>
-                                <dxi-validation-rule type="required" message="Yêu cầu thông tin họ và tên"></dxi-validation-rule>
+                                <dxi-validation-rule type="required" message="Full name is required"></dxi-validation-rule>
                             </dx-validator>
                         </dx-text-box>
                     </div>
@@ -39,16 +39,16 @@
             <div class="row">
                 <div class="col-12">
                     <div class="my-2">
-                        <label for="">Đơn vị</label>
+                        <label for="">Unit</label>
                         <dx-text-box [(value)]="entity.TenDonVi" [readOnly]="true"></dx-text-box>
                     </div>
                 </div>
             </div>
-           
+
             <div class="row">
                 <div class="col-12">
                     <div class="my-2">
-                        <label for="">Giới tính</label>
+                        <label for="">Gender</label>
                         <dx-select-box [dataSource]="allGender" valueExpr="value" displayExpr="label"
                             [(value)]="entity.cGioiTinh"></dx-select-box>
                     </div>
@@ -65,21 +65,21 @@
             <div class="row">
                 <div class="col-12">
                     <div class="my-2">
-                        <label for="">Số điện thoại</label>
+                        <label for="">Phone Number</label>
                         <dx-text-box [(value)]="entity.cSDT"></dx-text-box>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <dx-button text="Lưu" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type"
+                    <dx-button text="Save" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type"
                         [useSubmitBehavior]="true">
                     </dx-button>
                 </div>
             </div>
         </form>
-        
-        
+
+
     </div>
-    
+
 </div>

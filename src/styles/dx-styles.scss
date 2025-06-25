@@ -26,7 +26,7 @@
 
 .dx-datagrid-rowsview .dx-row {
   border-color: #dee2e6;
-  height: 40px; /*Bằng với chiều cao của button*/
+  height: 40px; /*Equal to button height*/
 }
 
 .dx-datagrid-borders > .dx-datagrid-rowsview,
@@ -587,7 +587,7 @@ dx-tree-list {
 
 
 // table
-// tăng không gian điền số cho bảng kế hoạch năm
+// increase number filling space for year plan table
 .table-kehoach {
   tr {
     height: auto !important;

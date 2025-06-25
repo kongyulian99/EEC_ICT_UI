@@ -5,7 +5,7 @@
         [value]="startDate"
         [max]="endDate"
         type="date"
-        placeholder="Từ ngày"
+        placeholder="From Date"
         displayFormat="dd/MM/yyyy"
         (onValueChanged)="onStartDateChanged($event)">
       </dx-date-box>
@@ -13,12 +13,12 @@
         [value]="endDate"
         [min]="startDate"
         type="date"
-        placeholder="Đến ngày"
+        placeholder="To Date"
         displayFormat="dd/MM/yyyy"
         (onValueChanged)="onEndDateChanged($event)">
       </dx-date-box>
       <dx-button
-        text="Áp dụng"
+        text="Apply"
         type="default"
         [icon]="'refresh'"
         (onClick)="refreshDashboard()">
@@ -28,7 +28,7 @@
 
   <ng-container body>
     <div class="dashboard-container">
-      <!-- Hàng đầu tiên - KPI Cards -->
+      <!-- First Row - KPI Cards -->
       <div class="kpi-cards">
         <div class="kpi-card" [ngClass]="{'loading': loading}">
           <div class="kpi-icon">
@@ -68,7 +68,7 @@
         </div>
       </div>
 
-      <!-- Hàng thứ hai - Biểu đồ -->
+      <!-- Second Row - Charts -->
       <div class="chart-row">
         <div class="chart-container">
           <div class="chart-header">
@@ -135,7 +135,7 @@
         </div>
       </div>
 
-      <!-- Hàng thứ ba - Bảng dữ liệu -->
+      <!-- Third Row - Data Tables -->
       <div class="data-row">
         <div class="data-container">
           <div class="data-header">

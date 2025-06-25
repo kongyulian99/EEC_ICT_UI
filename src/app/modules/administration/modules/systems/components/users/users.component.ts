@@ -13,8 +13,8 @@ import { FormUserDetailComponent } from './form-user-detail/form-user-detail.com
 export class UsersComponent implements OnInit {
 
   @ViewChild('detail', { static: false }) detail!: FormUserDetailComponent;
-  placeholderSearch = 'Nhập tên người dùng ...';
-  title = 'Danh sách người dùng';
+  placeholderSearch = 'Enter user name...';
+  title = 'User List';
   optionsBtnFilter = {
     icon: 'find',
     type: 'default',
@@ -80,7 +80,7 @@ export class UsersComponent implements OnInit {
           }
           this.totalRows = response.ReturnData ? response.ReturnData?.length : 0;
         } else {
-          this.notificationService.showError('Dữ liệu tải lỗi!');
+          this.notificationService.showError('Data loading error!');
           this.totalRows = 0;
           this.allData = [];
           this.listData = [];
@@ -89,7 +89,7 @@ export class UsersComponent implements OnInit {
       },
       error: (err) => {
         console.error('API Error:', err);
-        this.notificationService.showError('Hệ thống xảy ra lỗi!');
+        this.notificationService.showError('System error occurred!');
         this.totalRows = 0;
         this.allData = [];
         this.listData = [];
@@ -131,7 +131,7 @@ export class UsersComponent implements OnInit {
     const fromIndex = this.pageSize * (this.pageIndex - 1);
     const toIndex = fromIndex + this.pageSize;
     this.listData = this.allData.slice(fromIndex, toIndex);
-    console.log('Dữ liệu hiển thị:', this.listData);
+    console.log('Display data:', this.listData);
   }
 
   onFocusedRowChanged(e: any) {
@@ -181,7 +181,7 @@ export class UsersComponent implements OnInit {
   save() {
     const check = this.detail.validationEntity.instance.validate();
     if (!check.isValid || this.detail.existName) {
-      this.notificationService.showError('Thông tin nhập không hợp lệ!');
+      this.notificationService.showError('Invalid input information!');
       return;
     }
 
@@ -198,9 +198,9 @@ export class UsersComponent implements OnInit {
               this.focusKey = res.ReturnData;
               this.state = 'edit';
               this.totalRows++;
-              this.notificationService.showSuccess('Thêm mới thành công!');
+              this.notificationService.showSuccess('Added successfully!');
             } else {
-              this.notificationService.showError('Không thành công!');
+              this.notificationService.showError('Unsuccessful!');
             }
           }
         );
@@ -209,14 +209,14 @@ export class UsersComponent implements OnInit {
         .subscribe(
           (res: any) => {
             if (res.ReturnStatus.Code === 1) {
-              this.notificationService.showSuccess('Cập nhật thành công!');
+              this.notificationService.showSuccess('Updated successfully!');
               const index1 = this.listData.findIndex(o => o.Id == body.Id);
               this.listData[index1] = this.detail.entity;
               const index2 = this.allData.findIndex(o => o.Id == body.Id);
               this.allData[index2] = this.detail.entity;
               this.state = 'detail';
             } else {
-              this.notificationService.showError('Không thành công!');
+              this.notificationService.showError('Unsuccessful!');
             }
           }
         );
@@ -224,19 +224,19 @@ export class UsersComponent implements OnInit {
   }
 
   delete(id: number, username: string) {
-    this.notificationService.showConfirmation("Bạn có chắc chắn muốn xóa user '" + username + "'?", () => {
+    this.notificationService.showConfirmation("Are you sure you want to delete user '" + username + "'?", () => {
       this.userService.deleteUser(id).subscribe({
         next: (response: any) => {
           if (response.ReturnStatus.Code == 1) {
             this.listData = this.listData.filter(o => o.Id != id);
             this.allData = this.allData.filter(o => o.Id != id);
-            this.notificationService.showSuccess("Đã xóa thành công user '" + username + "'!");
+            this.notificationService.showSuccess("Successfully deleted user '" + username + "'!");
           } else {
-            this.notificationService.showError('Không thành công!');
+            this.notificationService.showError('Unsuccessful!');
           }
         },
         error: _ => {
-          this.notificationService.showError('Lỗi hệ thống!')
+          this.notificationService.showError('System error!');
         }
       });
     });
@@ -247,14 +247,14 @@ export class UsersComponent implements OnInit {
   }
 
   resetPassword(userId: number) {
-    this.notificationService.showConfirmation('Chắc chắn thay đổi mật khẩu người dùng về mật khẩu mặc định?', () => {
+    this.notificationService.showConfirmation('Are you sure you want to reset the user password to default?', () => {
       this.userService.updatePassword(userId, 'Abc123')
         .subscribe(
           (res: any) => {
             if (res.ReturnStatus.Code === 1) {
-              this.notificationService.showSuccess('Đặt lại mật khẩu thành công!');
+              this.notificationService.showSuccess('Password reset successfully!');
             } else {
-              this.notificationService.showError('Không thành công!');
+              this.notificationService.showError('Unsuccessful!');
             }
           }
         );

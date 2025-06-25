@@ -195,10 +195,10 @@
   </app-generic-page>
 </div>
 
-<!-- Popup xác nhận nộp bài -->
+<!-- Submit confirmation popup -->
 <!-- <dx-popup
   [showTitle]="true"
-  title="Xác nhận nộp bài"
+  title="Confirm Submit Exam"
   [(visible)]="submitPopupVisible"
   [dragEnabled]="true"
   [closeOnOutsideClick]="false"
@@ -206,17 +206,17 @@
 >
   <div *dxTemplate="let data of 'content'">
     <div class="p-3">
-      <p>Bạn có chắc chắn muốn nộp bài kiểm tra này?</p>
+      <p>Are you sure you want to submit this exam?</p>
       <div class="d-flex justify-content-end mt-3">
         <dx-button
-          text="Hủy"
+          text="Cancel"
           [type]="'normal'"
           [stylingMode]="'outlined'"
           (onClick)="submitPopupVisible = false"
           class="me-2"
         ></dx-button>
         <dx-button
-          text="Xác nhận nộp bài"
+          text="Confirm Submit Exam"
           [type]="'success'"
           (onClick)="confirmSubmit()"
         ></dx-button>
@@ -225,7 +225,7 @@
   </div>
 </dx-popup> -->
 
-<!-- Popup hiển thị kết quả bài thi -->
+<!-- Exam result popup -->
 <dx-popup
   [showTitle]="true"
   title="Exam Result"

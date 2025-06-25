@@ -1,4 +1,4 @@
-<dx-select-box [label]="label" [stylingMode]="stylingMode" placeholder="Chọn tháng" valueExpr="Id" displayExpr="Ten" [dataSource]="items"
+<dx-select-box [label]="label" [stylingMode]="stylingMode" placeholder="Select month" valueExpr="Id" displayExpr="Ten" [dataSource]="items"
   [(value)]="thang" (onValueChanged)="onValueChanged($event)"
   [searchEnabled]="true">
   <dx-validator *ngIf="isValidate">

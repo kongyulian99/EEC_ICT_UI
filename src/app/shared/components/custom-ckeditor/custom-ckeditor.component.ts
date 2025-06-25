@@ -70,7 +70,7 @@ import { environment } from 'src/environments/environment';
   encapsulation: ViewEncapsulation.None,
 })
 export class CustomCkEditorComponent {
-  @Input() placeholder = 'Nhập thông tin tại đây';
+  @Input() placeholder = 'Enter information here';
   @Input() isValidate = false;
   @Input() message = '';
   constructor(private changeDetector: ChangeDetectorRef) {}

@@ -1,7 +1,7 @@
 <div class="widget-header">
   <dx-toolbar>
     <dxi-item *ngIf="haveBackButton" location="before" widget="dxButton" locateInMenu="never">
-      <dx-button id="button" hint="Về trang trước" (click)="handleBack()" icon="arrowleft"
+      <dx-button id="button" hint="Go back" (click)="handleBack()" icon="arrowleft"
         [type]="dxButtonConfig.onlyIcon_type">
       </dx-button>
     </dxi-item>
@@ -19,7 +19,7 @@
       <div class="filters px-0">
         <div class="main-filters px-0">
           <ng-content select="[main-filters]"></ng-content>
-          <i #moreFilterButton title="Thêm bộ lọc" class="icon fa fa-filter fa-lg"
+          <i #moreFilterButton title="Add Filter" class="icon fa fa-filter fa-lg"
             [ngClass]="{pushed: isShowExtraFilter}" (click)="showExtraFilters()"></i>
         </div>
         <div #extraFilters class="extra-filters" [ngClass]="{'show-filter': isShowExtraFilter}">
@@ -66,6 +66,6 @@
   </div> -->
 </div>
 
-<dx-load-panel shadingColor="rgba(0,0,0,0.4)" textContent="Đang xử lý" [position]="{ of: '.content' }" [(visible)]="loading"
+<dx-load-panel shadingColor="rgba(0,0,0,0.4)" textContent="Processing" [position]="{ of: '.content' }" [(visible)]="loading"
   [showIndicator]="true" [showPane]="false" [shading]="true" [closeOnOutsideClick]="false">
 </dx-load-panel>

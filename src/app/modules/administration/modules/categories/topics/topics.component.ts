@@ -11,8 +11,8 @@ import { TopicsService } from 'src/app/shared/services/topics.service';
   styleUrls: ['./topics.component.scss']
 })
 export class TopicsComponent implements OnInit {
-  placeholderSearch = 'Nhập tên chủ đề...';
-  title = 'Danh sách chủ đề';
+  placeholderSearch = 'Enter topic name...';
+  title = 'Topic List';
   optionsBtnFilter = {
     icon: 'find',
     type: 'default',
@@ -38,8 +38,8 @@ export class TopicsComponent implements OnInit {
   @ViewChild('treeList') treeList: any;
 
   // Form validation
-  namePattern = /^.{3,100}$/;
-  namePatternMessage = 'Tên chủ đề phải từ 3-100 ký tự';
+  namePattern = /^.{3,300}$/;
+  namePatternMessage = 'Topic name must be 3-300 characters';
 
   constructor(
     private notificationService: NotificationService,
@@ -55,13 +55,13 @@ export class TopicsComponent implements OnInit {
   loadData() {
     this.loading = true;
 
-    // Gọi API lấy danh sách chủ đề
+    // Call API to get topic list
     this.topicsService.getAllTopics().subscribe(
       (response: ResponseData) => {
         if (response && response.ReturnStatus && response.ReturnStatus.Code === 1) {
           this.treeData = response.ReturnData || [];
 
-          // Lọc theo từ khóa tìm kiếm nếu có
+          // Filter by search keyword if any
           if (this.textSearch) {
             this.treeData = this.treeData.filter(item =>
               item.Name.toLowerCase().includes(this.textSearch.toLowerCase()) ||
@@ -69,7 +69,7 @@ export class TopicsComponent implements OnInit {
             );
           }
 
-          // Đánh số phân cấp
+          // Number hierarchical levels
           this.assignHierarchicalIndex();
 
           this.updateParentTopicsList();
@@ -82,22 +82,22 @@ export class TopicsComponent implements OnInit {
             this.currentEntity = {};
           }
         } else {
-          this.notificationService.showError('Không thể tải dữ liệu chủ đề');
+          this.notificationService.showError('Unable to load topic data');
         }
         this.loading = false;
       },
       error => {
-        this.notificationService.showError('Lỗi khi tải dữ liệu: ' + error);
+        this.notificationService.showError('Error loading data: ' + error);
         this.loading = false;
       }
     );
   }
 
-  // Hàm đánh số phân cấp cho treeData
+  // Function to number hierarchical levels for treeData
   assignHierarchicalIndex() {
     const map = new Map<number, any>();
     this.treeData.forEach(item => map.set(item.Id, item));
-    // Xây dựng cây
+    // Build tree
     const roots = this.treeData.filter(item => !item.Parent_Id);
     let index = 1;
     roots.forEach(root => {
@@ -116,9 +116,9 @@ export class TopicsComponent implements OnInit {
   }
 
   updateParentTopicsList() {
-    // Cập nhật danh sách chủ đề cha (để hiển thị trong dropdown)
+    // Update parent topic list (to display in dropdown)
     this.parentTopics = [
-      { Id: null, Name: '-- Chủ đề gốc --' },
+      { Id: null, Name: '-- Root Topic --' },
       ...this.treeData.map(item => ({ Id: item.Id, Name: item.Name }))
     ];
   }
@@ -204,17 +204,17 @@ export class TopicsComponent implements OnInit {
   }
 
   validateParentId(topicId: number, parentId: number | null): boolean {
-    // Không cho phép chọn chính nó làm cha
+    // Don't allow selecting itself as parent
     if (parentId === topicId) {
-      this.notificationService.showError('Không thể chọn chính chủ đề này làm chủ đề cha!');
+      this.notificationService.showError('Cannot select this topic as its own parent!');
       return false;
     }
 
-    // Không cho phép chọn con của nó làm cha (tránh tạo vòng lặp)
+    // Don't allow selecting its child as parent (avoid circular reference)
     if (parentId !== null) {
       const childrenIds = this.getChildrenIds(topicId);
       if (childrenIds.includes(parentId)) {
-        this.notificationService.showError('Không thể chọn chủ đề con làm chủ đề cha (sẽ tạo vòng lặp)!');
+        this.notificationService.showError('Cannot select child topic as parent (will create circular reference)!');
         return false;
       }
     }
@@ -236,7 +236,7 @@ export class TopicsComponent implements OnInit {
 
   save() {
     if (!this.currentEntity.Name || this.currentEntity.Name.trim() === '') {
-      this.notificationService.showError('Tên chủ đề không được để trống!');
+      this.notificationService.showError('Topic name cannot be empty!');
       return;
     }
 
@@ -245,54 +245,54 @@ export class TopicsComponent implements OnInit {
       return;
     }
 
-    // Kiểm tra trùng tên (trừ chính nó khi đang edit)
+    // Check for duplicate names (except itself when editing)
     const existingName = this.treeData.find(item =>
       item.Name.toLowerCase() === this.currentEntity.Name.toLowerCase() &&
       item.Id !== this.currentEntity.Id
     );
 
     if (existingName) {
-      this.notificationService.showError('Tên chủ đề đã tồn tại!');
+      this.notificationService.showError('Topic name already exists!');
       return;
     }
 
-    // Kiểm tra Parent_Id hợp lệ
+    // Check valid Parent_Id
     if (this.currentEntity.Id > 0 && !this.validateParentId(this.currentEntity.Id, this.currentEntity.Parent_Id)) {
       return;
     }
 
     if (this.state === 'insert') {
-      // Thêm mới
+      // Add new
       this.topicsService.createTopic(this.currentEntity).subscribe(
         (response: ResponseData) => {
           if (response && response.ReturnStatus && response.ReturnStatus.Code === 1) {
-            this.notificationService.showSuccess('Thêm mới chủ đề thành công!');
+            this.notificationService.showSuccess('Topic added successfully!');
             this.loadData();
-            // Lấy ID mới được tạo từ response
+            // Get new ID from response
             if (response.ReturnData && response.ReturnData.New_Topic_Id) {
               this.focusKey = response.ReturnData.New_Topic_Id;
             }
           } else {
-            this.notificationService.showError(response.ReturnStatus?.Message || 'Thêm mới thất bại!');
+            this.notificationService.showError(response.ReturnStatus?.Message || 'Add failed!');
           }
         },
         error => {
-          this.notificationService.showError('Lỗi khi thêm mới: ' + error);
+          this.notificationService.showError('Error adding: ' + error);
         }
       );
     } else {
-      // Cập nhật
+      // Update
       this.topicsService.updateTopic(this.currentEntity).subscribe(
         (response: ResponseData) => {
           if (response && response.ReturnStatus && response.ReturnStatus.Code === 1) {
-            this.notificationService.showSuccess('Cập nhật chủ đề thành công!');
+            this.notificationService.showSuccess('Topic updated successfully!');
             this.loadData();
           } else {
-            this.notificationService.showError(response.ReturnStatus?.Message || 'Cập nhật thất bại!');
+            this.notificationService.showError(response.ReturnStatus?.Message || 'Update failed!');
           }
         },
         error => {
-          this.notificationService.showError('Lỗi khi cập nhật: ' + error);
+          this.notificationService.showError('Error updating: ' + error);
         }
       );
     }
@@ -301,17 +301,17 @@ export class TopicsComponent implements OnInit {
   }
 
   delete(id: number, name: string) {
-    // Kiểm tra xem có chủ đề con không
+    // Check if has child topics
     const hasChildren = this.treeData.some(item => item.Parent_Id === id);
 
     if (hasChildren) {
       this.notificationService.showConfirmation(
-        `Chủ đề '${name}' có chứa các chủ đề con. Khi xóa, các chủ đề con sẽ trở thành chủ đề gốc. Bạn có chắc chắn muốn xóa?`,
+        `Topic '${name}' has child topics. When deleted, these child topics will become root topics. Are you sure you want to delete?`,
         () => this.performDelete(id, name)
       );
     } else {
       this.notificationService.showConfirmation(
-        `Bạn có chắc chắn muốn xóa chủ đề '${name}'?`,
+        `Are you sure you want to delete topic '${name}'?`,
         () => this.performDelete(id, name)
       );
     }
@@ -321,14 +321,14 @@ export class TopicsComponent implements OnInit {
     this.topicsService.deleteTopic(id).subscribe(
       (response: ResponseData) => {
         if (response && response.ReturnStatus && response.ReturnStatus.Code === 1) {
-          this.notificationService.showSuccess(`Đã xóa thành công chủ đề '${name}'!`);
+          this.notificationService.showSuccess(`Deleted topic '${name}' successfully!`);
           this.loadData();
         } else {
-          this.notificationService.showError(response.ReturnStatus?.Message || 'Xóa thất bại!');
+          this.notificationService.showError(response.ReturnStatus?.Message || 'Delete failed!');
         }
       },
       error => {
-        this.notificationService.showError('Lỗi khi xóa: ' + error);
+        this.notificationService.showError('Error deleting: ' + error);
       }
     );
   }

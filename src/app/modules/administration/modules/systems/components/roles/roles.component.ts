@@ -13,8 +13,8 @@ import { ResponseData } from 'src/app/shared/models';
 export class RolesComponent implements OnInit {
 
   @ViewChild('detail', { static: false }) detail!: FormRoleDetailComponent;
-  placeholderSearch = 'Nhập tên chức năng...';
-  title = 'Danh sách chức năng';
+  placeholderSearch = 'Enter function name...';
+  title = 'Function List';
 
   dxButtonConfig = dxButtonConfig;
 
@@ -61,12 +61,12 @@ export class RolesComponent implements OnInit {
             this.state = 'detail';
           }
         } else {
-          this.notificationService.showError('Dữ liệu tải lỗi!');
+          this.notificationService.showError('Data loading error!');
         }
         this.loading = false;
       },
       error: _ => {
-        this.notificationService.showError('Hệ thống xảy ra lỗi!');
+        this.notificationService.showError('System error occurred!');
         this.loading = false;
       }
     });
@@ -89,7 +89,7 @@ export class RolesComponent implements OnInit {
   save() {
     const check = this.detail.validationEntity.instance.validate();
     if (!check.isValid || this.detail.existName) {
-      this.notificationService.showError('Thông tin nhập không hợp lệ!');
+      this.notificationService.showError('Invalid input information!');
       return;
     }
     const body = clone(this.detail.entity);
@@ -110,7 +110,7 @@ export class RolesComponent implements OnInit {
               this.focusKey = res.ReturnData.Data;
               this.state = 'detail';
             } else {
-              this.notificationService.showError('Không thành công!');
+              this.notificationService.showError('Unsuccessful!');
             }
           }
         )
@@ -120,30 +120,30 @@ export class RolesComponent implements OnInit {
         .subscribe(
           (res: any) => {
             if (res.ReturnStatus.Code === 0) {
-              this.notificationService.showSuccess('Cập nhật thành công!');
+              this.notificationService.showSuccess('Updated successfully!');
               const index2 = this.allData.findIndex(o => o.ID == body.ID)
               this.allData[index2] = this.detail.entity;
               this.state = 'detail';
             } else {
-              this.notificationService.showError('Không thành công!');
+              this.notificationService.showError('Unsuccessful!');
             }
           }
         )
     }
   }
   delete(id: number, name: string) {
-    this.notificationService.showConfirmation("Chắc chắn muốn xóa chức năng '" + name + "'?", () => {
+    this.notificationService.showConfirmation("Are you sure you want to delete function '" + name + "'?", () => {
       this.roleService.processCommand('ROLE_DELETE', { ID: id }).subscribe({
         next: (response: any) => {
           if (response.ReturnStatus.Code == 0) {
             this.allData = this.allData.filter(o => o.ID != id);
-            this.notificationService.showSuccess("Đã xóa thành công chức năng '" + name + "'!");
+            this.notificationService.showSuccess("Successfully deleted function '" + name + "'!");
           } else {
-            this.notificationService.showError('Không thành công!');
+            this.notificationService.showError('Unsuccessful!');
           }
         },
         error: _ => {
-          this.notificationService.showError('Lỗi hệ thống!')
+          this.notificationService.showError('System error!')
         }
       })
     })

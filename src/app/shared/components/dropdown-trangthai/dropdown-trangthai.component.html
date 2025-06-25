@@ -1,7 +1,7 @@
-<dx-select-box [label]="label" [stylingMode]="stylingMode" placeholder="Chọn tình trạng giải ngân" valueExpr="Value" displayExpr="Ten" [dataSource]="items"
+<dx-select-box [label]="label" [stylingMode]="stylingMode" placeholder="Select disbursement status" valueExpr="Value" displayExpr="Ten" [dataSource]="items"
   [(value)]="trangthai" (onValueChanged)="onValueChanged($event)"
   [searchEnabled]="true">
-  <dx-validator *ngIf="isValidate">
-    <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+  <dx-validator>
+    <dxi-validation-rule type="required" message="Information is required"></dxi-validation-rule>
   </dx-validator>
 </dx-select-box>

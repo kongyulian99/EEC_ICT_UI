@@ -612,12 +612,12 @@ ngx-extended-pdf-viewer .textLayer .selected {
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.6);
-        /* Màu đen mờ với độ mờ 50% */
+        /* Dimmed black with 50% opacity */
         opacity: 0;
         transition: opacity 0.3s ease;
-        /* Hiệu ứng chuyển tiếp mượt */
+        /* Smooth transition effect */
         pointer-events: none;
-        /* Đảm bảo lớp phủ không ảnh hưởng đến sự tương tác của chuột */
+        /* Ensure overlay doesn't affect mouse interaction */
       }
 
       &:hover {

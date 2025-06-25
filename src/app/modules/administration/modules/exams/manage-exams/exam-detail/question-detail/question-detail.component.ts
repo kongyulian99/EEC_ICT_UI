@@ -31,7 +31,7 @@ export class QuestionDetailComponent implements OnInit {
   @Output() save = new EventEmitter<QuestionInfo>();
   @Output() cancel = new EventEmitter<void>();
 
-  // Dữ liệu câu hỏi theo loại
+  // Question data by type
   multipleChoiceData: MultipleChoiceData = { options: ['', '', '', ''], correctOption: 0 };
   trueFalseData: TrueFalseData = { correctAnswer: true };
   fillInTheBlankData: FillInTheBlankData = { segments: [''], answers: [''] };
@@ -39,25 +39,25 @@ export class QuestionDetailComponent implements OnInit {
   // Enum
   questionTypes = QuestionType;
 
-  // Các mức độ khó
+  // Difficulty levels
   difficultyLevels = [
-    { value: Enum_DifficutyLevel.EASY, text: 'Dễ' },
-    { value: Enum_DifficutyLevel.MEDIUM, text: 'Trung bình' },
-    { value: Enum_DifficutyLevel.HARD, text: 'Khó' }
+    { value: Enum_DifficutyLevel.EASY, text: 'Easy' },
+    { value: Enum_DifficutyLevel.MEDIUM, text: 'Medium' },
+    { value: Enum_DifficutyLevel.HARD, text: 'Hard' }
   ];
 
   // Button config
   dxButtonConfig = dxButtonConfig;
 
-  // Hàm Number để sử dụng trong template
+  // Number function to use in template
   Number = Number;
 
   constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    // Khởi tạo giá trị mặc định cho điểm số nếu chưa có
+    // Initialize default score value if not set
     if (!this.editingQuestion.Score) {
-      this.editingQuestion.Score = 1.0; // Giá trị mặc định là 1 điểm
+      this.editingQuestion.Score = 1.0; // Default value is 1 point
     }
     this.initQuestionData();
   }
@@ -66,13 +66,13 @@ export class QuestionDetailComponent implements OnInit {
     this.initQuestionData();
   }
 
-  // Khởi tạo dữ liệu câu hỏi
+  // Initialize question data
   initQuestionData(): void {
     if (this.editingQuestion) {
-      // Đảm bảo Question_Type là số nguyên
+      // Ensure Question_Type is integer
       this.editingQuestion.Question_Type = Number(this.editingQuestion.Question_Type);
 
-      // Parse dữ liệu JSON theo loại câu hỏi
+      // Parse JSON data by question type
       try {
         if (this.editingQuestion.Question_Data_Json) {
           const questionData = JSON.parse(this.editingQuestion.Question_Data_Json);
@@ -94,9 +94,9 @@ export class QuestionDetailComponent implements OnInit {
                 segments: questionData.segments || [''],
                 answers: questionData.answers || ['']
               };
-              // Đợi một tick để content được parse
+              // Wait one tick for content to be parsed
               setTimeout(() => {
-                // Kiểm tra và tự động đồng bộ số lượng đáp án với số chỗ trống nếu cần
+                // Check and automatically sync answer count with blank count if needed
                 const blankCount = this.getBlankCount();
                 if (blankCount > 0 && blankCount !== this.fillInTheBlankData.answers.length) {
                   this.syncAnswersWithBlanks();
@@ -105,37 +105,37 @@ export class QuestionDetailComponent implements OnInit {
               break;
           }
         } else {
-          // Khởi tạo dữ liệu mặc định nếu không có dữ liệu
+          // Initialize default data if no data exists
           this.resetQuestionData();
         }
       } catch (e) {
-        console.error('Lỗi khi parse dữ liệu câu hỏi:', e);
-        // Khởi tạo dữ liệu mặc định nếu parse lỗi
+        console.error('Error parsing question data:', e);
+        // Initialize default data if parse error
         this.resetQuestionData();
       }
     }
   }
 
-  // Reset dữ liệu câu hỏi về mặc định
+  // Reset question data to default
   resetQuestionData(): void {
     this.multipleChoiceData = { options: ['', '', '', ''], correctOption: 0 };
     this.trueFalseData = { correctAnswer: true };
     this.fillInTheBlankData = { segments: [''], answers: [''] };
   }
 
-  // Xử lý khi thay đổi loại câu hỏi
+  // Handle when question type changes
   onQuestionTypeChanged(e: any): void {
-    // Đảm bảo Question_Type là số nguyên
+    // Ensure Question_Type is integer
     this.editingQuestion.Question_Type = Number(this.editingQuestion.Question_Type);
 
-    // Khởi tạo lại dữ liệu mặc định cho loại câu hỏi mới
+    // Re-initialize default data for new question type
     this.resetQuestionData();
 
-    // Nếu là câu hỏi điền vào chỗ trống, đợi nội dung được load, sau đó kiểm tra
+    // If it's a fill-in-the-blank question, wait for content to load, then check
     if (Number(this.editingQuestion.Question_Type) === this.questionTypes.FILL_IN_THE_BLANK) {
-      // Đợi nội dung được cập nhật
+      // Wait for content to be updated
       setTimeout(() => {
-        // Kiểm tra số lượng chỗ trống và đồng bộ đáp án nếu cần
+        // Check blank count and sync answers if needed
         const blankCount = this.getBlankCount();
         if (blankCount > 0) {
           this.syncAnswersWithBlanks();
@@ -144,12 +144,12 @@ export class QuestionDetailComponent implements OnInit {
     }
   }
 
-  // Thêm lựa chọn cho câu hỏi trắc nghiệm
+  // Add option for multiple choice question
   addOption(): void {
-    // Tạo bản sao mới của mảng options
+    // Create new copy of options array
     const newOptions = [...this.multipleChoiceData.options, ''];
 
-    // Cập nhật với bản sao mới
+    // Update with new copy
     this.multipleChoiceData = {
       ...this.multipleChoiceData,
       options: newOptions
@@ -157,23 +157,23 @@ export class QuestionDetailComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Xóa lựa chọn cho câu hỏi trắc nghiệm
+  // Remove option for multiple choice question
   removeOption(index: number): void {
     if (this.multipleChoiceData.options.length > 2) {
-      // Tạo bản sao mới của mảng options
+      // Create new copy of options array
       const newOptions = [...this.multipleChoiceData.options];
       newOptions.splice(index, 1);
 
-      // Điều chỉnh lại đáp án đúng nếu cần
+      // Adjust correct answer if needed
       let newCorrectOption = this.multipleChoiceData.correctOption;
       if (newCorrectOption >= newOptions.length) {
         newCorrectOption = newOptions.length - 1;
       } else if (index === newCorrectOption) {
-        // Nếu xóa đáp án đúng, chọn đáp án đầu tiên làm đáp án đúng
+        // If deleting correct answer, select first answer as correct
         newCorrectOption = 0;
       }
 
-      // Cập nhật với bản sao mới
+      // Update with new copy
       this.multipleChoiceData = {
         options: newOptions,
         correctOption: newCorrectOption
@@ -182,28 +182,28 @@ export class QuestionDetailComponent implements OnInit {
     }
   }
 
-  // Thêm đáp án cho câu hỏi điền vào chỗ trống
+  // Add answer for fill-in-the-blank question
   addAnswer(): void {
-    // Tạo bản sao mới của mảng đáp án
+    // Create new copy of answers array
     const newAnswers = [...this.fillInTheBlankData.answers, ''];
 
-    // Cập nhật với bản sao mới
+    // Update with new copy
     this.fillInTheBlankData = {
       ...this.fillInTheBlankData,
       answers: newAnswers
     };
 
-    // Thêm một chỗ trống mới vào nội dung nếu cần
+    // Add a new blank to content if needed
     const blankCount = this.getBlankCount();
     const answerCount = newAnswers.length;
 
-    // Nếu số đáp án nhiều hơn số chỗ trống, thêm chỗ trống vào cuối nội dung
+    // If answer count is more than blank count, add blank to end of content
     if (answerCount > blankCount) {
-      // Đảm bảo content không rỗng
+      // Ensure content is not empty
       if (!this.editingQuestion.Content || this.editingQuestion.Content.trim() === '') {
-        this.editingQuestion.Content = 'Hãy điền vào chỗ trống: [[...]]';
+        this.editingQuestion.Content = 'Please fill in the blank: [[...]]';
       } else {
-        // Thêm chỗ trống vào cuối nội dung nếu chưa có
+        // Add blank to end of content if not already there
         this.editingQuestion.Content += ' [[...]]';
       }
     }
@@ -211,7 +211,7 @@ export class QuestionDetailComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Xóa đáp án cho câu hỏi điền vào chỗ trống
+  // Remove answer for fill-in-the-blank question
   removeAnswer(index: number): void {
     if (this.fillInTheBlankData.answers.length > 1) {
       const newAnswers = [...this.fillInTheBlankData.answers];
@@ -226,9 +226,9 @@ export class QuestionDetailComponent implements OnInit {
     }
   }
 
-  // Phương thức xử lý khi chọn đáp án đúng cho câu hỏi trắc nghiệm
+  // Method to handle when selecting correct answer for multiple choice question
   setCorrectOption(index: number): void {
-    // Tạo bản sao mới để đảm bảo change detection hoạt động
+    // Create new copy to ensure change detection works
     this.multipleChoiceData = {
       options: [...this.multipleChoiceData.options],
       correctOption: index
@@ -236,13 +236,13 @@ export class QuestionDetailComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Cập nhật đáp án cho câu hỏi điền vào chỗ trống
+  // Update answer for fill-in-the-blank question
   updateAnswer(index: number, value: string): void {
-    // Tạo bản sao mới hoàn toàn của mảng đáp án
+    // Create new copy of answers array
     const newAnswers = [...this.fillInTheBlankData.answers];
     newAnswers[index] = value;
 
-    // Cập nhật với bản sao mới hoàn toàn
+    // Update with new copy of answers
     this.fillInTheBlankData = {
       ...this.fillInTheBlankData,
       answers: newAnswers
@@ -250,7 +250,7 @@ export class QuestionDetailComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Phương thức xử lý khi chọn đáp án đúng/sai
+  // Method to handle when selecting correct/incorrect answer
   setTrueFalseAnswer(event: any): void {
     if (event && event.value !== undefined) {
       this.trueFalseData = {
@@ -260,9 +260,9 @@ export class QuestionDetailComponent implements OnInit {
     }
   }
 
-  // Xử lý khi giá trị đáp án trắc nghiệm thay đổi
+  // Handle when multiple choice answer changes
   onMultipleChoiceAnswerChanged(index: number, event: any): void {
-    // Tạo mảng mới để tránh tham chiếu đến mảng cũ
+    // Create new copy to avoid reference issues
     const newOptions = [...this.multipleChoiceData.options];
     newOptions[index] = event.value;
 
@@ -273,9 +273,9 @@ export class QuestionDetailComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Xử lý khi giá trị đáp án điền vào chỗ trống thay đổi
+  // Handle when fill-in-the-blank answer changes
   onFillBlankAnswerChanged(index: number, event: any): void {
-    // Tạo mảng mới để tránh tham chiếu đến mảng cũ
+    // Create new copy to avoid reference issues
     const newAnswers = [...this.fillInTheBlankData.answers];
     newAnswers[index] = event.value;
 
@@ -286,56 +286,56 @@ export class QuestionDetailComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Tạo xem trước câu hỏi điền vào chỗ trống với các chỗ trống inline
+  // Create preview for fill-in-the-blank question with inline blanks
   previewFillInBlankQuestion(): string {
     if (!this.editingQuestion.Content) {
-      return 'Vui lòng nhập nội dung câu hỏi với cú pháp [[đáp án]] để đánh dấu chỗ trống và đáp án.';
+      return 'Please enter question content with syntax [[answer]] to mark the blank and answer.';
     }
 
-    // Thay thế các placeholder [[đáp án]] bằng input field
+    // Replace [[answer]] placeholders with input field
     let previewContent = this.editingQuestion.Content;
     const blankInputStyle = 'style="display: inline-block; min-width: 100px; border: 1px solid #007bff; border-radius: 4px; padding: 5px 10px; margin: 0 5px; background-color: #f0f8ff; text-align: center; box-shadow: 0 0 4px rgba(0,123,255,0.3);"';
 
-    // Đếm số lượng chỗ trống và thay thế từng chỗ trống bằng ô input có đánh số
+    // Count blank count and replace each blank with numbered input
     let blankIndex = 0;
     previewContent = previewContent.replace(/\[\[([^\]]+)\]\]/g, function(match, answer) {
-      const label = String.fromCharCode(65 + blankIndex); // Chuyển thành A, B, C, D...
+      const label = String.fromCharCode(65 + blankIndex); // Convert to A, B, C, D...
       blankIndex++;
-      return `<span class="blank-placeholder" ${blankInputStyle} title="Đáp án: ${answer}">[Chỗ trống ${label}]</span>`;
+      return `<span class="blank-placeholder" ${blankInputStyle} title="Answer: ${answer}">[Blank ${label}]</span>`;
     });
 
     return previewContent;
   }
 
-  // Đếm số lượng chỗ trống trong nội dung câu hỏi
+  // Count blank count in question content
   getBlankCount(): number {
     if (!this.editingQuestion.Content) {
       return 0;
     }
 
-    // Đếm số lượng chỗ trống bằng cách đếm số lần xuất hiện của mẫu [[đáp án]]
+    // Count blank count by counting occurrences of [[answer]]
     const matches = this.editingQuestion.Content.match(/\[\[([^\]]+)\]\]/g);
     return matches ? matches.length : 0;
   }
 
-  // Lấy danh sách các đáp án từ nội dung câu hỏi
+  // Get answers list from question content
   getAnswers(): string[] {
-    // Sử dụng cấu trúc dữ liệu mới từ getPreviewJsonData
+    // Use new data structure from getPreviewJsonData
     const jsonData = this.getPreviewJsonData();
     return jsonData.answers;
   }
 
-  // Lấy dữ liệu JSON cho xem trước
+  // Get JSON data for preview
   getPreviewJsonData(): any {
-    // Xử lý nội dung để tạo cấu trúc dữ liệu JSON mới
+    // Process content to create new JSON data structure
     const content = this.editingQuestion.Content || '';
 
-    // Sử dụng DOMParser để phân tích cú pháp HTML
+    // Use DOMParser to parse HTML syntax
     const parser = new DOMParser();
     const doc = parser.parseFromString(`<div id="content-container">${content}</div>`, 'text/html');
     const contentContainer = doc.getElementById('content-container');
 
-    // Tìm tất cả các vị trí của [[đáp án]] trong nội dung
+    // Find all [[answer]] placeholders in content
     const placeholders: { start: number, end: number, answer: string }[] = [];
     const regex = /\[\[([^\]]+)\]\]/g;
     let match;
@@ -350,46 +350,46 @@ export class QuestionDetailComponent implements OnInit {
     }
 
     if (placeholders.length === 0) {
-      // Không có chỗ trống, trả về toàn bộ nội dung
+      // No blanks, return full content
       return {
         segments: [content],
         answers: []
       };
     }
 
-    // Tạo các đoạn văn bản và danh sách đáp án
+    // Create text segments and answers list
     const segments: string[] = [];
     const answers: string[] = [];
 
-    // Tạo một bản sao của nội dung để xử lý
+    // Create a copy of content to process
     let processedContent = content;
     let lastEnd = 0;
 
-    // Xử lý từng placeholder
+    // Process each placeholder
     for (let i = 0; i < placeholders.length; i++) {
       const placeholder = placeholders[i];
 
-      // Lấy đoạn văn bản trước placeholder
+      // Get text before placeholder
       if (placeholder.start > lastEnd) {
         const segment = processedContent.substring(lastEnd, placeholder.start);
         segments.push(this.ensureValidHtml(segment));
       } else if (i === 0) {
-        // Đoạn đầu tiên rỗng nếu placeholder ở đầu
+        // First segment is empty if placeholder is at start
         segments.push('');
       }
 
-      // Thêm đáp án
+      // Add answer
       answers.push(placeholder.answer);
 
-      // Cập nhật vị trí cuối cùng
+      // Update last end position
       lastEnd = placeholder.end;
 
-      // Nếu là placeholder cuối cùng, thêm đoạn văn bản còn lại
+      // If last placeholder, add remaining content
       if (i === placeholders.length - 1 && lastEnd < processedContent.length) {
         const segment = processedContent.substring(lastEnd);
         segments.push(this.ensureValidHtml(segment));
       } else if (i === placeholders.length - 1 && lastEnd >= processedContent.length) {
-        // Thêm đoạn rỗng nếu placeholder ở cuối
+        // Add empty segment if placeholder is at end
         segments.push('');
       }
     }
@@ -400,11 +400,11 @@ export class QuestionDetailComponent implements OnInit {
     };
   }
 
-  // Đảm bảo HTML hợp lệ bằng cách sửa các thẻ bị cắt giữa chừng
+  // Ensure HTML is valid by fixing broken tags
   private ensureValidHtml(html: string): string {
     if (!html) return '';
 
-    // Sử dụng DOMParser để kiểm tra và sửa HTML
+    // Use DOMParser to check and fix HTML
     const parser = new DOMParser();
     const doc = parser.parseFromString(`<div id="wrapper">${html}</div>`, 'text/html');
     const wrapper = doc.getElementById('wrapper');
@@ -416,13 +416,13 @@ export class QuestionDetailComponent implements OnInit {
     return html;
   }
 
-  // Xử lý khi nội dung câu hỏi thay đổi
+  // Handle when question content changes
   onQuestionContentChanged(content: string): void {
-    // Chỉ xử lý cho câu hỏi điền vào chỗ trống
+    // Only process for fill-in-the-blank question
     if (Number(this.editingQuestion.Question_Type) === this.questionTypes.FILL_IN_THE_BLANK) {
       this.editingQuestion.Content = content;
 
-      // Cập nhật cấu trúc dữ liệu JSON mới
+      // Update new JSON data structure
       const jsonData = this.getPreviewJsonData();
       this.fillInTheBlankData = {
         segments: jsonData.segments,
@@ -433,30 +433,30 @@ export class QuestionDetailComponent implements OnInit {
     }
   }
 
-  // Đồng bộ số lượng đáp án với số lượng chỗ trống
+  // Sync answer count with blank count
   syncAnswersWithBlanks(): void {
-    // Lấy dữ liệu JSON mới để có danh sách đáp án
+    // Get new JSON data for answers
     const jsonData = this.getPreviewJsonData();
     const blankCount = jsonData.answers.length;
     const currentAnswerCount = this.fillInTheBlankData.answers.length;
 
-    // Không cần đồng bộ nếu số lượng đã khớp
+    // No need to sync if counts already match
     if (blankCount === currentAnswerCount && blankCount > 0) {
       return;
     }
 
     if (blankCount === 0) {
-      // Nếu không có chỗ trống, giữ ít nhất một đáp án
+      // If no blanks, keep at least one answer
       this.fillInTheBlankData = {
         segments: jsonData.segments,
         answers: ['']
       };
     } else {
-      // Điều chỉnh số lượng đáp án để khớp với số lượng chỗ trống
+      // Adjust answer count to match blank count
       const currentAnswers = [...this.fillInTheBlankData.answers];
       const newAnswers: string[] = [];
 
-      // Giữ lại các đáp án hiện có
+      // Keep existing answers
       for (let i = 0; i < blankCount; i++) {
         newAnswers.push(i < currentAnswers.length ? currentAnswers[i] : jsonData.answers[i] || '');
       }
@@ -470,9 +470,9 @@ export class QuestionDetailComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Lưu câu hỏi
+  // Save question
   saveQuestion(): void {
-    // Nếu là câu hỏi điền vào chỗ trống, cập nhật cấu trúc dữ liệu mới
+    // If it's a fill-in-the-blank question, update new JSON data structure
     if (Number(this.editingQuestion.Question_Type) === this.questionTypes.FILL_IN_THE_BLANK) {
       const jsonData = this.getPreviewJsonData();
       this.fillInTheBlankData = {
@@ -481,7 +481,7 @@ export class QuestionDetailComponent implements OnInit {
       };
     }
 
-    // Tạo bản sao mới của dữ liệu để tránh tham chiếu
+    // Create new copy of data to avoid reference issues
     let questionDataJson: any;
 
     switch (Number(this.editingQuestion.Question_Type)) {
@@ -508,47 +508,47 @@ export class QuestionDetailComponent implements OnInit {
     this.save.emit({...this.editingQuestion});
   }
 
-  // Hủy
+  // Cancel
   cancelQuestion(): void {
     this.cancel.emit();
   }
 
-  // Hàm trackBy cho câu hỏi trắc nghiệm
+  // TrackBy function for multiple choice question
   trackByOption(index: number): number {
     return index;
   }
 
-  // Hàm trackBy cho câu hỏi điền vào chỗ trống
+  // TrackBy function for fill-in-the-blank question
   trackByAnswer(index: number): number {
     return index;
   }
 
-  // Chuyển đổi số thành chữ cái A, B, C, D...
+  // Convert number to letter A, B, C, D...
   getOptionLabel(index: number): string {
-    return String.fromCharCode(65 + index); // 65 là mã ASCII của 'A'
+    return String.fromCharCode(65 + index); // 65 is ASCII code for 'A'
   }
 
-  // Hiển thị xem trước các đoạn văn bản và chỗ trống theo cấu trúc mới
+  // Preview segments and blanks in new structure
   previewSegments(): string {
     const jsonData = this.getPreviewJsonData();
     const segments = jsonData.segments;
     const answers = jsonData.answers;
 
     if (segments.length === 0) {
-      return 'Chưa có nội dung câu hỏi.';
+      return 'No question content.';
     }
 
     let previewHtml = '';
 
     for (let i = 0; i < segments.length; i++) {
-      // Thêm đoạn văn bản
+      // Add segment
       previewHtml += `<span class="segment">${segments[i]}</span>`;
 
-      // Thêm chỗ trống (nếu có)
+      // Add blank (if any)
       if (i < answers.length) {
-        const label = String.fromCharCode(65 + i); // Chuyển thành A, B, C, D...
+        const label = String.fromCharCode(65 + i); // Convert to A, B, C, D...
         const blankInputStyle = 'display: inline-block; min-width: 100px; border: 1px solid #007bff; border-radius: 4px; padding: 5px 10px; margin: 0 5px; background-color: #f0f8ff; text-align: center; box-shadow: 0 0 4px rgba(0,123,255,0.3);';
-        previewHtml += `<span class="blank-placeholder" style="${blankInputStyle}" title="Đáp án: ${answers[i]}">[Chỗ trống ${label}]</span>`;
+        previewHtml += `<span class="blank-placeholder" style="${blankInputStyle}" title="Answer: ${answers[i]}">[Blank ${label}]</span>`;
       }
     }
 

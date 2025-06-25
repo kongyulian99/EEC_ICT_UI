@@ -7,18 +7,18 @@
     [hideOnOutsideClick]="false"
   ></dx-load-panel>
 
-  <!-- Thông tin chung -->
+  <!-- General Information -->
   <div class="card mb-4 border-0 shadow-sm">
     <div class="card-body">
       <div class="row">
         <div class="col-md-4 mb-3">
-          <label class="form-label">Loại câu hỏi <span class="text-danger">*</span></label>
+          <label class="form-label">Question type <span class="text-danger">*</span></label>
           <dx-select-box
             [(value)]="editingQuestion.Question_Type"
             [items]="[
-              { value: questionTypes.MULTIPLE_CHOICE, text: 'Trắc nghiệm' },
-              { value: questionTypes.TRUE_FALSE, text: 'Đúng/Sai' },
-              { value: questionTypes.FILL_IN_THE_BLANK, text: 'Điền vào chỗ trống' }
+              { value: questionTypes.MULTIPLE_CHOICE, text: 'Multiple Choice' },
+              { value: questionTypes.TRUE_FALSE, text: 'True/False' },
+              { value: questionTypes.FILL_IN_THE_BLANK, text: 'Fill in the Blank' }
             ]"
             displayExpr="text"
             valueExpr="value"
@@ -27,7 +27,7 @@
           ></dx-select-box>
         </div>
         <div class="col-md-4 mb-3">
-          <label class="form-label">Chủ đề <span class="text-danger">*</span></label>
+          <label class="form-label">Topic <span class="text-danger">*</span></label>
           <dx-select-box
             [(value)]="editingQuestion.Topic_Id"
             [items]="topics"
@@ -35,15 +35,15 @@
             valueExpr="Id"
             [stylingMode]="'filled'"
             [searchEnabled]="true"
-            placeholder="Chọn chủ đề"
+            placeholder="Select topic"
           >
             <dx-validator>
-              <dxi-validation-rule type="required" message="Vui lòng chọn chủ đề"></dxi-validation-rule>
+              <dxi-validation-rule type="required" message="Please select a topic"></dxi-validation-rule>
             </dx-validator>
           </dx-select-box>
         </div>
         <div class="col-md-4 mb-3">
-          <label class="form-label">Độ khó <span class="text-danger">*</span></label>
+          <label class="form-label">Difficulty level <span class="text-danger">*</span></label>
           <dx-select-box
             [(value)]="editingQuestion.Difficulty_Level"
             [items]="difficultyLevels"
@@ -52,12 +52,12 @@
             [stylingMode]="'filled'"
           >
             <dx-validator>
-              <dxi-validation-rule type="required" message="Vui lòng chọn độ khó"></dxi-validation-rule>
+              <dxi-validation-rule type="required" message="Please select difficulty level"></dxi-validation-rule>
             </dx-validator>
           </dx-select-box>
         </div>
         <div class="col-md-4 mb-3">
-          <label class="form-label">Điểm số <span class="text-danger">*</span></label>
+          <label class="form-label">Score <span class="text-danger">*</span></label>
           <dx-number-box
             [(value)]="editingQuestion.Score"
             [min]="0"
@@ -67,50 +67,50 @@
             [stylingMode]="'filled'"
           >
             <dx-validator>
-              <dxi-validation-rule type="required" message="Vui lòng nhập điểm số"></dxi-validation-rule>
-              <dxi-validation-rule type="range" [min]="0.5" message="Điểm số phải lớn hơn 0"></dxi-validation-rule>
+              <dxi-validation-rule type="required" message="Please enter score"></dxi-validation-rule>
+              <dxi-validation-rule type="range" [min]="0.5" message="Score must be greater than 0"></dxi-validation-rule>
             </dx-validator>
           </dx-number-box>
         </div>
         <div class="col-12 mb-3">
-          <label class="form-label">Nội dung câu hỏi <span class="text-danger">*</span></label>
+          <label class="form-label">Question content <span class="text-danger">*</span></label>
           <app-custom-ckeditor
             [(Content)]="editingQuestion.Content"
-            [placeholder]="'Nhập nội dung câu hỏi'"
+            [placeholder]="'Enter question content'"
             [isValidate]="true"
-            [message]="'Nội dung câu hỏi là bắt buộc'"
+            [message]="'Question content is required'"
             (ContentChange)="onQuestionContentChanged($event)"
           ></app-custom-ckeditor>
           <small class="text-muted" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.FILL_IN_THE_BLANK">
-            Sử dụng cú pháp <strong>[[đáp án]]</strong> để đánh dấu chỗ trống và đáp án. Ví dụ: Thủ đô của Việt Nam là [[Hà Nội]].
+            Use syntax <strong>[[answer]]</strong> to mark the blank and answer. For example: The capital of Vietnam is [[Hanoi]].
           </small>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Xem trước câu hỏi điền vào chỗ trống -->
+  <!-- Preview fill-in-the-blank question -->
   <div class="card mb-4 border-0 shadow-sm" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.FILL_IN_THE_BLANK">
     <div class="card-body">
-      <h6 class="mb-3 fw-bold">Xem trước câu hỏi</h6>
+      <h6 class="mb-3 fw-bold">Question Preview</h6>
       <div class="preview-container">
         <div class="fill-blank-preview" [innerHTML]="previewFillInBlankQuestion()"></div>
         <div class="mt-3 d-flex justify-content-between align-items-center">
           <small class="text-info">
             <i class="fas fa-info-circle me-1"></i>
-            Chỗ trống sẽ được hiển thị như ô nhập liệu trong bài kiểm tra
+            The blank will be displayed as input field in the test
           </small>
           <div class="badge bg-info" *ngIf="getBlankCount() > 0">
-            {{getBlankCount()}} chỗ trống
+            {{getBlankCount()}} blanks
           </div>
         </div>
         <div class="mt-3">
           <div class="alert alert-info">
             <i class="fas fa-info-circle me-2"></i>
-            <strong>Hướng dẫn:</strong> Đánh dấu đáp án bằng cú pháp <strong>[[đáp án]]</strong>. Học sinh sẽ chỉ thấy chỗ trống để điền vào.
+            <strong>Guide:</strong> Mark the answer by using syntax <strong>[[answer]]</strong>. Students will only see the blank to fill in.
           </div>
           <div class="mt-2" *ngIf="getAnswers().length > 0">
-            <h6 class="fw-bold mb-2">Các đáp án:</h6>
+            <h6 class="fw-bold mb-2">Answers:</h6>
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let answer of getAnswers(); let i = index">
                 <div>
@@ -121,9 +121,9 @@
           </div>
         </div>
 
-        <!-- Xem trước cấu trúc dữ liệu JSON -->
+        <!-- Preview JSON data structure -->
         <div class="mt-4">
-          <h6 class="fw-bold mb-2">Cấu trúc dữ liệu JSON mới:</h6>
+          <h6 class="fw-bold mb-2">Preview JSON data structure:</h6>
           <div class="card">
             <div class="card-body">
               <pre class="mb-0"><code>{{getPreviewJsonData() | json}}</code></pre>
@@ -131,13 +131,13 @@
           </div>
           <small class="text-muted mt-2 d-block">
             <i class="fas fa-info-circle me-1"></i>
-            Dữ liệu này sẽ được lưu vào trường Question_Data_Json của câu hỏi.
+            This data will be saved in the Question_Data_Json field of the question.
           </small>
         </div>
 
-        <!-- Xem trước theo cấu trúc mới -->
+        <!-- Preview with new structure -->
         <div class="mt-4">
-          <h6 class="fw-bold mb-2">Xem trước theo cấu trúc mới:</h6>
+          <h6 class="fw-bold mb-2">Preview with new structure:</h6>
           <div class="card">
             <div class="card-body">
               <div class="fill-blank-preview-new" [innerHTML]="previewSegments()"></div>
@@ -145,23 +145,23 @@
           </div>
           <small class="text-muted mt-2 d-block">
             <i class="fas fa-info-circle me-1"></i>
-            Xem trước này hiển thị các đoạn văn bản và chỗ trống theo cấu trúc dữ liệu mới.
+            This preview shows the text segments and blanks according to the new data structure.
           </small>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Form câu hỏi trắc nghiệm -->
+  <!-- Multiple choice question form -->
   <div class="card mb-4 border-0 shadow-sm" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.MULTIPLE_CHOICE">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h6 class="fw-bold mb-0">Các lựa chọn</h6>
+        <h6 class="fw-bold mb-0">Options</h6>
         <dx-button
-          [hint]="'Thêm lựa chọn'"
+          [hint]="'Add option'"
           [icon]="'plus'"
           [type]="'default'"
-          [text]="'Thêm lựa chọn'"
+          [text]="'Add option'"
           (onClick)="addOption()"
         ></dx-button>
       </div>
@@ -179,13 +179,13 @@
                 />
                 <span class="option-label">{{ getOptionLabel(i) }}</span>
               </div>
-              <span class="correct-answer-label" *ngIf="multipleChoiceData.correctOption === i">Đáp án đúng</span>
+              <span class="correct-answer-label" *ngIf="multipleChoiceData.correctOption === i">Correct answer</span>
             </div>
             <div class="option-content flex-grow-1">
               <dx-text-box
                 [value]="option"
                 (onValueChanged)="onMultipleChoiceAnswerChanged(i, $event)"
-                [placeholder]="'Lựa chọn ' + getOptionLabel(i)"
+                [placeholder]="'Option ' + getOptionLabel(i)"
                 [stylingMode]="'filled'"
               ></dx-text-box>
             </div>
@@ -204,10 +204,10 @@
     </div>
   </div>
 
-  <!-- Form câu hỏi đúng/sai -->
+  <!-- True/False question form -->
   <div class="card mb-4 border-0 shadow-sm" *ngIf="Number(editingQuestion.Question_Type) === questionTypes.TRUE_FALSE">
     <div class="card-body">
-      <h6 class="fw-bold mb-3">Đáp án đúng</h6>
+      <h6 class="fw-bold mb-3">Correct answer</h6>
       <div class="true-false-options">
         <div class="true-false-container">
           <div class="true-false-option" [ngClass]="{'selected': trueFalseData.correctAnswer === true}" (click)="setTrueFalseAnswer({value: true})">
@@ -215,10 +215,10 @@
               <div class="radio-indicator">
                 <div class="indicator-dot" *ngIf="trueFalseData.correctAnswer === true"></div>
               </div>
-              <span class="option-text">Đúng</span>
+              <span class="option-text">True</span>
             </div>
             <div class="option-badge" *ngIf="trueFalseData.correctAnswer === true">
-              <span class="correct-answer-label">Đáp án đúng</span>
+              <span class="correct-answer-label">Correct answer</span>
             </div>
           </div>
 
@@ -227,10 +227,10 @@
               <div class="radio-indicator">
                 <div class="indicator-dot" *ngIf="trueFalseData.correctAnswer === false"></div>
               </div>
-              <span class="option-text">Sai</span>
+              <span class="option-text">False</span>
             </div>
             <div class="option-badge" *ngIf="trueFalseData.correctAnswer === false">
-              <span class="correct-answer-label">Đáp án đúng</span>
+              <span class="correct-answer-label">Correct answer</span>
             </div>
           </div>
         </div>
@@ -238,28 +238,28 @@
     </div>
   </div>
 
-  <!-- Giải thích -->
+  <!-- Explanation -->
   <div class="card mb-4 border-0 shadow-sm">
     <div class="card-body">
-      <label class="form-label">Giải thích</label>
+      <label class="form-label">Explanation</label>
       <app-custom-ckeditor
         [(Content)]="editingQuestion.Explanation"
-        [placeholder]="'Nhập giải thích cho câu hỏi'"
+        [placeholder]="'Enter explanation for the question'"
       ></app-custom-ckeditor>
     </div>
   </div>
 
-  <!-- Nút tác vụ -->
+  <!-- Action buttons -->
   <div class="d-flex justify-content-end mt-4">
     <dx-button
-      [text]="'Hủy'"
+      [text]="'Cancel'"
       [type]="'normal'"
       [stylingMode]="'outlined'"
       (onClick)="cancelQuestion()"
       class="me-2"
     ></dx-button>
     <dx-button
-      [text]="'Lưu'"
+      [text]="'Save'"
       [icon]="'save'"
       [type]="'default'"
       [stylingMode]="'contained'"

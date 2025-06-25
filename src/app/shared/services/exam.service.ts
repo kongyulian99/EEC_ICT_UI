@@ -19,7 +19,7 @@ export class ExamsService extends BaseService {
   }
 
   /**
-   * Lấy tất cả chủ đề
+   * Get all topics
    */
   getAllExams() {
     return this.http.get<ResponseData<ExamInfo[]>>(`${this.apiUrl}/GetAll`, { headers: this.httpOptions })
@@ -27,7 +27,7 @@ export class ExamsService extends BaseService {
   }
 
   /**
-   * Lấy tất cả chủ đề gốc (không có chủ đề cha)
+   * Get all root topics (no parent topic)
    */
   getRootExams() {
     return this.http.get<ResponseData<ExamInfo[]>>(`${this.apiUrl}/GetRootExams`, { headers: this.httpOptions })
@@ -35,8 +35,8 @@ export class ExamsService extends BaseService {
   }
 
   /**
-   * Lấy các chủ đề con của một chủ đề
-   * @param parentId ID của chủ đề cha
+   * Get child topics of a topic
+   * @param parentId ID of parent topic
    */
   getChildExams(parentId: number) {
     return this.http.get<ResponseData<ExamInfo[]>>(`${this.apiUrl}/GetChildExams/${parentId}`, { headers: this.httpOptions })
@@ -44,8 +44,8 @@ export class ExamsService extends BaseService {
   }
 
   /**
-   * Lấy chủ đề theo ID
-   * @param id ID của chủ đề
+   * Get topic by ID
+   * @param id Topic ID
    */
   getExamById(id: number) {
     return this.http.get<ResponseData<ExamInfo>>(`${this.apiUrl}/GetById/${id}`, { headers: this.httpOptions })
@@ -53,8 +53,8 @@ export class ExamsService extends BaseService {
   }
 
   /**
-   * Tạo chủ đề mới
-   * @param Exam Thông tin chủ đề (ExamInfo)
+   * Create new topic
+   * @param Exam Topic information (ExamInfo)
    */
   createExam(Exam: Partial<ExamInfo>) {
     return this.http.post<ResponseData<number>>(`${this.apiUrl}/Create`, Exam, { headers: this.httpOptions })
@@ -62,8 +62,7 @@ export class ExamsService extends BaseService {
   }
 
   /**
-   * Cập nhật thông tin chủ đề
-   * @param Exam Thông tin chủ đề cần cập nhật (ExamInfo)
+   * Update topic information
    */
   updateExam(Exam: ExamInfo) {
     return this.http.put<ResponseData<number>>(`${this.apiUrl}/Update`, Exam, { headers: this.httpOptions })
@@ -71,8 +70,8 @@ export class ExamsService extends BaseService {
   }
 
   /**
-   * Xóa chủ đề
-   * @param id ID của chủ đề cần xóa
+   * Delete topic
+   * @param id ID of topic to delete
    */
   deleteExam(id: number) {
     return this.http.delete<ResponseData<number>>(`${this.apiUrl}/Delete/${id}`, { headers: this.httpOptions })
@@ -80,10 +79,10 @@ export class ExamsService extends BaseService {
   }
 
   /**
-   * Lấy danh sách top bài thi theo số lượt làm bài
-   * @param startDate Ngày bắt đầu
-   * @param endDate Ngày kết thúc
-   * @param limit Số lượng kết quả tối đa
+   * Get top exams by attempt count
+   * @param startDate Start date
+   * @param endDate End date
+   * @param limit Maximum number of results
    */
   getTopExams(startDate: Date, endDate: Date, limit: number = 5) {
     let url = `${this.apiUrl}/TopExams?limit=${limit}`;
