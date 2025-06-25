@@ -124,7 +124,17 @@ export class SidebarComponent implements OnInit {
       cUrl: '/administration/dashboard',
       cParentId: null,
       IsActive: false,
-      expand: false
+      expand: false,
+      children: [
+        {
+          ID: '51',
+          cRoleName: 'Dashboard',
+          cIconCss: 'fa-bar-chart',
+          cUrl: '/administration/dashboard',
+          cParentId: '5',
+          IsActive: false
+        }
+      ]
     }
   ];
 

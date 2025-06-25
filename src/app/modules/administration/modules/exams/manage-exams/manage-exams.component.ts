@@ -65,7 +65,7 @@ export class ManageExamsComponent implements OnInit {
 
   // Mở popup chỉnh sửa
   editExam(exam: ExamInfo): void {
-    this.router.navigate(['/administration/exams/detail', exam.Id]);
+    this.router.navigate(['/administration/exams/detail'], { queryParams: { id: exam.Id } });
   }
 
   // Lưu đề thi

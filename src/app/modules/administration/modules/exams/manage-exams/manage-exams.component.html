@@ -41,15 +41,15 @@
             <dxo-header-filter [visible]="true"></dxo-header-filter>
 
             <!-- Column configuration -->
-            <dxi-column dataField="Id" caption="ID" [width]="70" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column cellTemplate="cellTitle" caption="Title" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Description" caption="Description" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Duration_Minutes" caption="Duration (minutes)" [width]="120" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Total_Questions" caption="Question Count" [width]="100" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Created_At" caption="Created Date" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Updated_At" caption="Updated Date" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column dataField="Create_User_Name" caption="Create User" [width]="150" [allowFiltering]="true" [allowSorting]="true"></dxi-column>
-            <dxi-column cellTemplate="cellAction" caption="Action" [width]="60"></dxi-column>
+            <dxi-column dataField="Id" caption="ID" [width]="70" [allowFiltering]="true" [allowSorting]="true" cssClass="vertical-center"></dxi-column>
+            <dxi-column cellTemplate="cellTitle" caption="Title" [allowFiltering]="true" [allowSorting]="true" cssClass="vertical-center"></dxi-column>
+            <dxi-column dataField="Description" caption="Description" [allowFiltering]="true" [allowSorting]="true" cssClass="vertical-center"></dxi-column>
+            <dxi-column dataField="Duration_Minutes" caption="Duration (minutes)" [width]="120" [allowFiltering]="true" [allowSorting]="true" cssClass="vertical-center"></dxi-column>
+            <dxi-column dataField="Total_Questions" caption="Question Count" [width]="100" [allowFiltering]="true" [allowSorting]="true" cssClass="vertical-center"></dxi-column>
+            <dxi-column dataField="Created_At" caption="Created Date" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true" cssClass="vertical-center"></dxi-column>
+            <dxi-column dataField="Updated_At" caption="Updated Date" dataType="date" format="dd/MM/yyyy HH:mm" [width]="150" [allowFiltering]="true" [allowSorting]="true" cssClass="vertical-center"></dxi-column>
+            <dxi-column dataField="Create_User_Name" caption="Create User" [width]="150" [allowFiltering]="true" [allowSorting]="true" cssClass="vertical-center"></dxi-column>
+            <dxi-column cellTemplate="cellAction" caption="Action" [width]="60" cssClass="vertical-center"></dxi-column>
 
             <div *dxTemplate="let row of 'cellTitle'" class="text-left kehoach-container">
               <a [routerLink]="['/administration/exams/detail']" [queryParams]="{id: row.data.Id}">{{ row.data.Title }}</a>
