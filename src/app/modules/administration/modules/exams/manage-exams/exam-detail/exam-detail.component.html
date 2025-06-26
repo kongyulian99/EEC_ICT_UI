@@ -19,55 +19,57 @@
           <h5 class="mb-0">Exam Information</h5>
         </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
-              <dx-text-box
-                [(value)]="exam.Title"
-                placeholder="Enter exam title"
-                [showClearButton]="true"
-              >
-                <dx-validator>
-                  <dxi-validation-rule type="required" message="Title is required"></dxi-validation-rule>
-                </dx-validator>
-              </dx-text-box>
+          <dx-validation-group #examValidationGroup>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                <dx-text-box
+                  [(value)]="exam.Title"
+                  placeholder="Enter exam title"
+                  [showClearButton]="true"
+                >
+                  <dx-validator>
+                    <dxi-validation-rule type="required" message="Title is required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="duration" class="form-label">Duration (minutes) <span class="text-danger">*</span></label>
+                <dx-number-box
+                  [(value)]="exam.Duration_Minutes"
+                  [min]="1"
+                  [showSpinButtons]="true"
+                >
+                  <dx-validator>
+                    <dxi-validation-rule type="required" message="Duration is required"></dxi-validation-rule>
+                    <dxi-validation-rule type="range" [min]="1" message="Duration must be greater than 0"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-number-box>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="duration" class="form-label">Passing Score <span class="text-danger">*</span></label>
+                <dx-number-box
+                  [(value)]="exam.Pass_Score"
+                  [min]="1"
+                  [max]="10"
+                  [showSpinButtons]="true"
+                >
+                  <dx-validator>
+                    <dxi-validation-rule type="required" message="Passing score is required"></dxi-validation-rule>
+                    <dxi-validation-rule type="range" [min]="1" message="Score must be greater than 0"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-number-box>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="description" class="form-label">Description</label>
+                <dx-text-area
+                  [(value)]="exam.Description"
+                  placeholder="Enter exam description"
+                  [height]="100"
+                ></dx-text-area>
+              </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="duration" class="form-label">Duration (minutes) <span class="text-danger">*</span></label>
-              <dx-number-box
-                [(value)]="exam.Duration_Minutes"
-                [min]="1"
-                [showSpinButtons]="true"
-              >
-                <dx-validator>
-                  <dxi-validation-rule type="required" message="Duration is required"></dxi-validation-rule>
-                  <dxi-validation-rule type="range" [min]="1" message="Duration must be greater than 0"></dxi-validation-rule>
-                </dx-validator>
-              </dx-number-box>
-            </div>
-            <div class="col-md-3 mb-3">
-              <label for="duration" class="form-label">Passing Score <span class="text-danger">*</span></label>
-              <dx-number-box
-                [(value)]="exam.Pass_Score"
-                [min]="1"
-                [max]="10"
-                [showSpinButtons]="true"
-              >
-                <dx-validator>
-                  <dxi-validation-rule type="required" message="Passing score is required"></dxi-validation-rule>
-                  <dxi-validation-rule type="range" [min]="1" message="Score must be greater than 0"></dxi-validation-rule>
-                </dx-validator>
-              </dx-number-box>
-            </div>
-            <div class="col-12 mb-3">
-              <label for="description" class="form-label">Description</label>
-              <dx-text-area
-                [(value)]="exam.Description"
-                placeholder="Enter exam description"
-                [height]="100"
-              ></dx-text-area>
-            </div>
-          </div>
+          </dx-validation-group>
         </div>
       </div>
 

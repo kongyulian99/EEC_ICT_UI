@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService, SystemConstants } from 'src/app/shared';
 import { ExamsService } from 'src/app/shared/services/exam.service';
@@ -9,6 +9,7 @@ import { dxButtonConfig } from 'src/app/shared/config';
 import { QuestionType } from 'src/app/shared/enums/enum';
 import { FillInTheBlankData, MultipleChoiceData, QuestionInfo, TrueFalseData } from 'src/app/shared/interfaces/question.interface';
 import { ExamInfo } from 'src/app/shared/interfaces/exam.interface';
+import { DxValidationGroupComponent } from 'devextreme-angular/ui/validation-group';
 
 @Component({
   selector: 'app-exam-detail',
@@ -16,6 +17,8 @@ import { ExamInfo } from 'src/app/shared/interfaces/exam.interface';
   styleUrls: ['./exam-detail.component.scss']
 })
 export class ExamDetailComponent implements OnInit {
+  @ViewChild('examValidationGroup') examValidationGroup: DxValidationGroupComponent;
+
   dxButtonConfig = dxButtonConfig;
 
   // Thông tin đề thi
@@ -149,7 +152,7 @@ export class ExamDetailComponent implements OnInit {
 
   // Lưu thông tin đề thi
   saveExam(): void {
-    if (!this.validateExam()) {
+    if (!this.examValidationGroup.instance.validate().isValid) {
       return;
     }
 
@@ -189,21 +192,6 @@ export class ExamDetailComponent implements OnInit {
         }
       );
     }
-  }
-
-  // Validate dữ liệu đề thi
-  validateExam(): boolean {
-    if (!this.exam.Title || this.exam.Title.trim() === '') {
-      this.notificationService.showError('Vui lòng nhập tiêu đề đề thi');
-      return false;
-    }
-
-    if (this.exam.Duration_Minutes <= 0) {
-      this.notificationService.showError('Thời gian làm bài phải lớn hơn 0');
-      return false;
-    }
-
-    return true;
   }
 
   // Thêm câu hỏi mới
