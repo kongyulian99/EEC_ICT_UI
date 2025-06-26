@@ -60,7 +60,6 @@ export class ExamsService extends BaseService {
    * @param Exam Topic information (ExamInfo)
    */
   createExam(Exam: Partial<ExamInfo>) {
-    Exam.Create_User_Id = this.user.Id;
     return this.http.post<ResponseData<number>>(`${this.apiUrl}/Create`, Exam, { headers: this.httpOptions })
       .pipe(catchError(this.handleError));
   }

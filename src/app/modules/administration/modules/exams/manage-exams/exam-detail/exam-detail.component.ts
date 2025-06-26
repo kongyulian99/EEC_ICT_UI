@@ -57,10 +57,6 @@ export class ExamDetailComponent implements OnInit {
   // Hàm Number để sử dụng trong template
   Number = Number;
 
-  user = JSON.parse(
-    localStorage.getItem(SystemConstants.CURRENT_USER) as string
-  );
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -74,7 +70,7 @@ export class ExamDetailComponent implements OnInit {
     this.loadTopics();
     this.route.queryParams.subscribe(params => {
       if (params['id']) {
-        this.examId = +params['id'];
+        this.examId = parseInt(params['id'], 10);
         this.isNewExam = false;
         this.loadExamDetails();
         this.loadQuestions();
@@ -86,6 +82,7 @@ export class ExamDetailComponent implements OnInit {
           Description: '',
           Duration_Minutes: 60,
           Total_Questions: 0,
+          Pass_Score: 5,
           Created_At: new Date(),
           Updated_At: new Date()
         } as ExamInfo;
@@ -156,10 +153,16 @@ export class ExamDetailComponent implements OnInit {
       return;
     }
 
+    debugger;
+    // Lấy thông tin user hiện tại từ localStorage
+    const currentUser = JSON.parse(
+      localStorage.getItem(SystemConstants.CURRENT_USER) as string
+    );
+
     this.isLoading = true;
 
     if (this.isNewExam) {
-      this.examsService.createExam({...this.exam, Create_User_Id: this.user.Id}).subscribe(
+      this.examsService.createExam({...this.exam, Create_User_Id: currentUser.Id}).subscribe(
         (response: any) => {
           if (response.ReturnStatus.Code === 1) {
             this.notificationService.showSuccess('Thêm mới đề thi thành công');
@@ -245,7 +248,16 @@ export class ExamDetailComponent implements OnInit {
     this.isLoading = true;
 
     if (this.isNewQuestion) {
-      this.questionService.createQuestion({...questionToSave, Question_Type: Number(questionToSave.Question_Type)}).subscribe(
+      // Lấy thông tin user hiện tại từ localStorage
+      const currentUser = JSON.parse(
+        localStorage.getItem(SystemConstants.CURRENT_USER) as string
+      );
+
+      this.questionService.createQuestion({
+        ...questionToSave,
+        Question_Type: Number(questionToSave.Question_Type),
+        Create_User_Id: currentUser.Id
+      }).subscribe(
         (response: any) => {
           if (response.ReturnStatus.Code === 1) {
             this.notificationService.showSuccess('Thêm mới câu hỏi thành công');

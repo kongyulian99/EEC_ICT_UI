@@ -13,6 +13,7 @@ export interface QuestionInfo {
   Score: number;
   Created_At: Date;
   Updated_At: Date;
+  Create_User_Id?: number;
 }
 
 export interface MultipleChoiceData {

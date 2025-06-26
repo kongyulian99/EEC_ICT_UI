@@ -1,6 +1,5 @@
 export class SystemConstants {
     public static CURRENT_USER: string = 'IGCSEHUB_USER';
-    public static CURRENT_THONGTIN_DOANHTRAI: string = 'THONGTIN_DOANHTRAI';
     public static SIDEBAR_ID: string = 'IGCSEHUB_SIDEBAR_ID';
 
     public static FUNCTION_SIDEBAR: string = 'Functions';
