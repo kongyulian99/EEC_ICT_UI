@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationService } from 'src/app/shared';
+import { NotificationService, SystemConstants } from 'src/app/shared';
 import { ExamsService } from 'src/app/shared/services/exam.service';
 import { QuestionService } from 'src/app/shared/services/question.service';
 import { TopicInfo, TopicsService } from 'src/app/shared/services/topics.service';
@@ -53,6 +53,10 @@ export class ExamDetailComponent implements OnInit {
 
   // Hàm Number để sử dụng trong template
   Number = Number;
+
+  user = JSON.parse(
+    localStorage.getItem(SystemConstants.CURRENT_USER) as string
+  );
 
   constructor(
     private route: ActivatedRoute,
@@ -152,7 +156,7 @@ export class ExamDetailComponent implements OnInit {
     this.isLoading = true;
 
     if (this.isNewExam) {
-      this.examsService.createExam(this.exam).subscribe(
+      this.examsService.createExam({...this.exam, Create_User_Id: this.user.Id}).subscribe(
         (response: any) => {
           if (response.ReturnStatus.Code === 1) {
             this.notificationService.showSuccess('Thêm mới đề thi thành công');

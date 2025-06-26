@@ -196,26 +196,28 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   startExam() {
     this.isLoading = true;
 
+    // Lưu thời gian bắt đầu
+    this.startTime = new Date();
+
     // Tạo lần làm bài mới
     this.userExamAttemptService.createUserExamAttempt(this.userId, this.exam.Id).subscribe({
       next: (response) => {
         if (response.ReturnStatus.Code === 1) {
           this.attemptId = response.ReturnData.NewAttemptId;
           this.attemptNumber = response.ReturnData.AttemptNumber;
-          this.startTime = new Date();
 
           this.isStarted = true;
           this.remainingTime = this.exam.Duration_Minutes * 60;
           this.startTimer();
-          this.notificationService.showSuccess('Bắt đầu làm bài thành công!');
+          this.notificationService.showSuccess('Exam started successfully!');
         } else {
-          this.notificationService.showError('Không thể bắt đầu làm bài: ' + response.ReturnStatus.Message);
+          this.notificationService.showError('Unable to start exam: ' + response.ReturnStatus.Message);
         }
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Lỗi khi tạo lần làm bài:', error);
-        this.notificationService.showError('Lỗi khi bắt đầu làm bài');
+        console.error('Error creating exam attempt:', error);
+        this.notificationService.showError('Error starting exam');
         this.isLoading = false;
       }
     });
@@ -234,9 +236,18 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Format thời gian
   formatTime(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
+    // Đảm bảo seconds không âm
+    seconds = Math.max(0, seconds);
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+
+    if (hours > 0) {
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    } else {
+      return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
   }
 
   // Lấy câu hỏi hiện tại
@@ -319,20 +330,19 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   getQuestionTypeLabel(type: number): string {
     switch (type) {
       case this.questionTypes.MULTIPLE_CHOICE:
-        return 'Trắc nghiệm';
+        return 'Multiple Choice';
       case this.questionTypes.TRUE_FALSE:
-        return 'Đúng/Sai';
+        return 'True/False';
       case this.questionTypes.FILL_IN_THE_BLANK:
-        return 'Điền vào chỗ trống';
+        return 'Fill in the Blank';
       default:
-        return 'Không xác định';
+        return 'Unknown';
     }
   }
 
   // Xử lý nộp bài
   submitExam() {
-    // this.submitPopupVisible = true;
-    this.notificationService.showConfirmation('Bạn có chắc chắn muốn nộp bài kiểm tra này?', () => {
+    this.notificationService.showConfirmation('Are you sure you want to submit this exam?', () => {
       this.confirmSubmit();
     });
   }
@@ -342,12 +352,17 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = true;
     this.isSubmitting = true;
 
+    // Dừng đồng hồ đếm ngược
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
 
+    // Tính thời gian hoàn thành
+    const endTime = new Date();
+    const totalTimeSpentInSeconds = Math.floor((endTime.getTime() - (this.startTime?.getTime() || endTime.getTime())) / 1000);
+
     // Chuẩn bị dữ liệu câu trả lời
-    const answers: UserAnswer[] = this.prepareUserAnswers();
+    const answers: UserAnswer[] = this.prepareUserAnswers(totalTimeSpentInSeconds);
 
     // Tạo yêu cầu chấm điểm
     const scoreRequest: ScoreExamRequest = {
@@ -362,20 +377,31 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       next: (response) => {
         if (response.ReturnStatus.Code === 1) {
           // Lấy kết quả chi tiết
-          // this.getDetailedResult();
           this.examResult = response.ReturnData;
+
+          // Đảm bảo thời gian hiển thị không bị âm
+          if (this.examResult && this.examResult.Duration) {
+            // Kiểm tra nếu thời gian có dấu "-" (âm)
+            if (this.examResult.Duration.includes('-')) {
+              // Tính thời gian thực tế từ startTime và endTime
+              const duration = this.formatDuration(totalTimeSpentInSeconds);
+              this.examResult.Duration = duration;
+              this.examResult.TotalTimeInSeconds = totalTimeSpentInSeconds;
+            }
+          }
+
           this.isCompleted = true;
           this.resultPopupVisible = true;
-          this.notificationService.showSuccess('Đã hoàn thành bài kiểm tra!');
+          this.notificationService.showSuccess('Exam completed successfully!');
         } else {
-          this.notificationService.showError('Không thể chấm điểm bài làm: ' + response.ReturnStatus.Message);
+          this.notificationService.showError('Unable to score exam: ' + response.ReturnStatus.Message);
           this.isLoading = false;
           this.isSubmitting = false;
         }
       },
       error: (error) => {
-        console.error('Lỗi khi chấm điểm bài làm:', error);
-        this.notificationService.showError('Lỗi khi chấm điểm bài làm');
+        console.error('Error scoring exam:', error);
+        this.notificationService.showError('Error scoring exam');
         this.isLoading = false;
         this.isSubmitting = false;
       }
@@ -383,8 +409,13 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // Chuẩn bị dữ liệu câu trả lời để gửi lên server
-  private prepareUserAnswers(): UserAnswer[] {
+  private prepareUserAnswers(totalTimeSpent: number): UserAnswer[] {
     const answers: UserAnswer[] = [];
+
+    // Tính thời gian trung bình cho mỗi câu hỏi
+    const avgTimePerQuestion = totalTimeSpent > 0 && this.questions.length > 0
+      ? Math.floor(totalTimeSpent / this.questions.length)
+      : 0;
 
     this.questions.forEach(question => {
       const answer = this.userAnswers[question.Id];
@@ -403,7 +434,7 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
             correctOption: answer !== null ? answer : -1
           });
         } catch (error) {
-          console.error('Lỗi khi xử lý dữ liệu câu hỏi trắc nghiệm:', error);
+          console.error('Error processing multiple choice data:', error);
           answerJson = JSON.stringify({ correctOption: -1 });
         }
       } else if (question.Question_Type === this.questionTypes.TRUE_FALSE) {
@@ -425,19 +456,30 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
             segments: segments
           });
         } catch (error) {
-          console.error('Lỗi khi xử lý dữ liệu câu hỏi điền vào chỗ trống:', error);
+          console.error('Error processing fill-in-the-blank data:', error);
           answerJson = JSON.stringify({ answers: [] });
         }
       }
 
+      // Thêm câu trả lời vào danh sách với thời gian
       answers.push({
         QuestionId: question.Id,
         AnswerGivenJson: answerJson,
-        TimeSpentSeconds: 0 // Có thể tính toán thời gian làm từng câu nếu cần
+        TimeSpentSeconds: this.isQuestionAnswered(question.Id) ? avgTimePerQuestion : 0
       });
     });
 
     return answers;
+  }
+
+  // Format thời gian dưới dạng HH:MM:SS
+  private formatDuration(seconds: number): string {
+    seconds = Math.max(0, seconds);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 
   // Lấy kết quả chi tiết sau khi chấm điểm

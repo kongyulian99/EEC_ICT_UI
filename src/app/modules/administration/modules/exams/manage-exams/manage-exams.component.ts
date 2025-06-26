@@ -130,7 +130,7 @@ export class ManageExamsComponent implements OnInit {
             this.isLoading = false;
           },
           (error) => {
-            this.notificationService.showError('Không thể xóa đề thi');
+            this.notificationService.showError('Không thể xóa đề thi, hãy xoá câu hỏi trong đề thi trước');
             this.isLoading = false;
           }
         );
