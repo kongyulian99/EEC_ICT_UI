@@ -3,7 +3,7 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install --force
 COPY . .
 ARG BUILD_ENV=production
 # BỎ --output-path=dist/browser khỏi dòng này. Angular sẽ dùng cấu hình từ angular.json.
