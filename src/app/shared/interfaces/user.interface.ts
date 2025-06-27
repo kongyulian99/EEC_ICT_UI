@@ -11,7 +11,7 @@
 // }
 
 export interface User {
-    Id: string;
+    Id: number;
     Username: string;
     Full_Name: string;
     Email: string;
@@ -21,11 +21,36 @@ export interface User {
     RefreshToken: string;
     AccessToken: string;
     Is_Admin: boolean;
+    Is_Active: boolean;
 }
 
 export interface UserLoginPayload {
     Username: string;
-    Password: string
+    Password: string;
+}
+
+// Thêm interface mới cho API Google Login
+export interface ReturnBaseInfo<T = any> {
+    ReturnStatus: StatusBaseInfo;
+    ReturnData: T;
+}
+
+export interface StatusBaseInfo {
+    Message: string;
+    Code: number;
+}
+
+export interface AuthResponseInfo {
+    AccessToken: string;
+    RefreshToken: string;
+    Id: number;
+    Username: string;
+    Full_Name: string;
+    Is_Admin: boolean;
+}
+
+export interface GoogleLoginRequest {
+    IdToken: string;
 }
 
 // public int Id { get; set; }

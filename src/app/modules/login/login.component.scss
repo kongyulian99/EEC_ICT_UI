@@ -15,6 +15,21 @@ i {
   padding: 20px;
   animation: gradientBG 15s ease infinite;
   background-size: 400% 400%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Thêm hiệu ứng hình học nền */
+.login-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: url('/assets/images/pattern.svg');
+  opacity: 0.05;
+  z-index: 0;
 }
 
 @keyframes gradientBG {
@@ -32,26 +47,34 @@ i {
 .main {
   width: 100%;
   max-width: 1200px;
+  position: relative;
+  z-index: 1;
 }
 
 .row {
   width: 900px;
-  height: 580px;
+  height: auto;
+  min-height: 580px;
+  max-height: none;
   border-radius: 20px;
   background: #ffffff;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   margin: 0 auto;
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
+  display: flex;
 
   &:hover {
-    // transform: translateY(-5px);
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    // transform: translateY(-5px);
   }
 
   @media (max-width: 767px) {
     height: auto;
+    min-height: auto;
+    max-height: none;
+    width: 95%;
   }
 }
 
@@ -64,6 +87,9 @@ i {
   border-radius: 20px 0 0 20px;
   padding: 0;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &::after {
     content: '';
@@ -75,23 +101,37 @@ i {
     z-index: 1;
     background: linear-gradient(to bottom, rgba(103, 58, 183, 0.8), rgba(63, 81, 181, 0.7), rgba(33, 150, 243, 0.9));
     border-radius: 20px 0 0 20px;
+    animation: pulseGradient 8s ease-in-out infinite;
+  }
+
+  @keyframes pulseGradient {
+    0%, 100% {
+      opacity: 0.8;
+    }
+    50% {
+      opacity: 0.9;
+    }
   }
 
   .text {
     position: relative;
     z-index: 2;
-    padding: 40px;
+    padding: 30px;
     height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
+    text-align: center;
     color: white;
 
     .login-header {
+      width: 100%;
       h3 {
-        font-size: 3rem;
+        font-size: 2.5rem;
         font-weight: 800;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         letter-spacing: 1px;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         background: linear-gradient(to right, #ffffff, #ececec);
@@ -111,26 +151,36 @@ i {
       }
 
       p {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         opacity: 0.9;
         font-weight: 300;
         margin-left: 2px;
+        margin-bottom: 0;
       }
     }
 
     .contact {
-      padding: 20px;
+      width: 100%;
+      text-align: left;
+      padding: 15px;
       background-color: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
       border-radius: 16px;
       margin-top: auto;
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+      }
 
       .title-left {
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 500;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
 
@@ -183,43 +233,29 @@ i {
   padding: 20px 0;
   overflow: hidden;
   background-color: #ffffff;
+  border-radius: 0 20px 20px 0;
+  height: 100%;
 }
 
 .input-box {
   width: 90%;
   max-width: 350px;
-  padding: 20px;
+  padding: 25px 20px;
   box-sizing: border-box;
   transition: all 0.3s ease;
   position: relative;
-  min-height: 480px;
+  min-height: auto;
   margin: 0 auto;
-
-  @media (max-width: 767px) {
-    min-height: 520px;
-    width: 95%;
-  }
-
-  .logo {
-    text-align: center;
-    margin-bottom: 20px;
-    img {
-      width: auto;
-      height: 80px;
-      transition: transform 0.3s ease;
-      filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
-
-      &:hover {
-        transform: scale(1.05) rotate(2deg);
-      }
-    }
-  }
+  overflow-y: visible;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 
   header {
     font-weight: 700;
     text-align: center;
     margin-bottom: 25px;
-    font-size: 24px;
+    font-size: 22px;
     color: #673ab7;
     position: relative;
 
@@ -233,18 +269,27 @@ i {
       height: 4px;
       background: linear-gradient(to right, #673ab7, #3f51b5);
       border-radius: 4px;
+      transition: width 0.3s ease;
     }
+
+    &:hover:after {
+      width: 100px;
+    }
+  }
+
+  .form-content {
+    margin-bottom: 20px;
   }
 
   .input-field {
     display: flex;
     flex-direction: column;
     position: relative;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 
     input {
-      height: 55px;
-      padding: 10px 20px 10px 55px;
+      height: 48px;
+      padding: 10px 20px 10px 50px;
       border: 2px solid #e0e0e0;
       border-radius: 30px !important;
       font-size: 16px;
@@ -256,16 +301,11 @@ i {
         box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.15);
         background-color: #fff;
       }
-
-      &::placeholder {
-        color: #9e9e9e;
-        opacity: 0.7;
-      }
     }
 
     i {
       position: absolute;
-      left: 22px;
+      left: 20px;
       top: 50%;
       transform: translateY(-50%);
       color: #9e9e9e;
@@ -279,85 +319,137 @@ i {
       color: #673ab7;
     }
   }
+}
 
-  .submit-area {
-    margin-top: 30px;
-    text-align: center;
+.submit-area {
+  margin-top: 25px;
+  text-align: center;
 
-    ::ng-deep .dx-button {
-      border-radius: 30px !important;
-      height: 55px;
-      background: linear-gradient(to right, #673ab7, #3f51b5) !important;
-      border: none !important;
-      transition: all 0.3s ease !important;
-      overflow: hidden;
-      position: relative;
-      margin: 0 auto;
-      max-width: 200px;
-      width: 100%;
-      display: block;
+  ::ng-deep .dx-button {
+    border-radius: 30px !important;
+    height: 48px;
+    background: linear-gradient(to right, #673ab7, #3f51b5) !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+    max-width: 200px;
+    width: 100%;
+    display: block;
 
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: all 0.6s ease;
-      }
-
-      &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 7px 20px rgba(103, 58, 183, 0.4) !important;
-
-        &::before {
-          left: 100%;
-        }
-      }
-
-      &:active {
-        transform: translateY(-1px);
-      }
-
-      .dx-button-content {
-        font-size: 17px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.5px;
-      }
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(103, 58, 183, 0.4) !important;
     }
 
-    .register-link {
-      display: block;
-      margin-top: 20px;
-      color: #757575;
-      transition: all 0.3s ease;
-      text-align: center;
-      font-size: 15px;
+    .dx-button-content {
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.5px;
+    }
+  }
 
-      span {
-        color: #673ab7;
-        font-weight: 500;
-        position: relative;
+  .register-link {
+    display: block;
+    margin-top: 20px;
+    color: #757575;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-size: 15px;
 
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: -2px;
-          left: 0;
-          width: 0;
-          height: 2px;
-          background-color: #673ab7;
-          transition: width 0.3s ease;
-        }
+    span {
+      color: #673ab7;
+      font-weight: 500;
+      position: relative;
 
-        &:hover {
-          &::after {
-            width: 100%;
-          }
-        }
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #673ab7;
+        transition: width 0.3s ease;
       }
+
+      &:hover::after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.google-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #757575;
+  border: 1px solid #dadce0;
+  border-radius: 30px;
+  padding: 10px 15px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  height: 45px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  max-width: 200px;
+  margin: 0 auto;
+
+  &:hover {
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .google-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+}
+
+.social-login {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-top: 15px;
+  position: relative;
+
+  &::before {
+    content: 'hoặc';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    // background-color: white;
+    padding: 0 10px;
+    color: #9e9e9e;
+    font-size: 12px;
+  }
+}
+
+.register-form {
+  .submit-area {
+    .d-flex {
+      gap: 10px;
+
+      .dx-button, .google-login-button {
+        max-width: none;
+        height: 45px;
+      }
+    }
+  }
+
+  .input-field {
+    margin-bottom: 15px;
+
+    input {
+      height: 45px;
+      font-size: 15px;
     }
   }
 }
@@ -371,7 +463,7 @@ i {
   }
 
   .side-image {
-    height: 220px;
+    height: 160px;
     border-radius: 15px 15px 0 0;
 
     &::after {
@@ -379,11 +471,11 @@ i {
     }
 
     .text {
-      padding: 20px;
+      padding: 15px;
 
       .login-header {
         h3 {
-          font-size: 2rem;
+          font-size: 1.8rem;
         }
 
         p {
@@ -392,7 +484,7 @@ i {
       }
 
       .contact {
-        padding: 15px;
+        padding: 10px;
       }
     }
   }
@@ -457,6 +549,8 @@ i {
   transition: all 0.5s ease;
   opacity: 1;
   transform: translateX(0);
+  padding-bottom: 20px;
+  padding-top: 15px;
 
   &.slide-out {
     position: absolute;
@@ -474,6 +568,7 @@ i {
   opacity: 0;
   transform: translateX(100%);
   pointer-events: none;
+  padding-bottom: 20px;
 
   &.slide-in {
     opacity: 1;
@@ -484,10 +579,28 @@ i {
   .form-content {
     .row {
       margin: 0 -5px;
+      box-shadow: none;
+      transform: none;
+      height: auto;
+      min-height: auto;
+      width: 100%;
+
+      &:hover {
+        box-shadow: none;
+        transform: none;
+      }
 
       .col-12 {
         padding: 0 5px;
       }
+    }
+  }
+
+  .input-field {
+    margin-bottom: 10px;
+
+    input {
+      height: 40px;
     }
   }
 }
@@ -497,13 +610,187 @@ i {
   margin-bottom: 15px;
 }
 
-// Make inputs a bit smaller for registration form
-.register-form {
-  .input-field {
-    margin-bottom: 12px;
+// Thêm CSS cho nút đăng nhập Google
+.google-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #757575;
+  border: 1px solid #dadce0;
+  border-radius: 30px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  height: 40px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  max-width: 200px;
 
-    input {
-      height: 45px;
+  &:hover {
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    background-color: #eee;
+    transform: translateY(0);
+  }
+
+  .google-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+  }
+}
+
+.social-login {
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+  position: relative;
+  margin-top: 15px;
+
+  &::before {
+    content: 'hoặc';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    // background-color: white;
+    padding: 0 10px;
+    color: #9e9e9e;
+    font-size: 12px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #757575;
+  }
+}
+
+// Responsive fixes
+@media only screen and (max-width: 992px) {
+  .row {
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .side-image {
+    height: 160px;
+  }
+
+  .right {
+    padding: 20px 0;
+  }
+
+  .input-box {
+    padding: 15px;
+  }
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+// Điều chỉnh kích thước nút trong form đăng ký
+.register-form {
+  .submit-area {
+    .dx-button {
+      max-width: none;
+    }
+
+    .google-login-button {
+      max-width: none;
+      width: auto;
     }
   }
+}
+
+// Điều chỉnh kích thước input trong form đăng ký
+.register-form {
+  .input-field {
+    input {
+      padding-left: 40px; // Giảm padding bên trái để tiết kiệm không gian
+    }
+
+    i {
+      left: 15px; // Điều chỉnh vị trí icon
+    }
+  }
+}
+
+.header-logo {
+  width: auto;
+  height: 120px;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+  margin-bottom: 15px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// Điều chỉnh header
+.login-header {
+  margin-bottom: 30px;
+
+  h3 {
+    margin-bottom: 5px;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-weight: 800;
+  }
+
+  p {
+    margin-bottom: 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+}
+
+// Thêm hiệu ứng cho logo
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-logo {
+  animation: fadeInDown 0.8s ease-out;
+}
+
+// Thêm hiệu ứng cho tiêu đề
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.login-header h3 {
+  animation: fadeIn 1s ease-out 0.3s both;
+}
+
+.login-header p {
+  animation: fadeIn 1s ease-out 0.5s both;
+}
+
+.spacer {
+  height: 40px; /* Điều chỉnh chiều cao để đẩy form xuống thấp hơn */
 }

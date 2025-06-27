@@ -1,0 +1,247 @@
+/* Styles chung cho trang */
+.card {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+/* Styles cho bảng điểm */
+.score-summary {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.score-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 6px solid;
+
+  &.passed {
+    border-color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+  }
+
+  &.failed {
+    border-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+  }
+}
+
+.score-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Styles cho danh sách câu hỏi */
+.question-card {
+  border-left: 4px solid;
+  transition: transform 0.2s;
+  margin-bottom: 20px;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  &.correct {
+    border-left-color: #28a745;
+  }
+
+  &.incorrect {
+    border-left-color: #dc3545;
+  }
+
+  &.unanswered {
+    border-left-color: #6c757d;
+  }
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.question-type-badge {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.question-content {
+  padding: 15px;
+}
+
+/* Styles cho các loại câu hỏi */
+.options-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 15px;
+}
+
+.option-item {
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+
+  &.user-selected {
+    background-color: rgba(0, 123, 255, 0.1);
+    border-color: #007bff;
+  }
+
+  &.correct-answer {
+    background-color: rgba(40, 167, 69, 0.1);
+    border-color: #28a745;
+  }
+
+  &.incorrect-answer {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+  }
+}
+
+.option-prefix {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  font-weight: 600;
+}
+
+.option-text {
+  flex-grow: 1;
+}
+
+/* Styles cho câu hỏi fill in blank */
+.fill-blank-container {
+  margin-top: 15px;
+}
+
+.fill-blank-segment {
+  display: inline;
+}
+
+.fill-blank-answer {
+  display: inline-block;
+  min-width: 120px;
+  padding: 5px 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  margin: 0 5px;
+  background-color: #f8f9fa;
+
+  &.correct {
+    background-color: rgba(40, 167, 69, 0.1);
+    border-color: #28a745;
+  }
+
+  &.incorrect {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    text-decoration: line-through;
+  }
+}
+
+.answer-comparison {
+  display: flex;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.answer-box {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 4px;
+
+  &.user-answer {
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+  }
+
+  &.correct-answer {
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid #28a745;
+  }
+}
+
+.answer-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6c757d;
+  margin-bottom: 5px;
+}
+
+/* Styles cho các chỉ báo */
+.status-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+
+  &.correct {
+    background-color: #28a745;
+  }
+
+  &.incorrect {
+    background-color: #dc3545;
+  }
+
+  &.unanswered {
+    background-color: #6c757d;
+  }
+}
+
+.answer-status {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .score-summary {
+    flex-direction: column;
+  }
+
+  .score-circle {
+    margin-bottom: 20px;
+  }
+}
+
+/* Animation cho loading */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}

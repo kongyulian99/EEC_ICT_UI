@@ -10,6 +10,7 @@ import { ComponentsSharedModule } from 'src/app/shared';
 import { HeaderStudentComponent } from './components/header-student/header-student.component';
 import { TestDetailComponent } from './test/test-detail/test-detail.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { ScoreDetailComponent } from './test/test-detail/score-detail/score-detail.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     DashboardComponent,
     TestComponent,
     HeaderStudentComponent,
-    TestDetailComponent
+    TestDetailComponent,
+    ScoreDetailComponent
   ],
   imports: [
     CommonModule,

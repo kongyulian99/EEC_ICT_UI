@@ -26,16 +26,48 @@ export class LoginComponent implements OnInit {
     confirmPassword: ''
   };
   registerLoading: boolean = false;
+  googleLoading: boolean = false;
 
   constructor(
     private router: Router,
     private fileService: FileService,
     private authService: AuthenService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) { }
 
 
-  ngOnInit() { }
+  ngOnInit() {
+    // Kiểm tra xem URL hiện tại có phải là callback từ Google không
+    console.log('Login component initialized, checking for Google callback...');
+
+    // Kiểm tra nếu có hash hoặc state=google_auth trong URL
+    const hasHash = window.location.hash && (
+      window.location.hash.includes('access_token=') ||
+      window.location.hash.includes('id_token=')
+    );
+
+    const hasGoogleState = new URLSearchParams(window.location.search).get('state') === 'google_auth';
+
+    if (hasHash || hasGoogleState) {
+      console.log('Phát hiện callback từ Google, xử lý đăng nhập...');
+      this.googleLoading = true;
+
+      // Xử lý callback từ Google
+      const hasProcessed = this.authService.handleGoogleRedirect();
+      if (hasProcessed) {
+        console.log('Đã xử lý callback từ Google thành công');
+        // Đã xử lý callback từ Google, reset trạng thái loading
+        this.googleLoading = false;
+      } else {
+        console.log('Không thể xử lý callback từ Google');
+        this.googleLoading = false;
+        this.notificationService.showError('Không thể xác thực với Google. Vui lòng thử lại.');
+      }
+    } else {
+      // Không phải là callback từ Google, reset trạng thái loading nếu có
+      this.googleLoading = false;
+    }
+  }
 
   onLoggedIn() {
     if(this.loading){
@@ -76,6 +108,28 @@ export class LoginComponent implements OnInit {
           this.notificationService.showError('System errorr!');
         }
     });
+  }
+
+  // Phương thức đăng nhập bằng Google
+  signInWithGoogle(): void {
+    if (this.googleLoading) {
+      return;
+    }
+
+    this.googleLoading = true;
+    console.log('Bắt đầu quá trình đăng nhập bằng Google...');
+
+    try {
+      // Gọi phương thức loginWithGoogle từ authService để chuyển hướng
+      this.authService.loginWithGoogle();
+
+      // Lưu ý: Không cần thiết lập timeout hoặc event listeners vì chúng ta sẽ chuyển hướng trang
+      // Trạng thái loading sẽ được reset khi quay lại trang sau khi xác thực
+    } catch (error: any) {
+      console.error('Lỗi khởi tạo đăng nhập Google:', error);
+      this.notificationService.showError('Không thể khởi tạo đăng nhập Google: ' + (error.message || 'Lỗi không xác định'));
+      this.googleLoading = false;
+    }
   }
 
   // Phương thức chuyển đổi giữa form đăng nhập và đăng ký

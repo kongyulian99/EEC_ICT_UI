@@ -53,12 +53,17 @@
       <div class="col-md-7 side-image">
         <div class="text">
           <div class="login-header">
-            <h3 class="fw-bold">IGCSE-HUB</h3>
-            <p class="mb-4">Mathematics Training System</p>
+            <div class="text-center mb-3">
+              <img src="/assets/images/Logo IGCSE.png" alt="Logo" class="header-logo">
+            </div>
+            <div class="text-center">
+              <h3 class="fw-bold">IGCSE-HUB</h3>
+              <p>Mathematics Training System</p>
+            </div>
           </div>
 
           <div class="contact">
-            <p class="title-left"><i class="fa fa-headset me-2 icon" aria-hidden="true"></i>Contact us:</p>
+            <p class="title-left"><i class="fa fa-headset me-2 icon" aria-hidden="true"></i>Liên hệ với chúng tôi:</p>
             <div class="left-contact">
               <p><a href="https://www.facebook.com/profile.php?id=61576715691782" target="_blank"><i class="fa fa-facebook-square"></i>IGCSE Fanpage</a></p>
             </div>
@@ -67,57 +72,74 @@
       </div>
       <div class="col-md-5 right">
         <div class="input-box">
-          <div class="logo">
-            <img src="/assets/images/Logo IGCSE.png" alt="Logo">
-          </div>
-
-          <!-- Login Form -->
+          <!-- Form đăng nhập -->
           <div class="form-container" [ngClass]="{'slide-out': !isLoginForm}">
-            <header>Login</header>
+            <div class="spacer"></div>
+            <header>Đăng nhập</header>
             <form role="form">
               <div class="form-content">
                 <div class="input-field">
-                  <input [(ngModel)]="username" placeholder="Username" class="form-control"
+                  <input [(ngModel)]="username" placeholder="Tên đăng nhập" class="form-control"
                     type="text" name="username" />
                   <i class="fa fa-user"></i>
                 </div>
 
                 <div class="input-field">
-                  <input [(ngModel)]="password" placeholder="Password" class="form-control"
+                  <input [(ngModel)]="password" placeholder="Mật khẩu" class="form-control"
                     type="password" name="password" (keyup.enter)="onLoggedIn()" />
                   <i class="fa fa-lock"></i>
                 </div>
 
                 <div class="d-flex justify-content-end mb-2">
-                  <a href="javascript:void(0)" class="forgot-password">Forgot Password?</a>
+                  <a href="javascript:void(0)" class="forgot-password">Quên mật khẩu?</a>
                 </div>
               </div>
+
               <div class="submit-area">
-                <dx-button text="Login" [icon]="dxButtonConfig.import_icon" [type]="dxButtonConfig.add_type"
+                <dx-button text="Đăng nhập" [icon]="dxButtonConfig.import_icon" [type]="dxButtonConfig.add_type"
                   (onClick)="onLoggedIn()" class="login-button">
                   <span *ngIf="!loading" class="btn-content">
                     <i class="fa fa-sign-in me-2" aria-hidden="true"></i>
-                    <span>Login</span>
+                    <span>Đăng nhập</span>
                   </span>
                   <span *ngIf="loading" class="btn-content">
                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    <span>Processing...</span>
+                    <span>Đang xử lý...</span>
                   </span>
                 </dx-button>
-                <a class="register-link" href="javascript:void(0)" (click)="toggleForm()">Don't have an account? <span>Register now</span></a>
+
+                <!-- Nút đăng nhập Google -->
+                <div class="social-login">
+                  <div class="d-flex justify-content-center">
+                    <button type="button" class="google-login-button" (click)="signInWithGoogle()" [disabled]="googleLoading">
+                      <span *ngIf="!googleLoading" class="d-flex align-items-center justify-content-center">
+                        <img src="assets/images/google-logo.svg" alt="Google" class="google-icon me-2"
+                             onerror="this.onerror=null; this.src='https://www.google.com/favicon.ico';">
+                        <span>Google</span>
+                      </span>
+                      <span *ngIf="googleLoading" class="d-flex align-items-center justify-content-center">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <span>Đang xử lý...</span>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                <a class="register-link" href="javascript:void(0)" (click)="toggleForm()">Chưa có tài khoản? <span>Đăng ký ngay</span></a>
               </div>
             </form>
           </div>
 
-          <!-- Registration Form -->
+          <!-- Form đăng ký (đã làm gọn) -->
           <div class="form-container register-form" [ngClass]="{'slide-in': !isLoginForm}">
-            <header>Register Account</header>
+            <div class="spacer"></div>
+            <header>Đăng ký tài khoản</header>
             <form role="form">
               <div class="form-content">
                 <div class="row g-2">
                   <div class="col-12">
                     <div class="input-field">
-                      <input [(ngModel)]="registerData.username" placeholder="Username" class="form-control"
+                      <input [(ngModel)]="registerData.username" placeholder="Tên đăng nhập" class="form-control"
                         type="text" name="reg-username" />
                       <i class="fa fa-user"></i>
                     </div>
@@ -125,7 +147,7 @@
 
                   <div class="col-12">
                     <div class="input-field">
-                      <input [(ngModel)]="registerData.fullName" placeholder="Full Name" class="form-control"
+                      <input [(ngModel)]="registerData.fullName" placeholder="Họ và tên" class="form-control"
                         type="text" name="reg-fullname" />
                       <i class="fa fa-id-card"></i>
                     </div>
@@ -139,36 +161,52 @@
                     </div>
                   </div>
 
-                  <div class="col-12">
+                  <div class="col-6">
                     <div class="input-field">
-                      <input [(ngModel)]="registerData.password" placeholder="Password" class="form-control"
+                      <input [(ngModel)]="registerData.password" placeholder="Mật khẩu" class="form-control"
                         type="password" name="reg-password" />
                       <i class="fa fa-lock"></i>
                     </div>
                   </div>
 
-                  <div class="col-12">
+                  <div class="col-6">
                     <div class="input-field">
-                      <input [(ngModel)]="registerData.confirmPassword" placeholder="Confirm Password" class="form-control"
+                      <input [(ngModel)]="registerData.confirmPassword" placeholder="Xác nhận" class="form-control"
                         type="password" name="reg-confirm-password" />
                       <i class="fa fa-check-circle"></i>
                     </div>
                   </div>
                 </div>
               </div>
+
               <div class="submit-area">
-                <dx-button text="Register" [icon]="dxButtonConfig.import_icon" [type]="dxButtonConfig.add_type"
-                  (onClick)="onRegister()" class="login-button">
-                  <span *ngIf="!registerLoading" class="btn-content">
-                    <i class="fa fa-user-plus me-2" aria-hidden="true"></i>
-                    <span>Register</span>
-                  </span>
-                  <span *ngIf="registerLoading" class="btn-content">
-                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    <span>Processing...</span>
-                  </span>
-                </dx-button>
-                <a class="register-link" href="javascript:void(0)" (click)="toggleForm()">Already have an account? <span>Login now</span></a>
+                <div class="d-flex gap-2">
+                  <dx-button text="Đăng ký" [icon]="dxButtonConfig.import_icon" [type]="dxButtonConfig.add_type"
+                    (onClick)="onRegister()" class="login-button flex-grow-1">
+                    <span *ngIf="!registerLoading" class="btn-content">
+                      <i class="fa fa-user-plus me-2" aria-hidden="true"></i>
+                      <span>Đăng ký</span>
+                    </span>
+                    <span *ngIf="registerLoading" class="btn-content">
+                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      <span>Đang xử lý...</span>
+                    </span>
+                  </dx-button>
+
+                  <button type="button" class="google-login-button flex-grow-1" (click)="signInWithGoogle()" [disabled]="googleLoading">
+                    <span *ngIf="!googleLoading" class="d-flex align-items-center justify-content-center">
+                      <img src="assets/images/google-logo.svg" alt="Google" class="google-icon me-2"
+                           onerror="this.onerror=null; this.src='https://www.google.com/favicon.ico';">
+                      <span>Google</span>
+                    </span>
+                    <span *ngIf="googleLoading" class="d-flex align-items-center justify-content-center">
+                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      <span>Google</span>
+                    </span>
+                  </button>
+                </div>
+
+                <a class="register-link" href="javascript:void(0)" (click)="toggleForm()">Đã có tài khoản? <span>Đăng nhập ngay</span></a>
               </div>
             </form>
           </div>

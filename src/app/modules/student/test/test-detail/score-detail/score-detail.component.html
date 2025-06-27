@@ -1,0 +1,231 @@
+<app-generic-page [pageTitle]="'Chi tiết kết quả bài thi'" [loading]="isLoading" [haveBackButton]="true" (backClicked)="goBack()">
+  <ng-container body>
+    <div class="container" *ngIf="examResult">
+      <!-- Phần tổng quan kết quả -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Thông tin tổng quan</h5>
+        </div>
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <h3>{{examResult.ExamTitle}}</h3>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="score-summary">
+                <div>
+                  <div class="score-circle" [ngClass]="{'passed': examResult.Passed, 'failed': !examResult.Passed}">
+                    <div class="score-value">{{examResult.FinalScore}}</div>
+                    <div class="score-label">điểm</div>
+                  </div>
+                </div>
+                <div>
+                  <h5 [ngClass]="{'text-success': examResult.Passed, 'text-danger': !examResult.Passed}">
+                    <i [class]="examResult.Passed ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                    {{examResult.Passed ? 'Đạt' : 'Không đạt'}}
+                  </h5>
+                  <p class="text-muted">Điểm đậu: {{examResult.PassScore}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <h6 class="card-title">Thống kê bài làm</h6>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Tổng số câu hỏi:</span>
+                    <span class="fw-bold">{{examResult.TotalQuestions}}</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Câu trả lời đúng:</span>
+                    <span class="fw-bold text-success">{{examResult.CorrectAnswers}}</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Câu trả lời sai:</span>
+                    <span class="fw-bold text-danger">{{examResult.IncorrectAnswers}}</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span>Câu chưa trả lời:</span>
+                    <span class="fw-bold text-muted">{{examResult.UnansweredQuestions}}</span>
+                  </div>
+                  <hr>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Thời gian bắt đầu:</span>
+                    <span class="fw-bold">{{examResult.StartTime | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Thời gian kết thúc:</span>
+                    <span class="fw-bold">{{examResult.EndTime | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span>Thời gian làm bài:</span>
+                    <span class="fw-bold">{{examResult.Duration}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phần chú giải -->
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex flex-wrap">
+            <div class="d-flex align-items-center me-4 mb-2">
+              <div class="status-indicator correct"></div>
+              <span>Đúng</span>
+            </div>
+            <div class="d-flex align-items-center me-4 mb-2">
+              <div class="status-indicator incorrect"></div>
+              <span>Sai</span>
+            </div>
+            <div class="d-flex align-items-center me-4 mb-2">
+              <div class="status-indicator unanswered"></div>
+              <span>Không trả lời</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phần chi tiết từng câu hỏi -->
+      <div class="mt-4">
+        <h4>Chi tiết câu trả lời</h4>
+
+        <ng-container *ngIf="examResult && examResult.DetailedAnswers && examResult.DetailedAnswers.length > 0">
+          <div class="question-card" *ngFor="let answer of examResult.DetailedAnswers; let i = index"
+                [ngClass]="{'correct': answer.Is_Correct, 'incorrect': !answer.Is_Correct && answer.Answer_Given_Json, 'unanswered': !answer.Answer_Given_Json}">
+
+            <ng-container *ngIf="getQuestionById(answer.Question_Id) as question">
+              <div class="question-header">
+                <div>
+                  <span class="badge bg-primary me-2">Câu hỏi {{i + 1}}</span>
+                  <span class="badge bg-secondary question-type-badge">{{getQuestionTypeLabel(question.Question_Type)}}</span>
+                </div>
+                <div class="answer-status">
+                  <ng-container *ngIf="answer.Answer_Given_Json">
+                    <ng-container *ngIf="answer.Is_Correct">
+                      <i class="fas fa-check-circle text-success me-1"></i>
+                      <span class="text-success">Đúng (+{{answer.Score_Achieved}} điểm)</span>
+                    </ng-container>
+                    <ng-container *ngIf="!answer.Is_Correct">
+                      <i class="fas fa-times-circle text-danger me-1"></i>
+                      <span class="text-danger">Sai (0 điểm)</span>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="!answer.Answer_Given_Json">
+                    <i class="fas fa-minus-circle text-muted me-1"></i>
+                    <span class="text-muted">Không trả lời</span>
+                  </ng-container>
+                </div>
+              </div>
+
+              <div class="question-content">
+                <!-- Hiển thị nội dung câu hỏi -->
+                <div *ngIf="question.Question_Type !== questionTypes.FILL_IN_THE_BLANK">
+                  <app-view-ckeditor [data]="question.Content"></app-view-ckeditor>
+                </div>
+
+                <!-- Hiển thị câu hỏi điền vào chỗ trống -->
+                <div *ngIf="question.Question_Type === questionTypes.FILL_IN_THE_BLANK" class="fill-blank-container">
+                  <ng-container *ngFor="let segment of getFillInBlankSegments(question); let j = index">
+                    <span class="fill-blank-segment" [innerHTML]="sanitizeHtml(segment)"></span>
+
+                    <ng-container *ngIf="j < getCorrectFillInBlankAnswers(question).length">
+                      <ng-container *ngIf="getUserFillInBlankAnswers(answer)[j] as userAnswer; else noUserAnswer">
+                        <span class="fill-blank-answer"
+                              [ngClass]="{'correct': userAnswer === getCorrectFillInBlankAnswers(question)[j],
+                                         'incorrect': userAnswer !== getCorrectFillInBlankAnswers(question)[j]}">
+                          {{userAnswer}}
+                        </span>
+                      </ng-container>
+                      <ng-template #noUserAnswer>
+                        <span class="fill-blank-answer unanswered">(Không trả lời)</span>
+                      </ng-template>
+                    </ng-container>
+                  </ng-container>
+
+                  <!-- Phần hiển thị đáp án đúng -->
+                  <div class="answer-comparison mt-3">
+                    <div class="answer-box correct-answer">
+                      <div class="answer-label">Đáp án đúng:</div>
+                      <div>
+                        <ng-container *ngFor="let correctAnswer of getCorrectFillInBlankAnswers(question); let k = index">
+                          <span *ngIf="k > 0">, </span>
+                          <span>{{k + 1}}. {{correctAnswer}}</span>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Hiển thị các options cho câu hỏi trắc nghiệm -->
+                <div *ngIf="question.Question_Type === questionTypes.MULTIPLE_CHOICE">
+                  <ul class="options-list">
+                    <ng-container *ngFor="let option of getMultipleChoiceOptions(question); let optionIndex = index">
+                      <li class="option-item"
+                          [ngClass]="{
+                            'user-selected': getUserMultipleChoiceAnswer(answer) === optionIndex,
+                            'correct-answer': getCorrectMultipleChoiceAnswer(question) === optionIndex,
+                            'incorrect-answer': getUserMultipleChoiceAnswer(answer) === optionIndex && getUserMultipleChoiceAnswer(answer) !== getCorrectMultipleChoiceAnswer(question)
+                          }">
+                        <div class="option-prefix">{{getOptionLabel(optionIndex)}}</div>
+                        <div class="option-text">{{option}}</div>
+                        <ng-container *ngIf="getCorrectMultipleChoiceAnswer(question) === optionIndex">
+                          <i class="fas fa-check ms-2 text-success"></i>
+                        </ng-container>
+                      </li>
+                    </ng-container>
+                  </ul>
+                </div>
+
+                <!-- Hiển thị đáp án đúng/sai -->
+                <div *ngIf="question.Question_Type === questionTypes.TRUE_FALSE">
+                  <ul class="options-list">
+                    <li class="option-item"
+                        [ngClass]="{
+                          'user-selected': getUserTrueFalseAnswer(answer) === true,
+                          'correct-answer': getCorrectTrueFalseAnswer(question) === true,
+                          'incorrect-answer': getUserTrueFalseAnswer(answer) === true && getUserTrueFalseAnswer(answer) !== getCorrectTrueFalseAnswer(question)
+                        }">
+                      <div class="option-prefix">A</div>
+                      <div class="option-text">Đúng</div>
+                      <ng-container *ngIf="getCorrectTrueFalseAnswer(question) === true">
+                        <i class="fas fa-check ms-2 text-success"></i>
+                      </ng-container>
+                    </li>
+                    <li class="option-item"
+                        [ngClass]="{
+                          'user-selected': getUserTrueFalseAnswer(answer) === false,
+                          'correct-answer': getCorrectTrueFalseAnswer(question) === false,
+                          'incorrect-answer': getUserTrueFalseAnswer(answer) === false && getUserTrueFalseAnswer(answer) !== getCorrectTrueFalseAnswer(question)
+                        }">
+                      <div class="option-prefix">B</div>
+                      <div class="option-text">Sai</div>
+                      <ng-container *ngIf="getCorrectTrueFalseAnswer(question) === false">
+                        <i class="fas fa-check ms-2 text-success"></i>
+                      </ng-container>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Hiển thị giải thích -->
+                <div *ngIf="question.Explanation" class="mt-3 p-3 bg-light border rounded">
+                  <h6 class="text-primary mb-2">Giải thích:</h6>
+                  <div>{{question.Explanation}}</div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Loading screen -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </ng-container>
+</app-generic-page>

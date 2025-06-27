@@ -1,3 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
 
 // Existing code...
+
+/* CSS cho nút đăng nhập Google */
+.google-login-button {
+  background-color: white;
+  color: #444;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  padding: 8px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 240px;
+  height: 42px;
+}
+
+.google-login-button:hover {
+  background-color: #f8f8f8;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.google-login-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-button:focus {
+  outline: none;
+}
+
+.google-login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+/* Animation cho spinner */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.spinner-border {
+  animation: spinner-border 0.75s linear infinite, fadeIn 0.2s;
+}

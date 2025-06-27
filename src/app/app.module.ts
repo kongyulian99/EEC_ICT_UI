@@ -24,17 +24,13 @@ registerLocaleData(localeVi, 'vi');
     AppRoutingModule,
     NgbModule
   ],
-  providers: [AuthGuard,
+  providers: [
+    AuthGuard,
     {
-        provide: HTTP_INTERCEPTORS,
-        useClass: AuthResponseInterceptor,
-        multi: true
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthResponseInterceptor,
+      multi: true
     },
-    // {
-    //     provide: HTTP_INTERCEPTORS,
-    //     useClass: AuthResponseInterceptor,
-    //     multi: true
-    // },
     NotificationService
   ],
   bootstrap: [AppComponent]
