@@ -1,11 +1,12 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { StudentRoutingModule } from './student-routing.module';
 import { StudentComponent } from './student.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TestComponent } from './test/test.component';
-import { DxPopupModule, DxButtonModule, DxTextBoxModule, DxLoadPanelModule, DxDataGridModule, DxChartModule } from 'devextreme-angular';
+import { DxPopupModule, DxButtonModule, DxTextBoxModule, DxLoadPanelModule, DxDataGridModule, DxChartModule, DxPolarChartModule, DxTreeMapModule } from 'devextreme-angular';
 import { ComponentsSharedModule } from 'src/app/shared';
 import { HeaderStudentComponent } from './components/header-student/header-student.component';
 import { TestDetailComponent } from './test/test-detail/test-detail.component';
@@ -24,12 +25,15 @@ import { ScoreDetailComponent } from './test/test-detail/score-detail/score-deta
   ],
   imports: [
     CommonModule,
+    FormsModule,
     DxPopupModule,
     DxButtonModule,
     DxTextBoxModule,
     DxDataGridModule,
     DxLoadPanelModule,
     DxChartModule,
+    DxPolarChartModule,
+    DxTreeMapModule,
     NgbDropdownModule,
     ComponentsSharedModule,
     StudentRoutingModule

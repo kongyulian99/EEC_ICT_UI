@@ -83,41 +83,6 @@ export class SidebarComponent implements OnInit {
       ]
     },
     {
-      ID: '3',
-      cRoleName: 'User Management',
-      cIconCss: 'fa-users',
-      cUrl: '/administration/users',
-      cParentId: null,
-      IsActive: false,
-      expand: false,
-      children: [
-        {
-          ID: '31',
-          cRoleName: 'User List',
-          cIconCss: 'fa-list',
-          cUrl: '/administration/users/list',
-          cParentId: '3',
-          IsActive: false
-        },
-        {
-          ID: '32',
-          cRoleName: 'Add User',
-          cIconCss: 'fa-user-plus',
-          cUrl: '/administration/users/add',
-          cParentId: '3',
-          IsActive: false
-        },
-        {
-          ID: '33',
-          cRoleName: 'Roles & Permissions',
-          cIconCss: 'fa-lock',
-          cUrl: '/administration/users/roles',
-          cParentId: '3',
-          IsActive: false
-        }
-      ]
-    },
-    {
       ID: '5',
       cRoleName: 'Dashboard',
       cIconCss: 'fa-bar-chart',

@@ -1,0 +1,47 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Cấu trúc dự án Angular
+
+Dự án này là một ứng dụng Angular cho hệ thống thi trực tuyến với hai vai trò chính: học sinh và quản trị viên.
+
+## Cấu trúc thư mục chính
+
+- [src/app/modules](mdc:src/app/modules) chứa các module chính của ứng dụng
+- [src/app/shared](mdc:src/app/shared) chứa các component, service, và tiện ích dùng chung
+- [src/assets](mdc:src/assets) chứa tài nguyên tĩnh như hình ảnh và tệp cấu hình
+
+## Module học sinh
+
+Module học sinh ([src/app/modules/student](mdc:src/app/modules/student)) bao gồm các tính năng:
+
+- Dashboard ([src/app/modules/student/dashboard](mdc:src/app/modules/student/dashboard)) hiển thị tổng quan về tiến độ học tập
+- Danh sách bài thi ([src/app/modules/student/test](mdc:src/app/modules/student/test)) cho phép học sinh xem và làm bài thi
+- Chi tiết bài thi ([src/app/modules/student/test/test-detail](mdc:src/app/modules/student/test/test-detail)) hiển thị giao diện làm bài
+- Kết quả bài thi ([src/app/modules/student/test/test-detail/score-detail](mdc:src/app/modules/student/test/test-detail/score-detail)) hiển thị điểm số và đáp án
+
+## Module quản trị
+
+Module quản trị ([src/app/modules/administration](mdc:src/app/modules/administration)) bao gồm các tính năng:
+
+- Quản lý bài thi ([src/app/modules/administration/modules/exams](mdc:src/app/modules/administration/modules/exams))
+- Quản lý người dùng ([src/app/modules/administration/modules/systems/components/users](mdc:src/app/modules/administration/modules/systems/components/users))
+- Quản lý phân quyền ([src/app/modules/administration/modules/systems/components/permissions](mdc:src/app/modules/administration/modules/systems/components/permissions))
+
+## Shared Components
+
+Các component dùng chung được lưu trong [src/app/shared/components](mdc:src/app/shared/components), bao gồm:
+
+- Generic Table ([src/app/shared/components/generic-table](mdc:src/app/shared/components/generic-table))
+- Paginator ([src/app/shared/components/paginator](mdc:src/app/shared/components/paginator))
+- Custom CKEditor ([src/app/shared/components/custom-ckeditor](mdc:src/app/shared/components/custom-ckeditor))
+
+## Services
+
+Các service chính:
+
+- Authentication ([src/app/shared/services/auth.service.ts](mdc:src/app/shared/services/auth.service.ts))
+
+- User Exam Attempt ([src/app/shared/services/user-attempt.service.ts](mdc:src/app/shared/services/user-attempt.service.ts))

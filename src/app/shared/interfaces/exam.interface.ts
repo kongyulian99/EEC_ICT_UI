@@ -11,4 +11,5 @@ export interface ExamInfo {
   Created_At: Date;
   Updated_At: Date;
   Create_User_Id: number;
+  Create_User_Name: string;
 }

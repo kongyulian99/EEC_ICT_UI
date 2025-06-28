@@ -1,12 +1,47 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserExamAttemptService } from 'src/app/shared/services/user-attempt.service';
-import { ScoreExamResponse, DetailedAnswer } from 'src/app/shared/interfaces/user-exam-attempt.interface';
-import { QuestionInfo } from 'src/app/shared/interfaces/question.interface';
-import { QuestionService } from 'src/app/shared/services/question.service';
-import { QuestionType } from 'src/app/shared/enums/enum';
-import { NotificationService } from 'src/app/shared';
-import { DomSanitizer } from '@angular/platform-browser';
+import { NotificationService, SystemConstants } from 'src/app/shared';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Location } from '@angular/common';
+
+// Interface cho kết quả chi tiết bài thi
+interface DetailedAttemptResult {
+  AttemptInfo: {
+    AttemptId: number;
+    AttemptNumber: number;
+    UserId: number;
+    ExamId: number;
+    ExamTitle: string;
+    TotalScore: number;
+    PassScore: number;
+    Passed: boolean;
+    ScorePercentage: number;
+    StartTime: Date;
+    EndTime: Date;
+    Duration: string;
+    TotalTimeInSeconds: number;
+  };
+  Statistics: {
+    TotalQuestions: number;
+    CorrectAnswers: number;
+    IncorrectAnswers: number;
+    CorrectPercentage: number;
+  };
+  Questions: {
+    QuestionId: number;
+    QuestionText: string;
+    QuestionType: string;
+    MaxScore: number;
+    UserScore: number;
+    IsCorrect: boolean;
+    UserAnswer: string;
+    CorrectAnswer: string;
+    Explanation: string;
+    TimeSpent: number;
+    QuestionData: any;
+  }[];
+}
 
 @Component({
   selector: 'app-score-detail',
@@ -19,214 +54,177 @@ export class ScoreDetailComponent implements OnInit {
 
   // Thông tin đề thi và kết quả
   examId: number = 0;
-  attemptId?: number;
-  attemptNumber?: number;
-  examResult?: ScoreExamResponse;
-  questions: QuestionInfo[] = [];
+  attemptId: number = 0;
 
-  // Các hằng số
-  questionTypes = {
-    MULTIPLE_CHOICE: QuestionType.MULTIPLE_CHOICE,
-    TRUE_FALSE: QuestionType.TRUE_FALSE,
-    FILL_IN_THE_BLANK: QuestionType.FILL_IN_THE_BLANK
-  };
+  // Dữ liệu kết quả chi tiết
+  detailedResult?: DetailedAttemptResult;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private userExamAttemptService: UserExamAttemptService,
-    private questionService: QuestionService,
     private notificationService: NotificationService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
-    // Lấy thông tin từ URL
     this.route.params.subscribe(params => {
-      this.examId = +params['id'];
+      this.examId = +params['examId'] || 0;
+      this.attemptId = +params['attemptId'] || 0;
 
-      this.route.queryParams.subscribe(queryParams => {
-        this.attemptId = queryParams['attemptId'] ? +queryParams['attemptId'] : undefined;
-        this.attemptNumber = queryParams['attemptNumber'] ? +queryParams['attemptNumber'] : undefined;
-
-        if (this.examId && (this.attemptId || this.attemptNumber)) {
-          this.loadExamResult();
-        }
-      });
+      if (this.attemptId) {
+        this.loadDetailedResult();
+      } else {
+        this.notificationService.showError('Không tìm thấy thông tin lượt làm bài');
+        this.goBack();
+      }
     });
   }
 
-  // Tải dữ liệu kết quả bài thi
-  loadExamResult(): void {
+  // Tải kết quả chi tiết của lượt làm bài
+  loadDetailedResult(): void {
     this.isLoading = true;
 
-    // Lấy thông tin chi tiết về lần làm bài
-    const userId = JSON.parse(localStorage.getItem('current_user') || '{}').id || 0;
-
-    // Tạo request để lấy thông tin chi tiết bài thi
-    const scoreRequest = {
-      UserId: userId,
-      ExamId: this.examId,
-      AttemptId: this.attemptId,
-      AttemptNumber: this.attemptNumber
-    };
-
-    this.userExamAttemptService.scoreExam(scoreRequest).subscribe({
+    this.userExamAttemptService.getDetailedAttemptResult(this.attemptId).subscribe({
       next: (response) => {
         if (response.ReturnStatus.Code === 1) {
-          this.examResult = response.ReturnData;
-          this.loadQuestionDetails();
-        } else {
-          this.notificationService.showError('Không thể tải thông tin chi tiết bài thi: ' + response.ReturnStatus.Message);
+          this.detailedResult = response.ReturnData;
+          this.examId = this.detailedResult.AttemptInfo.ExamId;
           this.isLoading = false;
+        } else {
+          this.notificationService.showError('Không thể tải kết quả chi tiết: ' + response.ReturnStatus.Message);
+          this.isLoading = false;
+          this.goBack();
         }
       },
       error: (error) => {
-        console.error('Lỗi khi tải thông tin chi tiết bài thi:', error);
-        this.notificationService.showError('Đã xảy ra lỗi khi tải thông tin chi tiết');
+        console.error('Lỗi khi tải kết quả chi tiết:', error);
+        this.notificationService.showError('Đã xảy ra lỗi khi tải kết quả chi tiết');
         this.isLoading = false;
+        this.goBack();
       }
     });
-  }
-
-  // Tải thông tin chi tiết các câu hỏi
-  loadQuestionDetails(): void {
-    if (!this.examId) return;
-
-    this.questionService.getQuestionsByExamId(this.examId).subscribe({
-      next: (response) => {
-        if (response.ReturnStatus.Code === 1) {
-          this.questions = response.ReturnData;
-          this.isLoading = false;
-        } else {
-          this.notificationService.showError('Không thể tải câu hỏi: ' + response.ReturnStatus.Message);
-          this.isLoading = false;
-        }
-      },
-      error: (error) => {
-        console.error('Lỗi khi tải câu hỏi:', error);
-        this.notificationService.showError('Đã xảy ra lỗi khi tải câu hỏi');
-        this.isLoading = false;
-      }
-    });
-  }
-
-  // Lấy thông tin loại câu hỏi
-  getQuestionTypeLabel(questionType: number): string {
-    switch (questionType) {
-      case this.questionTypes.MULTIPLE_CHOICE:
-        return 'Trắc nghiệm';
-      case this.questionTypes.TRUE_FALSE:
-        return 'Đúng/Sai';
-      case this.questionTypes.FILL_IN_THE_BLANK:
-        return 'Điền vào chỗ trống';
-      default:
-        return 'Không xác định';
-    }
-  }
-
-  // Lấy câu hỏi từ ID
-  getQuestionById(questionId: number): QuestionInfo | undefined {
-    return this.questions.find(q => q.Id === questionId);
-  }
-
-  // Lấy chi tiết câu trả lời từ ID câu hỏi
-  getDetailedAnswerByQuestionId(questionId: number): DetailedAnswer | undefined {
-    return this.examResult?.DetailedAnswers.find(a => a.Question_Id === questionId);
-  }
-
-  // Lấy options cho câu hỏi trắc nghiệm
-  getMultipleChoiceOptions(question: QuestionInfo): string[] {
-    try {
-      const data = JSON.parse(question.Question_Data_Json);
-      return data.options || [];
-    } catch {
-      return [];
-    }
-  }
-
-  // Lấy đáp án đúng cho câu hỏi trắc nghiệm
-  getCorrectMultipleChoiceAnswer(question: QuestionInfo): number {
-    try {
-      const data = JSON.parse(question.Question_Data_Json);
-      return data.correctOption || 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  // Lấy đáp án người dùng đã chọn cho câu hỏi trắc nghiệm
-  getUserMultipleChoiceAnswer(answer: DetailedAnswer): number {
-    try {
-      const data = JSON.parse(answer.Answer_Given_Json);
-      return data.correctOption;
-    } catch {
-      return -1;
-    }
-  }
-
-  // Lấy đáp án đúng cho câu hỏi đúng/sai
-  getCorrectTrueFalseAnswer(question: QuestionInfo): boolean {
-    try {
-      const data = JSON.parse(question.Question_Data_Json);
-      return data.correctAnswer || false;
-    } catch {
-      return false;
-    }
-  }
-
-  // Lấy đáp án người dùng đã chọn cho câu hỏi đúng/sai
-  getUserTrueFalseAnswer(answer: DetailedAnswer): boolean {
-    try {
-      const data = JSON.parse(answer.Answer_Given_Json);
-      return data.correctAnswer || false;
-    } catch {
-      return false;
-    }
-  }
-
-  // Lấy các phần text cho câu hỏi điền vào chỗ trống
-  getFillInBlankSegments(question: QuestionInfo): string[] {
-    try {
-      const data = JSON.parse(question.Question_Data_Json);
-      return data.segments || [];
-    } catch {
-      return [];
-    }
-  }
-
-  // Lấy các đáp án đúng cho câu hỏi điền vào chỗ trống
-  getCorrectFillInBlankAnswers(question: QuestionInfo): string[] {
-    try {
-      const data = JSON.parse(question.Question_Data_Json);
-      return data.answers || [];
-    } catch {
-      return [];
-    }
-  }
-
-  // Lấy đáp án người dùng đã nhập cho câu hỏi điền vào chỗ trống
-  getUserFillInBlankAnswers(answer: DetailedAnswer): string[] {
-    try {
-      const data = JSON.parse(answer.Answer_Given_Json);
-      return data.answers || [];
-    } catch {
-      return [];
-    }
-  }
-
-  // Làm sạch HTML để hiển thị an toàn
-  sanitizeHtml(html: string) {
-    return this.sanitizer.bypassSecurityTrustHtml(html);
-  }
-
-  // Định dạng nhãn cho options
-  getOptionLabel(index: number): string {
-    return String.fromCharCode(65 + index);
   }
 
   // Quay lại trang danh sách bài thi
   goBack(): void {
-    this.router.navigate(['/student/my-exams']);
+    this.location.back();
+  }
+
+  // Tạo giá trị cho biểu đồ tròn tỷ lệ đúng
+  getCorrectAnswerCircle(): string {
+    if (!this.detailedResult || this.detailedResult.Statistics.TotalQuestions === 0) {
+      return '0 502.4'; // 2πr, r = 80
+    }
+    const correctPercentage = this.detailedResult.Statistics.CorrectPercentage;
+    const circumference = 2 * Math.PI * 80; // 2πr, r = 80
+    const dashArray = (correctPercentage / 100) * circumference;
+    return `${dashArray} ${circumference}`;
+  }
+
+  // Tạo giá trị cho biểu đồ donut
+  getDonutCircleValue(percentage: number): string {
+    if (!percentage) return '0 502.4';
+
+    const radius = 80;
+    const circumference = 2 * Math.PI * radius;
+    const dashArray = (percentage / 100) * circumference;
+    return `${dashArray} ${circumference}`;
+  }
+
+  // Định dạng số giây thành hh:mm:ss
+  formatSeconds(seconds: number): string {
+    if (!seconds) return '00:00';
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    const hoursStr = hours > 0 ? `${hours.toString().padStart(2, '0')}:` : '';
+    const minutesStr = minutes.toString().padStart(2, '0');
+    const secondsStr = remainingSeconds.toString().padStart(2, '0');
+
+    return `${hoursStr}${minutesStr}:${secondsStr}`;
+  }
+
+  // Xử lý HTML an toàn
+  sanitizeHtml(html: string): SafeHtml {
+    if (!html) return '';
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+
+  // Lấy các phân đoạn từ câu hỏi điền vào chỗ trống
+  getFillInBlankSegments(questionData: any): string[] {
+    if (!questionData || !questionData.segments) {
+      return [];
+    }
+    return questionData.segments;
+  }
+
+  // Lấy các đáp án từ câu hỏi điền vào chỗ trống
+  getFillInBlankAnswers(questionData: any): string[] {
+    if (!questionData || !questionData.answers) {
+      return [];
+    }
+    return questionData.answers;
+  }
+
+  // Lấy nhãn cho các tùy chọn trắc nghiệm (A, B, C, D, ...)
+  getOptionLabel(index: number): string {
+    return String.fromCharCode(65 + index); // A, B, C, D, ...
+  }
+
+  // Kiểm tra xem câu trả lời của người dùng có đúng không
+  isBlankAnswerCorrect(question: any, index: number): boolean {
+    if (!question || !question.QuestionData || !question.QuestionData.answers) {
+      return false;
+    }
+
+    const correctAnswer = this.getCorrectBlankAnswer(question, index);
+    const userAnswer = this.getUserBlankAnswer(question, index);
+
+    return userAnswer && correctAnswer && userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+  }
+
+  // Kiểm tra xem người dùng có câu trả lời không
+  hasUserAnswer(question: any, index: number): boolean {
+    const userAnswer = this.getUserBlankAnswer(question, index);
+    return userAnswer !== null && userAnswer !== undefined && userAnswer !== '';
+  }
+
+  // Lấy câu trả lời của người dùng
+  getUserBlankAnswer(question: any, index: number): string {
+    if (!question) {
+      return '';
+    }
+
+    // Sử dụng UserAnswer thay vì UserAnswerData
+    if (question.UserAnswer) {
+      const answers = question.UserAnswer.split(',');
+      if (index < answers.length) {
+        return answers[index].trim();
+      }
+    }
+
+    return '';
+  }
+
+  // Lấy đáp án đúng
+  getCorrectBlankAnswer(question: any, index: number): string {
+    if (!question || !question.QuestionData || !question.QuestionData.answers) {
+      return '';
+    }
+
+    if (index < question.QuestionData.answers.length) {
+      return question.QuestionData.answers[index];
+    }
+
+    return '';
+  }
+
+  // Làm lại đề thi
+  retakeExam(): void {
+    this.router.navigate(['/student/test-detail'], { queryParams: { id: this.examId } });
   }
 }

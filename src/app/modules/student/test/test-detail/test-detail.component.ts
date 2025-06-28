@@ -9,6 +9,7 @@ import { QuestionInfo } from 'src/app/shared/interfaces/question.interface';
 import { UserExamAttemptService } from 'src/app/shared/services/user-attempt.service';
 import { ScoreExamRequest, ScoreExamResponse, UserAnswer } from 'src/app/shared/interfaces/user-exam-attempt.interface';
 import { NotificationService, SystemConstants, User } from 'src/app/shared';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-test-detail',
@@ -60,7 +61,8 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     private questionService: QuestionService,
     private userExamAttemptService: UserExamAttemptService,
     private notificationService: NotificationService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private location: Location
   ) {
     // Lấy ID người dùng từ thông tin đăng nhập và chuyển đổi sang kiểu number
     this.userId = this.currentUser && this.currentUser.Id ? parseInt(this.currentUser.Id.toString(), 10) : 0;
@@ -283,25 +285,36 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userAnswers[questionId] = value;
   }
 
-  updateBlankAnswer(questionId: number, index: number, value: string) {
-    if (this.userAnswers[questionId] && Array.isArray(this.userAnswers[questionId])) {
+  updateBlankAnswer(questionId: number, index: number, value: any) {
+    if (this.userAnswers[questionId] && this.userAnswers[questionId][index] !== undefined) {
       this.userAnswers[questionId][index] = value;
     }
   }
 
   // Kiểm tra câu hỏi đã được trả lời chưa
-  isQuestionAnswered(questionId: number): boolean {
-    const answer = this.userAnswers[questionId];
-    if (answer === null || answer === undefined) {
+  isQuestionAnswered(questionId: string | number): boolean {
+    const id = typeof questionId === 'number' ? questionId : parseInt(questionId);
+    if (!this.userAnswers[id]) {
       return false;
     }
 
-    // Đối với câu hỏi điền vào chỗ trống, kiểm tra nếu có ít nhất 1 đáp án
-    if (Array.isArray(answer)) {
-      return answer.some(item => item && item.trim() !== '');
+    // Kiểm tra câu trả lời dựa trên loại câu hỏi
+    const question = this.questions.find(q => q.Id === id);
+    if (!question) return false;
+
+    if (question.Question_Type === this.questionTypes.FILL_IN_THE_BLANK) {
+      // Với câu điền vào chỗ trống, kiểm tra xem có ít nhất một ô đã được điền
+      const answers = this.userAnswers[id] as string[];
+      return answers.some(answer => answer && answer.trim() !== '');
+    } else if (question.Question_Type === this.questionTypes.MULTIPLE_CHOICE) {
+      // Với câu trắc nghiệm, chỉ cần có giá trị là đã trả lời
+      return this.userAnswers[id] !== undefined;
+    } else if (question.Question_Type === this.questionTypes.TRUE_FALSE) {
+      // Với câu đúng/sai, chỉ cần có giá trị là đã trả lời
+      return this.userAnswers[id] !== undefined;
     }
 
-    return true;
+    return false;
   }
 
   getMultipleChoiceOptions(question: QuestionInfo): string[] {
@@ -513,12 +526,7 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   // Chuyển đến trang kết quả
   goToResultPage() {
     this.resultPopupVisible = false;
-    this.router.navigate(['/student/exam-result', this.exam.Id], {
-      queryParams: {
-        attemptId: this.attemptId,
-        attemptNumber: this.attemptNumber
-      }
-    });
+    this.router.navigate(['/student/score-detail', this.exam.Id, this.attemptId]);
   }
 
   // Lấy danh sách các đoạn văn bản từ câu hỏi
@@ -536,18 +544,26 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
-  // Kiểm tra xem đáp án người dùng nhập vào có đúng không
-  isCorrectAnswer(questionId: number, index: number): boolean {
-    // Trong môi trường làm bài kiểm tra thực tế, chúng ta không nên hiển thị đáp án đúng
-    // Phương thức này chỉ để minh họa, có thể sử dụng trong chế độ xem lại bài làm
-    return false;
+  // Thêm phương thức getAnsweredCount để đếm số câu hỏi đã trả lời
+  getAnsweredCount(): number {
+    let count = 0;
+    if (this.questions && this.questions.length > 0) {
+      for (const question of this.questions) {
+        if (this.isQuestionAnswered(question.Id)) {
+          count++;
+        }
+      }
+    }
+    return count;
   }
 
-  // Kiểm tra xem người dùng đã nhập đáp án cho ô nhập liệu này chưa
-  hasAnswered(questionId: number, index: number): boolean {
-    if (this.userAnswers[questionId] && Array.isArray(this.userAnswers[questionId])) {
-      return !!this.userAnswers[questionId][index];
-    }
-    return false;
+  // Method to navigate back
+  goBack() {
+    this.location.back();
+  }
+
+  // Method to handle result popup closing
+  onResultPopupHidden() {
+    this.goToResultPage();
   }
 }

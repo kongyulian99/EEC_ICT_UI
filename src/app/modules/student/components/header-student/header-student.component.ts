@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SystemConstants } from 'src/app/shared/constants/systems.constant';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-header-student',
@@ -9,10 +10,20 @@ import { SystemConstants } from 'src/app/shared/constants/systems.constant';
 })
 export class HeaderStudentComponent implements OnInit {
   userFullName: string = '';
+  userAvatar: string = '';
 
   constructor(
-    private router: Router
-  ) { }
+    private router: Router,
+    private modalService: NgbModal
+  ) {
+    // Get user info from localStorage
+    const currentUser = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER) || '{}');
+    this.userFullName = currentUser.Full_Name || 'User';
+
+    // Get avatar if available
+    const userObj: any = currentUser;
+    this.userAvatar = userObj.Avatar || '';
+  }
 
   ngOnInit(): void {
     this.loadUserInfo();

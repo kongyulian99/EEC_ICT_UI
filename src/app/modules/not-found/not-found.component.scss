@@ -1,0 +1,74 @@
+.not-found-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 2rem;
+  gap: 3rem;
+
+  @media (max-width: 992px) {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+}
+
+.not-found-content {
+  max-width: 500px;
+}
+
+.error-code {
+  font-size: 8rem;
+  font-weight: 700;
+  color: #3f51b5;
+  line-height: 1;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 8px rgba(63, 81, 181, 0.3);
+}
+
+.error-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.error-message {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.btn-home {
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 6px rgba(63, 81, 181, 0.2);
+
+  &:hover {
+    background-color: #303f9f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(63, 81, 181, 0.3);
+  }
+}
+
+.not-found-image {
+  max-width: 400px;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 576px) {
+    max-width: 300px;
+  }
+}

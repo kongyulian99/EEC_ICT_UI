@@ -4,6 +4,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { StudentComponent } from './student.component';
 import { TestComponent } from './test/test.component';
 import { TestDetailComponent } from './test/test-detail/test-detail.component';
+import { ScoreDetailComponent } from './test/test-detail/score-detail/score-detail.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -18,12 +20,20 @@ const routes: Routes = [
         component: TestComponent
       },
       {
+        path: 'test/:examId',
+        component: TestDetailComponent
+      },
+      {
         path: 'test-detail',
         component: TestDetailComponent
       },
       {
         path: 'dashboard',
         component: DashboardComponent
+      },
+      {
+        path: 'score-detail/:examId/:attemptId',
+        component: ScoreDetailComponent
       }
     ]
   },

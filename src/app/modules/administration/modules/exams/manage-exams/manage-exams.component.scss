@@ -1,1 +1,147 @@
+// Card styles
+.exam-card {
+  transition: all 0.3s ease;
+  height: 100%;
 
+  .card-header {
+    background-color: rgba(0, 123, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 123, 255, 0.1);
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    max-width: 70%;
+  }
+
+  .badge {
+    font-size: 0.8rem;
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .description-text {
+    color: #6c757d;
+    font-size: 0.9rem;
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 123, 255, 0.3);
+  }
+
+  .fw-medium {
+    font-weight: 500;
+  }
+}
+
+// List view styles
+.table {
+  th {
+    font-weight: 500;
+    background-color: #f8f9fa;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+}
+
+// Search and filter styles
+.input-group {
+  .form-control {
+    border-right: none;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .input-group-append .btn {
+    border-left: none;
+    background-color: white;
+    color: #007bff;
+    border-color: #ced4da;
+
+    &:hover {
+      color: #0056b3;
+    }
+  }
+}
+
+// Filter container
+.filter-container {
+  width: 180px;
+
+  .form-select {
+    border-color: #ced4da;
+    font-size: 0.9rem;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      border-color: #80bdff;
+    }
+  }
+}
+
+// View toggle buttons
+.btn-group {
+  .btn {
+    &.active {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+  }
+}
+
+// Pagination styles
+.pagination {
+  .page-item {
+    &.active .page-link {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .page-link {
+      color: #007bff;
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      }
+    }
+  }
+}
+
+// Empty state
+.empty-state {
+  padding: 2rem;
+  color: #6c757d;
+
+  i {
+    opacity: 0.5;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .dropdown, .btn-group, .filter-container {
+    margin-top: 1rem;
+  }
+
+  .filter-container {
+    width: 100%;
+  }
+}

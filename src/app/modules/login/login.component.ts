@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   loading: boolean = false;
   dxButtonConfig = dxButtonConfig;
 
-  // Thêm các thuộc tính cho form đăng ký
+  // Add properties for registration form
   isLoginForm: boolean = true;
   registerData = {
     username: '',
@@ -37,10 +37,10 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit() {
-    // Kiểm tra xem URL hiện tại có phải là callback từ Google không
+    // Check if the current URL is a callback from Google
     console.log('Login component initialized, checking for Google callback...');
 
-    // Kiểm tra nếu có hash hoặc state=google_auth trong URL
+    // Check if there is a hash or state=google_auth in the URL
     const hasHash = window.location.hash && (
       window.location.hash.includes('access_token=') ||
       window.location.hash.includes('id_token=')
@@ -49,22 +49,22 @@ export class LoginComponent implements OnInit {
     const hasGoogleState = new URLSearchParams(window.location.search).get('state') === 'google_auth';
 
     if (hasHash || hasGoogleState) {
-      console.log('Phát hiện callback từ Google, xử lý đăng nhập...');
+      console.log('Google callback detected, processing login...');
       this.googleLoading = true;
 
-      // Xử lý callback từ Google
+      // Process Google callback
       const hasProcessed = this.authService.handleGoogleRedirect();
       if (hasProcessed) {
-        console.log('Đã xử lý callback từ Google thành công');
-        // Đã xử lý callback từ Google, reset trạng thái loading
+        console.log('Google callback processed successfully');
+        // Google callback processed, reset loading state
         this.googleLoading = false;
       } else {
-        console.log('Không thể xử lý callback từ Google');
+        console.log('Could not process Google callback');
         this.googleLoading = false;
-        this.notificationService.showError('Không thể xác thực với Google. Vui lòng thử lại.');
+        this.notificationService.showError('Could not authenticate with Google. Please try again.');
       }
     } else {
-      // Không phải là callback từ Google, reset trạng thái loading nếu có
+      // Not a Google callback, reset loading state if any
       this.googleLoading = false;
     }
   }
@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(this.user));
 
                 setTimeout(() => {
-                    // Kiểm tra xem người dùng có phải là admin không
+                    // Check if user is admin
                     if (this.user.Is_Admin) {
                         this.router.navigate(['administration']).then(() => {
                             this.loading = false;
@@ -105,37 +105,37 @@ export class LoginComponent implements OnInit {
         },
         error: (error: any) => {
           this.loading = false;
-          this.notificationService.showError('System errorr!');
+          this.notificationService.showError('System error!');
         }
     });
   }
 
-  // Phương thức đăng nhập bằng Google
+  // Method to sign in with Google
   signInWithGoogle(): void {
     if (this.googleLoading) {
       return;
     }
 
     this.googleLoading = true;
-    console.log('Bắt đầu quá trình đăng nhập bằng Google...');
+    console.log('Starting Google login process...');
 
     try {
-      // Gọi phương thức loginWithGoogle từ authService để chuyển hướng
+      // Call loginWithGoogle method from authService to redirect
       this.authService.loginWithGoogle();
 
-      // Lưu ý: Không cần thiết lập timeout hoặc event listeners vì chúng ta sẽ chuyển hướng trang
-      // Trạng thái loading sẽ được reset khi quay lại trang sau khi xác thực
+      // Note: No need to set timeout or event listeners as we will redirect the page
+      // Loading state will be reset when returning to the page after authentication
     } catch (error: any) {
-      console.error('Lỗi khởi tạo đăng nhập Google:', error);
-      this.notificationService.showError('Không thể khởi tạo đăng nhập Google: ' + (error.message || 'Lỗi không xác định'));
+      console.error('Error initiating Google login:', error);
+      this.notificationService.showError('Could not initiate Google login: ' + (error.message || 'Unknown error'));
       this.googleLoading = false;
     }
   }
 
-  // Phương thức chuyển đổi giữa form đăng nhập và đăng ký
+  // Method to toggle between login and registration forms
   toggleForm() {
     this.isLoginForm = !this.isLoginForm;
-    // Reset các trường dữ liệu
+    // Reset data fields
     if (this.isLoginForm) {
       this.username = '';
       this.password = '';
@@ -150,34 +150,34 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // Phương thức xử lý đăng ký
+  // Method to handle registration
   onRegister() {
     if (this.registerLoading) {
       return;
     }
 
-    // Kiểm tra mật khẩu xác nhận
+    // Check confirm password
     if (this.registerData.password !== this.registerData.confirmPassword) {
-      this.notificationService.showError('Mật khẩu xác nhận không khớp!');
+      this.notificationService.showError('Confirm password does not match!');
       return;
     }
 
     this.registerLoading = true;
 
-    // Giả lập API đăng ký (thay bằng API thực tế sau)
+    // Simulate registration API (replace with actual API later)
     setTimeout(() => {
       this.registerLoading = false;
-      this.notificationService.showSuccess('Đăng ký thành công! Vui lòng đăng nhập.');
+      this.notificationService.showSuccess('Registration successful! Please log in.');
       this.isLoginForm = true;
     }, 1500);
 
-    // Thay thế bằng API thực tế
+    // Replace with actual API
     /*
     this.authService.register(this.registerData).subscribe({
       next: (response: ResponseData) => {
         this.registerLoading = false;
         if (response.ReturnStatus.Code === 1) {
-          this.notificationService.showSuccess('Đăng ký thành công! Vui lòng đăng nhập.');
+          this.notificationService.showSuccess('Registration successful! Please log in.');
           this.isLoginForm = true;
         } else {
           this.notificationService.showError(response.ReturnStatus.Message);
@@ -185,7 +185,7 @@ export class LoginComponent implements OnInit {
       },
       error: (error: any) => {
         this.registerLoading = false;
-        this.notificationService.showError('Lỗi hệ thống!');
+        this.notificationService.showError('System error!');
       }
     });
     */

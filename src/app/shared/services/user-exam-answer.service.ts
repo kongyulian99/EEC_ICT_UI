@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { ResponseData } from '../models';
@@ -15,12 +15,25 @@ import {
   ScoreDistributionRequest
 } from '../interfaces/user-exam-attempt.interface';
 
+/**
+ * Interface cho TopicPerformanceInfo
+ */
+export interface TopicPerformanceInfo {
+  TopicId: number;
+  TopicName: string;
+  TotalQuestions: number;
+  AnsweredQuestions: number;
+  AverageScore: number;
+  MaxPossibleScore: number;
+  TotalAchievedScore: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
-export class UserExamAttemptService extends BaseService {
+export class UserExamAnswerService extends BaseService {
   private httpOptions = new HttpHeaders();
-  private apiUrl = `${environment.apiUrl}/api/UserExamAttempt`;
+  private apiUrl = `${environment.apiUrl}/api/UserExamAnswer`;
 
   constructor(private http: HttpClient) {
     super();
@@ -208,6 +221,26 @@ export class UserExamAttemptService extends BaseService {
     }>>(
       url,
       { headers: this.httpOptions }
+    ).pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Lấy danh sách các topic có điểm trung bình thấp nhất dựa trên kết quả trả lời của người dùng
+   * @param userId ID của người dùng (tùy chọn)
+   * @param limit Số lượng topic cần lấy (mặc định: 10)
+   */
+  getLowestPerformingTopics(userId?: number, limit: number = 10) {
+    let params = new HttpParams();
+
+    if (userId) {
+      params = params.set('userId', userId.toString());
+    }
+
+    params = params.set('limit', limit.toString());
+
+    return this.http.get<ResponseData<TopicPerformanceInfo[]>>(
+      `${this.apiUrl}/GetLowestPerformingTopics`,
+      { params: params, headers: this.httpOptions }
     ).pipe(catchError(this.handleError));
   }
 

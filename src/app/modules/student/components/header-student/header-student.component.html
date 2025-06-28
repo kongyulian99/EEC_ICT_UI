@@ -1,46 +1,50 @@
 <nav class="navbar navbar-expand-lg">
-  <a class="navbar-brand" href="#">
-    <i class="fa fa-graduation-cap mr-1"></i> IGCSE-HUB
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <i class="fa fa-bars"></i>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/student/dashboard" routerLinkActive="active">
-          <i class="fa fa-home mr-1"></i> Home
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/student/test" routerLinkActive="active">
-          <i class="fa fa-file-text mr-1"></i> Exams
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/student/results" routerLinkActive="active">
-          <i class="fa fa-chart-bar mr-1"></i> Results
-        </a>
-      </li>
-    </ul>
-    <ul class="navbar-nav">
-      <li class="nav-item dropdown" ngbDropdown>
-        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="userDropdown" ngbDropdownToggle>
-          <i class="fa fa-user-circle mr-1"></i> {{ userFullName }}
-        </a>
-        <div class="dropdown-menu dropdown-user" ngbDropdownMenu aria-labelledby="userDropdown">
-          <a class="dropdown-item" routerLink="/student/profile">
-            <i class="fa fa-fw fa-user"></i> Profile
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <!-- <i class="fa fa-graduation-cap mr-1"></i> IGCSE-HUB -->
+      <img src="/assets/images/Logo IGCSE.png" alt="IGCSE-HUB" class="logo" style="max-height: 40px; width: auto;">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/student/dashboard" routerLinkActive="active">
+            <i class="fa fa-home me-2"></i> Home
           </a>
-          <a class="dropdown-item" href="javascript:void(0)" (click)="onChangePassword()">
-            <i class="fa fa-fw fa-key"></i> Change Password
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/student/test" routerLinkActive="active">
+            <i class="fa fa-file-text me-2"></i> Exams
           </a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:void(0)" (click)="onLoggedout()">
-            <i class="fa fa-fw fa-sign-out"></i> Logout
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/student/results" routerLinkActive="active">
+            <i class="fa fa-chart-bar me-2"></i> Results
           </a>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown" ngbDropdown>
+          <a class="nav-link dropdown-toggle user-dropdown" href="javascript:void(0)" id="userDropdown" ngbDropdownToggle>
+            <img [src]="userAvatar || 'assets/images/default-avatar.avif'" class="user-avatar" alt="User Avatar">
+            <span class="user-name">{{ userFullName }}</span>
+          </a>
+          <div class="dropdown-menu dropdown-user" ngbDropdownMenu aria-labelledby="userDropdown">
+            <a class="dropdown-item" routerLink="/student/profile">
+              <i class="fa fa-fw fa-user me-2"></i> Profile
+            </a>
+            <a class="dropdown-item" href="javascript:void(0)" (click)="onChangePassword()">
+              <i class="fa fa-fw fa-key me-2"></i> Change Password
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item logout-item" href="javascript:void(0)" (click)="onLoggedout()">
+              <i class="fa fa-fw fa-sign-out me-2"></i> Logout
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>

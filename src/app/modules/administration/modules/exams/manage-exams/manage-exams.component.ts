@@ -21,6 +21,7 @@ export class ManageExamsComponent implements OnInit {
 
   // Dữ liệu
   exams: ExamInfo[] = [];
+  filteredExams: ExamInfo[] = [];
   isLoading: boolean = false;
 
   // Popup
@@ -28,6 +29,19 @@ export class ManageExamsComponent implements OnInit {
   popupTitle: string = '';
   editingExam: ExamInfo = {} as ExamInfo;
   isNewExam: boolean = false;
+
+  // Card view properties
+  viewMode: string = 'card'; // 'card' or 'list'
+  searchText: string = '';
+  currentPage: number = 1;
+  totalPages: number = 1;
+  itemsPerPage: number = 12;
+  sortField: string = 'Created_At';
+  sortDirection: string = 'desc';
+
+  // Filter properties
+  filterCreator: string = '';
+  uniqueCreators: string[] = [];
 
   constructor(
     private examsService: ExamsService,
@@ -46,6 +60,9 @@ export class ManageExamsComponent implements OnInit {
       (response: any) => {
         if (response.ReturnStatus.Code === 1) {
           this.exams = response.ReturnData;
+          this.extractUniqueCreators();
+          this.applyFilters();
+          this.calculateTotalPages();
         } else {
           this.notificationService.showError(response.ReturnStatus.Message);
         }
@@ -161,5 +178,142 @@ export class ManageExamsComponent implements OnInit {
   // Đóng popup
   cancelPopup(): void {
     this.popupVisible = false;
+  }
+
+  // Card view methods
+  onSearchChange(): void {
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      // Toggle direction if clicking the same field
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.applyFilters();
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages) {
+      return;
+    }
+    this.currentPage = page;
+  }
+
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxPagesToShow = 5;
+
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = startPage + maxPagesToShow - 1;
+
+    if (endPage > this.totalPages) {
+      endPage = this.totalPages;
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  }
+
+  calculateTotalPages(): void {
+    this.totalPages = Math.ceil(this.filteredExams.length / this.itemsPerPage);
+    if (this.totalPages === 0) {
+      this.totalPages = 1;
+    }
+  }
+
+  // Filter methods
+  applyFilters(): void {
+    let filtered = [...this.exams];
+
+    // Apply text search
+    if (this.searchText && this.searchText.trim() !== '') {
+      const searchLower = this.searchText.toLowerCase().trim();
+      filtered = filtered.filter(exam =>
+        (exam.Title && exam.Title.toLowerCase().includes(searchLower)) ||
+        (exam.Description && exam.Description.toLowerCase().includes(searchLower))
+      );
+    }
+
+    // Apply creator filter
+    if (this.filterCreator) {
+      filtered = filtered.filter(exam => exam.Create_User_Name === this.filterCreator);
+    }
+
+    // Apply sorting
+    filtered = this.sortExams(filtered);
+
+    this.filteredExams = filtered;
+    this.calculateTotalPages();
+  }
+
+  sortExams(exams: ExamInfo[]): ExamInfo[] {
+    return exams.sort((a, b) => {
+      let valueA: any = a[this.sortField];
+      let valueB: any = b[this.sortField];
+
+      // Handle date comparisons
+      if (this.sortField === 'Created_At' || this.sortField === 'Updated_At') {
+        valueA = valueA ? new Date(valueA).getTime() : 0;
+        valueB = valueB ? new Date(valueB).getTime() : 0;
+      }
+
+      // Handle string comparisons
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        valueA = valueA.toLowerCase();
+        valueB = valueB.toLowerCase();
+      }
+
+      // Handle null/undefined values
+      if (valueA === null || valueA === undefined) return 1;
+      if (valueB === null || valueB === undefined) return -1;
+
+      // Compare based on sort direction
+      if (this.sortDirection === 'asc') {
+        return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+      } else {
+        return valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
+      }
+    });
+  }
+
+  extractUniqueCreators(): void {
+    const creators = new Set<string>();
+    this.exams.forEach(exam => {
+      if (exam.Create_User_Name) {
+        creators.add(exam.Create_User_Name);
+      }
+    });
+    this.uniqueCreators = Array.from(creators);
+  }
+
+  resetFilters(): void {
+    this.searchText = '';
+    this.filterCreator = '';
+    this.sortField = 'Created_At';
+    this.sortDirection = 'desc';
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  getSortLabel(): string {
+    switch (this.sortField) {
+      case 'Title':
+        return 'Title ' + (this.sortDirection === 'asc' ? '(A-Z)' : '(Z-A)');
+      case 'Created_At':
+        return 'Date ' + (this.sortDirection === 'asc' ? '(Oldest)' : '(Newest)');
+      case 'Total_Questions':
+        return 'Questions ' + (this.sortDirection === 'asc' ? '(Low-High)' : '(High-Low)');
+      default:
+        return 'Sort By';
+    }
   }
 }

@@ -1,241 +1,220 @@
-<!-- Màn hình thông tin đề thi -->
-<div class="exam-info-screen" *ngIf="!isStarted">
-  <app-generic-page [pageTitle]="'Thông tin đề thi'" [loading]="isLoading" [haveBackButton]="true">
-    <ng-container body>
-      <div class="container">
-        <div class="card">
-          <div class="card-body text-center">
-            <h3 class="mb-4">{{exam.Title}}</h3>
-            <div class="exam-details mb-4">
-              <p><strong>Thời gian làm bài:</strong> {{exam.Duration_Minutes}} phút</p>
-              <p><strong>Số câu hỏi:</strong> {{questions.length}}</p>
-              <p class="text-muted">{{exam.Description}}</p>
+<!-- Màn hình thông tin bài thi -->
+<div class="exam-info-container" *ngIf="!isStarted && !isLoading">
+    <div class="container py-5">
+        <div class="card shadow-lg exam-intro-card">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h3 class="mb-0">Thông tin bài thi</h3>
             </div>
-            <dx-button
-              text="Bắt đầu làm bài"
-              [type]="'success'"
-              [icon]="'play'"
-              (onClick)="startExam()"
-            ></dx-button>
+            <div class="card-body text-center p-4">
+                <div class="exam-icon mb-4">
+                    <div class="icon-circle">
+                        <i class="fa fa-file-text-o fa-2x"></i>
+                    </div>
+                </div>
+                <h2 class="card-title fw-bold mb-3">{{ exam.Title }}</h2>
+                <p class="text-muted mb-4">{{ exam.Description }}</p>
+
+                <div class="row exam-details my-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="detail-box">
+                            <div class="detail-icon">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <div class="detail-label">Thời gian</div>
+                            <div class="detail-value">{{ exam.Duration_Minutes }} phút</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="detail-box">
+                            <div class="detail-icon">
+                                <i class="fa fa-question-circle"></i>
+                            </div>
+                            <div class="detail-label">Số câu hỏi</div>
+                            <div class="detail-value">{{ questions.length }} câu</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="detail-box">
+                            <div class="detail-icon">
+                                <i class="fa fa-trophy"></i>
+                            </div>
+                            <div class="detail-label">Điểm đạt</div>
+                            <div class="detail-value">{{ exam.Pass_Score }} điểm</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-lg start-exam-btn px-4 py-2" (click)="startExam()">
+                    <i class="fa fa-play me-2"></i>Bắt đầu làm bài
+                </button>
+                <div class="mt-3">
+                    <a href="javascript:void(0)" (click)="goBack()" class="back-link">
+                        <i class="fa fa-arrow-left me-1"></i> Quay lại danh sách bài thi
+                    </a>
+                </div>
           </div>
         </div>
       </div>
-    </ng-container>
-  </app-generic-page>
 </div>
 
-<!-- Màn hình làm bài -->
-<div class="exam-taking-screen" *ngIf="isStarted && !isCompleted">
-  <app-generic-page [pageTitle]="'Làm bài kiểm tra'" [loading]="isLoading" [haveBackButton]="true">
-    <ng-container buttons>
-      <dx-button text="Nộp bài" [icon]="'check'" [type]="'success'" (onClick)="submitExam()"></dx-button>
-    </ng-container>
-    <ng-container body>
-      <div class="container-fluid">
-        <div class="row">
-          <!-- Phần làm bài -->
-          <div class="col-md-8">
-            <div class="card">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                  <span class="badge bg-primary me-2">Câu {{currentQuestionIndex + 1}}/{{questions.length}}</span>
-                  <span class="badge bg-secondary">{{getQuestionTypeLabel(currentQuestion.Question_Type)}}</span>
-                </h5>
-                <div class="exam-timer">
-                  <i class="fas fa-clock me-2"></i>
-                  <span>{{formatTime(remainingTime)}}</span>
+<!-- Màn hình loading -->
+<div class="loading-container" *ngIf="isLoading">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-3">Đang tải bài thi...</p>
+</div>
+
+<!-- Màn hình làm bài thi -->
+<div class="exam-taking-container" *ngIf="isStarted && !isCompleted">
+    <!-- Header -->
+    <div class="exam-header">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <h4 class="exam-title-header mb-0">{{ exam.Title }}</h4>
+            <div class="d-flex align-items-center">
+                <div class="exam-timer me-3">
+                    <i class="fa fa-clock-o me-2"></i>
+                    <span>{{ formatTime(remainingTime) }}</span>
                 </div>
+                <button class="btn btn-success submit-btn-header" (click)="submitExam()">
+                    <i class="fa fa-check me-2"></i>Nộp bài
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nội dung chính -->
+    <div class="container-fluid exam-body py-3">
+        <div class="row g-4">
+            <!-- Panel câu hỏi -->
+            <div class="col-lg-8">
+                <div class="card question-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            Câu hỏi {{ currentQuestionIndex + 1 }}
+                            <span class="badge question-type-badge ms-2">{{ getQuestionTypeLabel(currentQuestion.Question_Type) }}</span>
+                        </h5>
+                        <span class="badge bg-info">Điểm: {{ currentQuestion.Score }}</span>
               </div>
               <div class="card-body">
                 <!-- Nội dung câu hỏi -->
                 <div class="question-content mb-4 p-3 border rounded bg-light">
-                  <!-- Nội dung câu hỏi thông thường -->
-                  <div *ngIf="currentQuestion.Question_Type !== questionTypes.FILL_IN_THE_BLANK">
+                          <div *ngIf="currentQuestion.Question_Type !== questionTypes.FILL_IN_THE_BLANK" class="question-text">
                     <app-view-ckeditor [data]="currentQuestion.Content"></app-view-ckeditor>
                   </div>
-
-                  <!-- Nội dung câu hỏi điền vào chỗ trống với input inline -->
                   <div *ngIf="currentQuestion.Question_Type === questionTypes.FILL_IN_THE_BLANK" class="fill-blank-question">
                     <ng-container *ngFor="let segment of getFillInBlankSegments(currentQuestion); let i = index">
-                      <!-- Hiển thị đoạn văn bản với innerHTML để giữ định dạng HTML -->
                       <span [innerHTML]="sanitizeHtml(segment)"></span>
-
-                      <!-- Hiển thị ô nhập liệu sau mỗi đoạn (trừ đoạn cuối) -->
                       <ng-container *ngIf="i < getFillInBlankAnswers(currentQuestion).length">
-                        <dx-text-box
-                          class="fill-blank-input"
-                          [ngClass]="{
-                            'has-answer': hasAnswered(currentQuestion.Id, i)
-                          }"
-                          [value]="userAnswers[currentQuestion.Id][i] || ''"
-                          placeholder="Nhập đáp án..."
-                          (onValueChanged)="updateBlankAnswer(currentQuestion.Id, i, $event.value)"
-                          [stylingMode]="'filled'"
-                          [showClearButton]="true"
-                        ></dx-text-box>
+                                <input type="text" class="form-control fill-blank-input d-inline-block"
+                                       [value]="userAnswers[currentQuestion.Id] ? userAnswers[currentQuestion.Id][i] : ''"
+                                       (input)="updateBlankAnswer(currentQuestion.Id, i, $any($event.target).value)">
                       </ng-container>
                     </ng-container>
                   </div>
                 </div>
 
-                <!-- Phần trả lời -->
-                <div class="question-answer mt-4" *ngIf="currentQuestion.Question_Type !== questionTypes.FILL_IN_THE_BLANK">
-                  <h6 class="mb-3 text-primary">Chọn đáp án:</h6>
-
-                  <!-- Câu hỏi trắc nghiệm -->
-                  <div *ngIf="currentQuestion.Question_Type === questionTypes.MULTIPLE_CHOICE">
-                    <div class="option-list">
-                      <div
-                        class="option-item p-3 mb-3 border rounded"
-                        *ngFor="let option of getMultipleChoiceOptions(currentQuestion); let j = index"
+                        <!-- Các lựa chọn đáp án -->
+                        <div class="answer-options" *ngIf="currentQuestion.Question_Type !== questionTypes.FILL_IN_THE_BLANK">
+                          <div *ngIf="currentQuestion.Question_Type === questionTypes.MULTIPLE_CHOICE" class="option-list">
+                            <div class="option-item" *ngFor="let option of getMultipleChoiceOptions(currentQuestion); let j = index"
                         [ngClass]="{'selected': userAnswers[currentQuestion.Id] === j}"
-                        (click)="setMultipleChoiceAnswer(currentQuestion.Id, j)"
-                      >
-                        <div class="d-flex align-items-center">
-                          <div class="radio-indicator me-3">
-                            <div class="indicator-dot" *ngIf="userAnswers[currentQuestion.Id] === j"></div>
+                                 (click)="setMultipleChoiceAnswer(currentQuestion.Id, j)">
+                                <span class="option-letter">{{ getOptionLabel(j) }}</span>
+                                <div class="option-text">{{ option }}</div>
+                            </div>
                           </div>
-                          <label class="mb-0 option-label w-100 cursor-pointer">
-                            <span class="option-prefix fw-bold">{{getOptionLabel(j)}}.</span> {{option}}
-                          </label>
+
+                          <div *ngIf="currentQuestion.Question_Type === questionTypes.TRUE_FALSE" class="option-list true-false-list">
+                            <div class="option-item" [ngClass]="{'selected': userAnswers[currentQuestion.Id] === true}"
+                                 (click)="setTrueFalseAnswer(currentQuestion.Id, true)">
+                                <span class="option-letter">A</span>
+                                <div class="option-text">Đúng</div>
                         </div>
-                      </div>
-                    </div>
+                            <div class="option-item" [ngClass]="{'selected': userAnswers[currentQuestion.Id] === false}"
+                                 (click)="setTrueFalseAnswer(currentQuestion.Id, false)">
+                                <span class="option-letter">B</span>
+                                <div class="option-text">Sai</div>
                   </div>
-
-                  <!-- Câu hỏi đúng/sai -->
-                  <div *ngIf="currentQuestion.Question_Type === questionTypes.TRUE_FALSE">
-                    <div class="true-false-options">
-                      <div class="true-false-option" [ngClass]="{'selected': userAnswers[currentQuestion.Id] === true}" (click)="setTrueFalseAnswer(currentQuestion.Id, true)">
-                        <div class="option-content">
-                          <div class="radio-indicator">
-                            <div class="indicator-dot" *ngIf="userAnswers[currentQuestion.Id] === true"></div>
                           </div>
-                          <span class="option-text">Đúng</span>
                         </div>
                       </div>
-
-                      <div class="true-false-option" [ngClass]="{'selected': userAnswers[currentQuestion.Id] === false}" (click)="setTrueFalseAnswer(currentQuestion.Id, false)">
-                        <div class="option-content">
-                          <div class="radio-indicator">
-                            <div class="indicator-dot" *ngIf="userAnswers[currentQuestion.Id] === false"></div>
-                          </div>
-                          <span class="option-text">Sai</span>
+                    <!-- Điều hướng -->
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <button class="btn btn-outline-primary" [disabled]="currentQuestionIndex === 0" (click)="previousQuestion()">
+                            <i class="fa fa-chevron-left me-2"></i>Câu trước
+                        </button>
+                        <div class="question-counter">
+                            {{ currentQuestionIndex + 1 }} / {{ questions.length }}
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Navigation buttons -->
-                <div class="navigation-buttons mt-4 d-flex justify-content-between">
-                  <dx-button
-                    text="Previous"
-                    [icon]="'chevronleft'"
-                    [type]="'default'"
-                    [disabled]="currentQuestionIndex === 0"
-                    (onClick)="previousQuestion()"
-                  ></dx-button>
-                  <dx-button
-                    text="Next"
-                    [icon]="'chevronright'"
-                    [type]="'default'"
-                    [disabled]="currentQuestionIndex === questions.length - 1"
-                    (onClick)="nextQuestion()"
-                  ></dx-button>
-                </div>
+                        <button class="btn btn-primary" [disabled]="currentQuestionIndex === questions.length - 1" (click)="nextQuestion()">
+                            Câu tiếp<i class="fa fa-chevron-right ms-2"></i>
+                        </button>
               </div>
             </div>
           </div>
 
-          <!-- Navigation bar -->
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="mb-0">Question List</h5>
+            <!-- Thanh điều hướng -->
+            <div class="col-lg-4">
+                <div class="card question-nav-card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Danh sách câu hỏi</h5>
               </div>
               <div class="card-body">
                 <div class="question-navigation">
-                  <div class="row g-2">
-                    <div class="col-3" *ngFor="let question of questions; let i = index">
-                      <div
-                        class="question-number p-2 text-center rounded cursor-pointer"
+                            <button *ngFor="let question of questions; let i = index"
+                                    class="question-number"
                         [ngClass]="{
-                          'bg-primary text-white': currentQuestionIndex === i,
-                          'bg-success text-white': isQuestionAnswered(question.Id),
-                          'bg-light': !isQuestionAnswered(question.Id) && currentQuestionIndex !== i
+                                        'current': currentQuestionIndex === i,
+                                        'answered': isQuestionAnswered(question.Id) && currentQuestionIndex !== i,
+                                        'unanswered': !isQuestionAnswered(question.Id) && currentQuestionIndex !== i
                         }"
-                        (click)="goToQuestion(i)"
-                      >
-                        {{i + 1}}
+                                    (click)="goToQuestion(i)">
+                                {{ i + 1 }}
+                            </button>
+                        </div>
+                        <hr>
+                        <div class="nav-legend">
+                            <div class="legend-item"><span class="legend-color current"></span> Câu hiện tại</div>
+                            <div class="legend-item"><span class="legend-color answered"></span> Đã trả lời</div>
+                            <div class="legend-item"><span class="legend-color unanswered"></span> Chưa trả lời</div>
+                        </div>
+
+                        <div class="exam-progress mt-4">
+                            <h6 class="mb-2">Tiến độ làm bài</h6>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-success"
+                                     [style.width]="(getAnsweredCount() / questions.length * 100) + '%'">
                       </div>
                     </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Đã làm: {{ getAnsweredCount() }}/{{ questions.length }}</span>
+                                <span>{{ (getAnsweredCount() / questions.length * 100).toFixed(0) }}%</span>
                   </div>
                 </div>
-                <div class="mt-3">
-                  <div class="d-flex align-items-center mb-2">
-                    <div class="status-dot bg-primary me-2"></div>
-                    <span>Current question</span>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-success w-100" (click)="submitExam()">
+                                <i class="fa fa-paper-plane me-2"></i>Nộp bài
+                            </button>
                   </div>
-                  <div class="d-flex align-items-center mb-2">
-                    <div class="status-dot bg-success me-2"></div>
-                    <span>Answered</span>
-                  </div>
-                  <div class="d-flex align-items-center">
-                    <div class="status-dot bg-light me-2"></div>
-                    <span>Not answered</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </ng-container>
-  </app-generic-page>
 </div>
 
-<!-- Submit confirmation popup -->
-<!-- <dx-popup
-  [showTitle]="true"
-  title="Confirm Submit Exam"
-  [(visible)]="submitPopupVisible"
-  [dragEnabled]="true"
-  [closeOnOutsideClick]="false"
-  [showCloseButton]="true"
->
-  <div *dxTemplate="let data of 'content'">
-    <div class="p-3">
-      <p>Are you sure you want to submit this exam?</p>
-      <div class="d-flex justify-content-end mt-3">
-        <dx-button
-          text="Cancel"
-          [type]="'normal'"
-          [stylingMode]="'outlined'"
-          (onClick)="submitPopupVisible = false"
-          class="me-2"
-        ></dx-button>
-        <dx-button
-          text="Confirm Submit Exam"
-          [type]="'success'"
-          (onClick)="confirmSubmit()"
-        ></dx-button>
-      </div>
-    </div>
-  </div>
-</dx-popup> -->
-
-<!-- Exam result popup -->
+<!-- Popup kết quả -->
 <dx-popup
   [showTitle]="true"
-  title="Exam Result"
+  title="Kết quả bài thi"
   [(visible)]="resultPopupVisible"
   [dragEnabled]="true"
   [closeOnOutsideClick]="false"
   [showCloseButton]="true"
-  [width]="700"
-  [height]="'auto'"
+  width="700"
+  height="auto"
   [maxHeight]="'80vh'"
+  (onHidden)="onResultPopupHidden()"
 >
   <div *dxTemplate="let data of 'content'">
     <div class="p-4" *ngIf="examResult">
@@ -244,15 +223,15 @@
         <div class="score-display">
           <div class="score-circle" [ngClass]="{'passed': examResult.Passed, 'failed': !examResult.Passed}">
             <div class="score-value">{{examResult.FinalScore}}</div>
-            <div class="score-label">points</div>
+            <div class="score-label">điểm</div>
           </div>
         </div>
         <div class="mt-3">
           <h5 class="result-status" [ngClass]="{'text-success': examResult.Passed, 'text-danger': !examResult.Passed}">
-            <i [class]="examResult.Passed ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
-            {{examResult.Passed ? 'Passed' : 'Failed'}}
+            <i [class]="examResult.Passed ? 'fa fa-check-circle' : 'fa fa-times-circle'"></i>
+            {{examResult.Passed ? 'Đạt' : 'Không đạt'}}
           </h5>
-          <p class="text-muted">Minimum passing score: {{examResult.PassScore}}</p>
+          <p class="text-muted">Điểm đạt tối thiểu: {{examResult.PassScore}}</p>
         </div>
       </div>
 
@@ -261,23 +240,23 @@
           <div class="col-md-6">
             <div class="card mb-3">
               <div class="card-header bg-light">
-                <h6 class="mb-0">Answer Statistics</h6>
+                <h6 class="mb-0">Thống kê câu trả lời</h6>
               </div>
               <div class="card-body">
                 <div class="d-flex justify-content-between mb-2">
-                  <span>Total questions:</span>
+                  <span>Tổng số câu hỏi:</span>
                   <span class="fw-bold">{{examResult.TotalQuestions}}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
-                  <span>Correct answers:</span>
+                  <span>Câu trả lời đúng:</span>
                   <span class="fw-bold text-success">{{examResult.CorrectAnswers}}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
-                  <span>Incorrect answers:</span>
+                  <span>Câu trả lời sai:</span>
                   <span class="fw-bold text-danger">{{examResult.IncorrectAnswers}}</span>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <span>Unanswered:</span>
+                  <span>Câu chưa trả lời:</span>
                   <span class="fw-bold text-muted">{{examResult.UnansweredQuestions}}</span>
                 </div>
               </div>
@@ -286,19 +265,19 @@
           <div class="col-md-6">
             <div class="card mb-3">
               <div class="card-header bg-light">
-                <h6 class="mb-0">Time Information</h6>
+                <h6 class="mb-0">Thông tin thời gian</h6>
               </div>
               <div class="card-body">
                 <div class="d-flex justify-content-between mb-2">
-                  <span>Start time:</span>
+                  <span>Thời gian bắt đầu:</span>
                   <span class="fw-bold">{{examResult.StartTime | date:'dd/MM/yyyy HH:mm:ss'}}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
-                  <span>End time:</span>
+                  <span>Thời gian kết thúc:</span>
                   <span class="fw-bold">{{examResult.EndTime | date:'dd/MM/yyyy HH:mm:ss'}}</span>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <span>Duration:</span>
+                  <span>Thời gian làm bài:</span>
                   <span class="fw-bold">{{examResult.Duration}}</span>
                 </div>
               </div>
@@ -308,20 +287,16 @@
       </div>
 
       <div class="text-center mt-4">
-        <dx-button
-          text="View Detailed Results"
-          [type]="'default'"
-          [stylingMode]="'contained'"
-          (onClick)="goToResultPage()"
-          [icon]="'chevronnext'"
-        ></dx-button>
+        <button class="btn btn-primary" (click)="goToResultPage()">
+            <i class="fa fa-bar-chart me-2"></i>Xem kết quả chi tiết
+        </button>
       </div>
     </div>
 
     <div class="p-4 text-center" *ngIf="!examResult">
-      <p>Loading exam results...</p>
+      <p>Đang tải kết quả...</p>
       <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+        <span class="visually-hidden">Đang tải...</span>
       </div>
     </div>
   </div>
