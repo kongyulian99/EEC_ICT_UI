@@ -1,95 +1,90 @@
 <div class="summary-container">
   <div class="summary-card" [ngClass]="{'loading': loading}">
-    <div class="summary-icon">
-      <i class="dx-icon dx-icon-user"></i>
-    </div>
-    <div class="summary-content">
-      <div class="summary-value">{{summaryData.totalUsers || 0}}</div>
-      <div class="summary-label">Tổng số người dùng</div>
-      <div class="summary-trend positive" *ngIf="summaryData.userGrowth > 0">
-        <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.userGrowth}}%
+    <div class="card-content">
+      <div class="summary-icon">
+        <i class="dx-icon dx-icon-user"></i>
       </div>
-      <div class="summary-trend negative" *ngIf="summaryData.userGrowth < 0">
-        <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.userGrowth}}%
-      </div>
-      <div class="summary-trend neutral" *ngIf="summaryData.userGrowth === 0">
-        Không thay đổi
-      </div>
-    </div>
-  </div>
-
-  <div class="summary-card" [ngClass]="{'loading': loading}">
-    <div class="summary-icon">
-      <i class="dx-icon dx-icon-file"></i>
-    </div>
-    <div class="summary-content">
-      <div class="summary-value">{{summaryData.totalExams || 0}}</div>
-      <div class="summary-label">Tổng số bài thi</div>
-      <div class="summary-trend positive" *ngIf="summaryData.examGrowth > 0">
-        <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.examGrowth}}%
-      </div>
-      <div class="summary-trend negative" *ngIf="summaryData.examGrowth < 0">
-        <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.examGrowth}}%
-      </div>
-      <div class="summary-trend neutral" *ngIf="summaryData.examGrowth === 0">
-        Không thay đổi
+      <div class="summary-content">
+        <div class="summary-value">{{summaryData.totalUsers || 0}}</div>
+        <div class="summary-label">Tổng số người dùng</div>
+        <div class="summary-trend positive" *ngIf="summaryData.userGrowth > 0">
+          <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.userGrowth}}%
+        </div>
+        <div class="summary-trend negative" *ngIf="summaryData.userGrowth < 0">
+          <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.userGrowth}}%
+        </div>
       </div>
     </div>
   </div>
 
   <div class="summary-card" [ngClass]="{'loading': loading}">
-    <div class="summary-icon">
-      <i class="dx-icon dx-icon-help"></i>
-    </div>
-    <div class="summary-content">
-      <div class="summary-value">{{summaryData.totalQuestions || 0}}</div>
-      <div class="summary-label">Tổng số câu hỏi</div>
-      <div class="summary-trend positive" *ngIf="summaryData.questionGrowth > 0">
-        <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.questionGrowth}}%
+    <div class="card-content">
+      <div class="summary-icon">
+        <i class="dx-icon dx-icon-file"></i>
       </div>
-      <div class="summary-trend negative" *ngIf="summaryData.questionGrowth < 0">
-        <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.questionGrowth}}%
-      </div>
-      <div class="summary-trend neutral" *ngIf="summaryData.questionGrowth === 0">
-        Không thay đổi
-      </div>
-    </div>
-  </div>
-
-  <div class="summary-card" [ngClass]="{'loading': loading}">
-    <div class="summary-icon">
-      <i class="dx-icon dx-icon-event"></i>
-    </div>
-    <div class="summary-content">
-      <div class="summary-value">{{summaryData.totalAttempts || 0}}</div>
-      <div class="summary-label">Tổng số lần làm bài</div>
-      <div class="summary-trend positive" *ngIf="summaryData.attemptGrowth > 0">
-        <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.attemptGrowth}}%
-      </div>
-      <div class="summary-trend negative" *ngIf="summaryData.attemptGrowth < 0">
-        <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.attemptGrowth}}%
-      </div>
-      <div class="summary-trend neutral" *ngIf="summaryData.attemptGrowth === 0">
-        Không thay đổi
+      <div class="summary-content">
+        <div class="summary-value">{{summaryData.totalExams || 0}}</div>
+        <div class="summary-label">Tổng số bài thi</div>
+        <div class="summary-trend positive" *ngIf="summaryData.examGrowth > 0">
+          <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.examGrowth}}%
+        </div>
+        <div class="summary-trend negative" *ngIf="summaryData.examGrowth < 0">
+          <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.examGrowth}}%
+        </div>
       </div>
     </div>
   </div>
 
   <div class="summary-card" [ngClass]="{'loading': loading}">
-    <div class="summary-icon">
-      <i class="dx-icon dx-icon-check"></i>
+    <div class="card-content">
+      <div class="summary-icon">
+        <i class="dx-icon dx-icon-help"></i>
+      </div>
+      <div class="summary-content">
+        <div class="summary-value">{{summaryData.totalQuestions || 0}}</div>
+        <div class="summary-label">Tổng số câu hỏi</div>
+        <div class="summary-trend positive" *ngIf="summaryData.questionGrowth > 0">
+          <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.questionGrowth}}%
+        </div>
+        <div class="summary-trend negative" *ngIf="summaryData.questionGrowth < 0">
+          <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.questionGrowth}}%
+        </div>
+      </div>
     </div>
-    <div class="summary-content">
-      <div class="summary-value">{{summaryData.passRate | number:'1.1-1'}}%</div>
-      <div class="summary-label">Tỷ lệ đậu</div>
-      <div class="summary-trend positive" *ngIf="summaryData.passRateGrowth > 0">
-        <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.passRateGrowth}}%
+  </div>
+
+  <div class="summary-card" [ngClass]="{'loading': loading}">
+    <div class="card-content">
+      <div class="summary-icon">
+        <i class="dx-icon dx-icon-event"></i>
       </div>
-      <div class="summary-trend negative" *ngIf="summaryData.passRateGrowth < 0">
-        <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.passRateGrowth}}%
+      <div class="summary-content">
+        <div class="summary-value">{{summaryData.totalAttempts || 0}}</div>
+        <div class="summary-label">Tổng số lần làm bài</div>
+        <div class="summary-trend positive" *ngIf="summaryData.attemptGrowth > 0">
+          <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.attemptGrowth}}%
+        </div>
+        <div class="summary-trend negative" *ngIf="summaryData.attemptGrowth < 0">
+          <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.attemptGrowth}}%
+        </div>
       </div>
-      <div class="summary-trend neutral" *ngIf="summaryData.passRateGrowth === 0">
-        Không thay đổi
+    </div>
+  </div>
+
+  <div class="summary-card" [ngClass]="{'loading': loading}">
+    <div class="card-content">
+      <div class="summary-icon">
+        <i class="dx-icon dx-icon-check"></i>
+      </div>
+      <div class="summary-content">
+        <div class="summary-value">{{summaryData.passRate | number:'1.1-1'}}%</div>
+        <div class="summary-label">Tỷ lệ đậu</div>
+        <div class="summary-trend positive" *ngIf="summaryData.passRateGrowth > 0">
+          <i class="dx-icon dx-icon-arrowup"></i> {{summaryData.passRateGrowth}}%
+        </div>
+        <div class="summary-trend negative" *ngIf="summaryData.passRateGrowth < 0">
+          <i class="dx-icon dx-icon-arrowdown"></i> {{summaryData.passRateGrowth}}%
+        </div>
       </div>
     </div>
   </div>

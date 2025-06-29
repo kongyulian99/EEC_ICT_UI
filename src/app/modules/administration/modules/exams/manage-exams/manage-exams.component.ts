@@ -208,16 +208,26 @@ export class ManageExamsComponent implements OnInit {
     const pages: number[] = [];
     const maxPagesToShow = 5;
 
-    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
-    let endPage = startPage + maxPagesToShow - 1;
+    if (this.totalPages <= maxPagesToShow) {
+      // Nếu tổng số trang ít hơn hoặc bằng số trang tối đa cần hiển thị
+      // thì hiển thị tất cả các trang
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Nếu tổng số trang nhiều hơn số trang tối đa cần hiển thị
+      // thì hiển thị một số trang ở giữa
+      let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
+      let endPage = startPage + maxPagesToShow - 1;
 
-    if (endPage > this.totalPages) {
-      endPage = this.totalPages;
-      startPage = Math.max(1, endPage - maxPagesToShow + 1);
-    }
+      if (endPage > this.totalPages) {
+        endPage = this.totalPages;
+        startPage = Math.max(1, endPage - maxPagesToShow + 1);
+      }
 
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
     }
 
     return pages;
@@ -315,5 +325,12 @@ export class ManageExamsComponent implements OnInit {
       default:
         return 'Sort By';
     }
+  }
+
+  // Thêm phương thức để lấy danh sách exam theo trang hiện tại
+  get paginatedExams(): ExamInfo[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredExams.slice(startIndex, endIndex);
   }
 }
