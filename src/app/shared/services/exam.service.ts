@@ -106,4 +106,38 @@ export class ExamsService extends BaseService {
       passRate: number;
     }[]>>(url, { headers: this.httpOptions }).pipe(catchError(this.handleError));
   }
+
+  /**
+   * Lấy danh sách bài thi sắp tới
+   * @param limit Số lượng bài thi cần lấy
+   */
+  getUpcomingExams(limit: number = 5) {
+    return this.http.get<ResponseData<{
+      ExamId: number;
+      ExamName: string;
+      Description: string;
+      StartDate: string;
+      EndDate: string;
+      Duration: number;
+      QuestionCount: number;
+    }[]>>(`${this.apiUrl}/UpcomingExams?limit=${limit}`, { headers: this.httpOptions })
+      .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Lấy danh sách bài thi khả dụng cho học viên
+   * @param userId ID của học viên
+   * @param limit Số lượng bài thi cần lấy
+   */
+  getAvailableExams(userId: number, limit: number = 10) {
+    return this.http.get<ResponseData<{
+      ExamId: number;
+      ExamName: string;
+      Description: string;
+      Duration: number;
+      TotalQuestions: number;
+      PassScore: number;
+    }[]>>(`${this.apiUrl}/AvailableExams?userId=${userId}&limit=${limit}`, { headers: this.httpOptions })
+      .pipe(catchError(this.handleError));
+  }
 }

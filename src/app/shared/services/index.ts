@@ -10,4 +10,6 @@ export * from './file.service';
 export * from './permission.service';
 export * from './logshethong.service';
 export * from './exam.service';
+export * from './dashboard.service';
+export * from './user-attempt.service';
 //end system

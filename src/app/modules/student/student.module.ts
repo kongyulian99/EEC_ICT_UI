@@ -6,12 +6,23 @@ import { StudentRoutingModule } from './student-routing.module';
 import { StudentComponent } from './student.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TestComponent } from './test/test.component';
-import { DxPopupModule, DxButtonModule, DxTextBoxModule, DxLoadPanelModule, DxDataGridModule, DxChartModule, DxPolarChartModule, DxTreeMapModule } from 'devextreme-angular';
-import { ComponentsSharedModule } from 'src/app/shared';
+import {
+  DxPopupModule,
+  DxButtonModule,
+  DxTextBoxModule,
+  DxLoadPanelModule,
+  DxDataGridModule,
+  DxChartModule,
+  DxPolarChartModule,
+  DxTreeMapModule,
+  DxPieChartModule,
+  DxTooltipModule
+} from 'devextreme-angular';
 import { HeaderStudentComponent } from './components/header-student/header-student.component';
 import { TestDetailComponent } from './test/test-detail/test-detail.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ScoreDetailComponent } from './test/test-detail/score-detail/score-detail.component';
+import { ComponentsSharedModule } from 'src/app/shared';
 
 
 @NgModule({
@@ -34,6 +45,8 @@ import { ScoreDetailComponent } from './test/test-detail/score-detail/score-deta
     DxChartModule,
     DxPolarChartModule,
     DxTreeMapModule,
+    DxPieChartModule,
+    DxTooltipModule,
     NgbDropdownModule,
     ComponentsSharedModule,
     StudentRoutingModule

@@ -13,3 +13,14 @@ export interface ExamInfo {
   Create_User_Id: number;
   Create_User_Name: string;
 }
+
+/**
+ * Interface cho TopExamByPassRate
+ */
+export interface TopExamByPassRate {
+  ExamId: number;
+  ExamTitle: string;
+  TotalAttempts: number;
+  PassedAttempts: number;
+  PassRate: number;
+}

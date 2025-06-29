@@ -27,149 +27,203 @@
   </ng-container>
 
   <ng-container body>
-    <div class="dashboard-container">
-      <!-- First Row - KPI Cards -->
-      <div class="kpi-cards">
-        <div class="kpi-card" [ngClass]="{'loading': loading}">
-          <div class="kpi-icon">
-            <i class="dx-icon dx-icon-user"></i>
-          </div>
-          <div class="kpi-content">
-            <div class="kpi-value">{{summaryData.totalUsers || 0}}</div>
-            <div class="kpi-label">Total Users</div>
-          </div>
-        </div>
-        <div class="kpi-card" [ngClass]="{'loading': loading}">
-          <div class="kpi-icon">
-            <i class="dx-icon dx-icon-file"></i>
-          </div>
-          <div class="kpi-content">
-            <div class="kpi-value">{{summaryData.totalExams || 0}}</div>
-            <div class="kpi-label">Total Exams</div>
-          </div>
-        </div>
-        <div class="kpi-card" [ngClass]="{'loading': loading}">
-          <div class="kpi-icon">
-            <i class="dx-icon dx-icon-event"></i>
-          </div>
-          <div class="kpi-content">
-            <div class="kpi-value">{{summaryData.totalAttempts || 0}}</div>
-            <div class="kpi-label">Total Attempts</div>
-          </div>
-        </div>
-        <div class="kpi-card" [ngClass]="{'loading': loading}">
-          <div class="kpi-icon">
-            <i class="dx-icon dx-icon-check"></i>
-          </div>
-          <div class="kpi-content">
-            <div class="kpi-value">{{summaryData.passRate | number:'1.1-1'}}%</div>
-            <div class="kpi-label">Pass Rate</div>
-          </div>
+    <div class="container-fluid">
+      <!-- Hàng đầu tiên - Summary Cards -->
+      <div class="row mb-3">
+        <div class="col-12">
+          <app-summary></app-summary>
         </div>
       </div>
 
-      <!-- Second Row - Charts -->
-      <div class="chart-row">
-        <div class="chart-container">
-          <div class="chart-header">
-            <h3>Exam Attempts Over Time</h3>
-          </div>
-          <div class="chart-body">
-            <dx-chart
-              [dataSource]="attemptsByDateData"
-              [rotated]="false">
-              <dxo-size [height]="330"></dxo-size>
-              <dxo-legend [visible]="true" horizontalAlignment="center" verticalAlignment="bottom"></dxo-legend>
-              <dxo-argument-axis
-                argumentType="datetime"
-                [tickInterval]="{ days: 1 }"
-                [valueMarginsEnabled]="false">
-                <dxo-label format="dd/MM"></dxo-label>
-              </dxo-argument-axis>
-              <dxi-series
-                name="Attempts"
-                argumentField="date"
-                valueField="attempts"
-                type="bar"
-                color="#5B9BD5">
-              </dxi-series>
-              <dxi-series
-                name="Passed"
-                argumentField="date"
-                valueField="passed"
-                type="bar"
-                color="#70AD47">
-              </dxi-series>
-              <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip"></dxo-tooltip>
-            </dx-chart>
+      <!-- Hàng thứ hai - Biểu đồ -->
+      <div class="row mb-3">
+        <!-- Biểu đồ Số lượng làm bài theo thời gian -->
+        <div class="col-lg-7 col-md-12 mb-3 mb-lg-0">
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3>Số lượng làm bài theo thời gian</h3>
+              <div class="chart-legend">
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: #5B9BD5;"></div>
+                  <span>Tổng số lần làm bài</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: #70AD47;"></div>
+                  <span>Số lần đậu</span>
+                </div>
+              </div>
+            </div>
+            <div class="chart-body">
+              <dx-chart
+                [dataSource]="attemptsByDateData"
+                [rotated]="false"
+                [palette]="['#5B9BD5', '#70AD47']"
+              >
+                <dxo-legend
+                  [visible]="false"
+                ></dxo-legend>
+                <dxo-argument-axis
+                  argumentType="datetime"
+                  [tickInterval]="{ days: 2 }"
+                  [valueMarginsEnabled]="true"
+                >
+                  <dxo-label format="dd/MM"></dxo-label>
+                </dxo-argument-axis>
+                <dxo-value-axis [visualRange]="{ startValue: 0 }">
+                  <dxo-label format="fixedPoint"></dxo-label>
+                  <dxo-grid [visible]="true"></dxo-grid>
+                </dxo-value-axis>
+                <dxo-tooltip
+                  [enabled]="true"
+                  [shared]="true"
+                  [customizeTooltip]="customizeAttemptsTooltip"
+                ></dxo-tooltip>
+                <dxi-series
+                  name="Tổng số lần làm"
+                  argumentField="date"
+                  valueField="attempts"
+                  type="bar"
+                  color="#5B9BD5"
+                ></dxi-series>
+                <dxi-series
+                  name="Đậu"
+                  argumentField="date"
+                  valueField="passed"
+                  type="bar"
+                  color="#70AD47"
+                ></dxi-series>
+              </dx-chart>
+            </div>
           </div>
         </div>
 
-        <div class="chart-container">
-          <div class="chart-header">
-            <h3>Score Distribution</h3>
-          </div>
-          <div class="chart-body">
-            <dx-pie-chart
-              [dataSource]="scoreDistributionData"
-              [palette]="['#5B9BD5', '#ED7D31', '#A5A5A5', '#FFC000', '#70AD47']">
-              <dxo-size [height]="330"></dxo-size>
-              <dxo-legend
-                [visible]="true"
-                horizontalAlignment="center"
-                verticalAlignment="bottom">
-              </dxo-legend>
-              <dxi-series argumentField="rangeLabel" valueField="count">
-                <dxo-label
+        <!-- Biểu đồ Phân bố điểm số -->
+        <div class="col-lg-5 col-md-12">
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3>Phân bố điểm số</h3>
+            </div>
+            <div class="chart-body">
+              <dx-pie-chart
+                id="pie"
+                type="doughnut"
+                [palette]="['#5B9BD5', '#ED7D31', '#A5A5A5', '#FFC000', '#70AD47']"
+                [dataSource]="scoreDistributionData"
+              >
+                <dxo-legend
                   [visible]="true"
-                  format="fixedPoint"
-                  [customizeText]="customizeLabel">
-                </dxo-label>
-              </dxi-series>
-              <dxo-tooltip
-                [enabled]="true"
-                [customizeTooltip]="customizePieTooltip">
-              </dxo-tooltip>
-            </dx-pie-chart>
+                  horizontalAlignment="center"
+                  verticalAlignment="bottom"
+                ></dxo-legend>
+                <dxo-tooltip
+                  [enabled]="true"
+                  [customizeTooltip]="customizePieTooltip"
+                ></dxo-tooltip>
+                <dxi-series argumentField="rangeLabel" valueField="count">
+                  <dxo-label
+                    [visible]="true"
+                    [connector]="{ visible: true }"
+                    [customizeText]="customizePieLabel"
+                    position="outside"
+                  >
+                  </dxo-label>
+                </dxi-series>
+              </dx-pie-chart>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Third Row - Data Tables -->
-      <div class="data-row">
-        <div class="data-container">
-          <div class="data-header">
-            <h3>Top Exams</h3>
-          </div>
-          <div class="data-body">
-            <dx-data-grid
-              [dataSource]="topExamsData"
-              [showBorders]="true"
-              [columnAutoWidth]="true">
-              <dxo-scrolling mode="virtual"></dxo-scrolling>
-              <dxi-column dataField="title" caption="Exam Title"></dxi-column>
-              <dxi-column dataField="attempts" caption="Attempts" alignment="center"></dxi-column>
-              <dxi-column dataField="avgScore" caption="Avg Score" alignment="center" format="fixedPoint"></dxi-column>
-              <dxi-column dataField="passRate" caption="Pass Rate" alignment="center" format="percent"></dxi-column>
-            </dx-data-grid>
+      <!-- Hàng thứ ba - Bài thi có tỷ lệ đậu cao nhất và Hoạt động gần đây -->
+      <div class="row">
+        <!-- Bài thi có tỷ lệ đậu cao nhất -->
+        <div class="col-lg-5 col-md-12 mb-3 mb-lg-0">
+          <div class="data-container">
+            <div class="data-header">
+              <h3>Bài thi có tỷ lệ đậu cao nhất</h3>
+            </div>
+            <div class="data-body">
+              <div class="activity-list" *ngIf="topExamsData.length > 0">
+                <div class="activity-item" *ngFor="let exam of topExamsData">
+                  <div class="activity-icon" [style.background-color]="'rgba(' + getPassRateColorRGB(exam.passRatePercent) + ', 0.2)'" [style.color]="getPassRateColor(exam.passRatePercent)">
+                    <i class="dx-icon dx-icon-file"></i>
+                  </div>
+                  <div class="activity-content">
+                    <h4 class="activity-title">{{ exam.title }}</h4>
+                    <p class="activity-description">
+                      Tổng số lần làm: {{ exam.attempts }} | Số lần đậu: {{ exam.passed }}
+                    </p>
+                    <div class="activity-meta">
+                      <span class="activity-time">
+                        <i class="dx-icon dx-icon-chart"></i> Tỷ lệ đậu
+                      </span>
+                      <span class="activity-status" [style.background-color]="'rgba(' + getPassRateColorRGB(exam.passRatePercent) + ', 0.1)'" [style.color]="getPassRateColor(exam.passRatePercent)">
+                        {{ exam.passRatePercent.toFixed(1) }}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="topExamsData.length === 0">
+                <div class="col-12 text-center">
+                  <p class="no-data-message">Chưa có dữ liệu</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="data-container">
-          <div class="data-header">
-            <h3>Recent Activities</h3>
-          </div>
-          <div class="data-body">
-            <dx-data-grid
-              [dataSource]="recentActivitiesData"
-              [showBorders]="true"
-              [columnAutoWidth]="true">
-              <dxo-scrolling mode="virtual"></dxo-scrolling>
-              <dxi-column dataField="timestamp" caption="Time" dataType="datetime" format="dd/MM/yyyy HH:mm" [width]="150"></dxi-column>
-              <dxi-column dataField="user" caption="User"></dxi-column>
-              <dxi-column dataField="activity" caption="Activity"></dxi-column>
-              <dxi-column dataField="details" caption="Details"></dxi-column>
-            </dx-data-grid>
+        <!-- Hoạt động gần đây -->
+        <div class="col-lg-7 col-md-12">
+          <div class="data-container">
+            <div class="data-header">
+              <h3>Hoạt động gần đây</h3>
+            </div>
+            <div class="data-body">
+              <div class="row" *ngIf="recentActivitiesData.length > 0">
+                <div class="col-12">
+                  <div class="activity-list">
+                    <div class="activity-item" *ngFor="let activity of displayedActivities">
+                      <div class="activity-icon" [ngClass]="{'passed': activity.isPassed, 'failed': !activity.isPassed && activity.activityType === 'exam_attempt'}">
+                        <i [class]="activity.activityIcon"></i>
+                      </div>
+                      <div class="activity-content">
+                        <h4 class="activity-title">{{ activity.user }}</h4>
+                        <p class="activity-description">{{ activity.details }}</p>
+                        <div class="activity-meta">
+                          <span class="activity-time">
+                            <i class="dx-icon-time"></i> {{ activity.timestamp | date:'dd/MM/yyyy HH:mm' }}
+                          </span>
+                          <span class="activity-status" *ngIf="activity.activityType === 'exam_attempt'" [ngClass]="{'passed': activity.isPassed, 'failed': !activity.isPassed}">
+                            {{ activity.isPassed ? 'Đậu' : 'Trượt' }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pagination-container mt-3" *ngIf="recentActivitiesData.length > activitiesPerPage">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="pagination-info">
+                        <span>{{ currentActivityPage }} / {{ totalActivityPages }}</span>
+                      </div>
+                      <div class="pagination-buttons">
+                        <button class="btn btn-sm btn-outline-secondary" [disabled]="currentActivityPage === 1" (click)="prevActivityPage()">
+                          <i class="dx-icon-chevronprev"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary ml-2" [disabled]="currentActivityPage === totalActivityPages" (click)="nextActivityPage()">
+                          <i class="dx-icon-chevronnext"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="recentActivitiesData.length === 0">
+                <div class="col-12 text-center">
+                  <p class="no-data-message">Chưa có hoạt động nào</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

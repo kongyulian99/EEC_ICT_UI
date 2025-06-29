@@ -22,7 +22,9 @@ export interface User {
     AccessToken: string;
     Is_Admin: boolean;
     Is_Active: boolean;
+    Avatar: string;
 }
+
 
 export interface UserLoginPayload {
     Username: string;

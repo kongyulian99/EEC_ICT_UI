@@ -67,6 +67,8 @@ export interface ScoreExamResponse {
   UserId: number;
   ExamId: number;
   ExamTitle: string;
+  RawScore: number;
+  TotalPossibleScore: number;
   FinalScore: number;
   PassScore: number;
   Passed: boolean;
@@ -75,10 +77,17 @@ export interface ScoreExamResponse {
   IncorrectAnswers: number;
   UnansweredQuestions: number;
   StartTime: Date;
-  EndTime?: Date;
+  EndTime: Date;
   Duration: string;
   TotalTimeInSeconds: number;
-  DetailedAnswers: DetailedAnswer[];
+  DetailedAnswers: {
+    Id: number;
+    Question_Id: number;
+    Answer_Given_Json: string;
+    Is_Correct: boolean;
+    Score_Achieved: number;
+    Time_Spent_Seconds: number;
+  }[];
 }
 
 /**
@@ -122,6 +131,42 @@ export interface ScoreRange {
   RangeEnd: number;
   RangeLabel: string;
   Count: number;
+}
+
+export interface DetailedAttemptResult {
+  AttemptInfo: {
+    AttemptId: number;
+    AttemptNumber: number;
+    UserId: number;
+    ExamId: number;
+    ExamTitle: string;
+    TotalScore: number;
+    PassScore: number;
+    Passed: boolean;
+    ScorePercentage: number;
+    StartTime: Date;
+    EndTime: Date;
+    Duration: string;
+    TotalTimeInSeconds: number;
+  };
+  Statistics: {
+    TotalQuestions: number;
+    CorrectAnswers: number;
+    IncorrectAnswers: number;
+    CorrectPercentage: number;
+  };
+  Questions: {
+    QuestionId: number;
+    QuestionText: string;
+    QuestionType: string;
+    MaxScore: number;
+    UserScore: number;
+    IsCorrect: boolean;
+    UserAnswer: string;
+    CorrectAnswer: string;
+    Explanation: string;
+    QuestionData: any;
+  }[];
 }
 
 // export interface ScoreCompleteExamResponse {
