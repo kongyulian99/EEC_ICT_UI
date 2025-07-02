@@ -79,7 +79,7 @@
               <div *ngIf="scoresByDateData.length > 0" class="score-timeline">
                 <div *ngFor="let item of scoresByDateData" class="score-item">
                   <div class="score-date">{{item.date | date:'dd/MM/yyyy'}}</div>
-                  <div class="score-value">{{item.score}}%</div>
+                  <div class="score-value">{{item.score | number:'1.2-2'}}%</div>
                   <div class="score-exam">{{item.examName}}</div>
                 </div>
               </div>
