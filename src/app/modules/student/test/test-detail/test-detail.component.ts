@@ -73,7 +73,10 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Không cần khởi tạo các input sau khi view được tạo nữa
+    // Gọi lại processTableInputs sau khi view được khởi tạo
+    // setTimeout(() => {
+    //   this.processTableInputs();
+    // }, 100);
   }
 
   ngOnDestroy() {
@@ -261,18 +264,27 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   previousQuestion() {
     if (this.currentQuestionIndex > 0) {
       this.currentQuestionIndex--;
+      setTimeout(() => {
+        this.processTableInputs();
+      }, 100);
     }
   }
 
   nextQuestion() {
     if (this.currentQuestionIndex < this.questions.length - 1) {
       this.currentQuestionIndex++;
+      setTimeout(() => {
+        this.processTableInputs();
+      }, 100);
     }
   }
 
   goToQuestion(index: number) {
     if (index >= 0 && index < this.questions.length) {
       this.currentQuestionIndex = index;
+      setTimeout(() => {
+        this.processTableInputs();
+      }, 100);
     }
   }
 
@@ -565,5 +577,86 @@ export class TestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   // Method to handle result popup closing
   onResultPopupHidden() {
     this.goToResultPage();
+  }
+
+  // Xử lý các input trong bảng
+  processTableInputs() {
+    console.log('processTableInputs');
+    if (!this.currentQuestion || this.currentQuestion.Question_Type !== this.questionTypes.FILL_IN_THE_BLANK) {
+      return;
+    }
+
+    try {
+      const data = JSON.parse(this.currentQuestion.Question_Data_Json);
+
+      // Kiểm tra nếu có segment chứa bảng
+      const hasTableSegment = data.segments && data.segments.some((segment: string) => segment.includes('<table'));
+
+      if (!hasTableSegment) {
+        return;
+      }
+
+      // Tìm tất cả các bảng trong câu hỏi
+      const tables = document.querySelectorAll('.fill-blank-question table');
+
+      if (!tables || tables.length === 0) {
+        return;
+      }
+
+      // Xử lý từng bảng
+      tables.forEach(table => {
+        // Tìm tất cả các hàng trong bảng
+        const rows = table.querySelectorAll('tr');
+
+        // Nếu có ít nhất 2 hàng (tiêu đề và dữ liệu)
+        if (rows.length >= 2) {
+          // Hàng thứ hai chứa ô trống (y)
+          const dataRow = rows[1];
+          const cells = dataRow.querySelectorAll('td');
+
+          // Nếu có ít nhất 2 ô (y và các ô trống)
+          if (cells.length > 1) {
+            // Khởi tạo mảng câu trả lời nếu chưa có
+            if (!this.userAnswers[this.currentQuestion.Id]) {
+              this.userAnswers[this.currentQuestion.Id] = new Array(data.answers.length).fill('');
+            }
+
+            // Bắt đầu từ ô thứ hai (sau ô "y")
+            for (let i = 1; i < cells.length && (i-1) < data.answers.length; i++) {
+              const cell = cells[i];
+              const answerIndex = i - 1;
+
+              // Tạo input element
+              const input = document.createElement('input');
+              input.type = 'text';
+              input.className = 'form-control fill-blank-input';
+              input.style.width = '100%';
+              input.style.minWidth = '60px';
+
+              // Thiết lập giá trị ban đầu
+              if (this.userAnswers[this.currentQuestion.Id] &&
+                  this.userAnswers[this.currentQuestion.Id][answerIndex] !== undefined) {
+                input.value = this.userAnswers[this.currentQuestion.Id][answerIndex];
+              }
+
+              // Thêm sự kiện input
+              input.addEventListener('input', (event) => {
+                this.updateBlankAnswer(
+                  this.currentQuestion.Id,
+                  answerIndex,
+                  (event.target as HTMLInputElement).value
+                );
+              });
+
+              // Xóa nội dung cũ và thêm input vào ô
+              cell.innerHTML = '';
+              cell.appendChild(input);
+            }
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Error processing table inputs:', error);
+    }
   }
 }

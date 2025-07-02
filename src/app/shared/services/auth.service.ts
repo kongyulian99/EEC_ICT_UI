@@ -38,6 +38,7 @@ export class AuthenService extends BaseService {
 
       // Các tham số cho OAuth 2.0
       const redirectUri = encodeURIComponent(`${window.location.origin}/login`);
+      console.log('Redirect URI:', redirectUri);
       const scope = encodeURIComponent('email profile');
       const responseType = 'token id_token';
       const state = 'google_auth'; // Thêm state để nhận dạng callback
