@@ -250,17 +250,25 @@
 
         .page-item.active .page-link {
             background-color: #007bff;
-            border-color: #007bff;
             color: #fff;
-            font-weight: 500;
+            border-color: #007bff;
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+            z-index: 3;
         }
 
         .page-item.disabled .page-link {
             color: #6c757d;
-            background-color: #fff;
+            background-color: #e9ecef;
             border-color: #dee2e6;
-            opacity: 0.6;
         }
+    }
+}
+
+// Responsive Styles
+@media (max-width: 992px) {
+    .row-cols-lg-3 > .col {
+        flex: 0 0 50%;
+        max-width: 50%;
     }
 }
 
@@ -271,21 +279,32 @@
 
     .header-section {
         flex-direction: column;
-        align-items: flex-start;
-        padding: 1.25rem;
-
-        .page-title {
-            margin-bottom: 1rem;
-        }
-
-        .search-box {
-            width: 100%;
-        }
+        align-items: stretch;
+        gap: 1rem;
     }
 
-    .exam-card {
-        .card-text {
-            min-height: auto;
-        }
+    .search-box {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .exam-list-container {
+        padding: 1rem;
+    }
+
+    .row-cols-md-2 > .col, .row-cols-lg-3 > .col {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .exam-card .card-body {
+        padding: 1rem;
+    }
+
+    .pagination .page-link {
+        min-width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
     }
 }

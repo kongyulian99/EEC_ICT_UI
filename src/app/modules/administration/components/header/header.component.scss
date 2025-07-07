@@ -1,6 +1,309 @@
+// Màu sắc chính của ứng dụng
+$primary: #2962ff;  // Màu xanh dương chính
+$primary-dark: #0039cb;
+$primary-light: #768fff;
+$secondary: #26c6da;  // Màu xanh lá nhạt/ngọc lam
+$success: #66bb6a;
+$info: #29b6f6;
+$warning: #ffa726;
+$danger: #ef5350;
+$light: #f5f5f5;
+$dark: #212121;
+$white: #ffffff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+
+// Box shadow mặc định
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($dark, 0.075);
+$box-shadow: 0 0.5rem 1rem rgba($dark, 0.08);
+$box-shadow-lg: 0 1rem 3rem rgba($dark, 0.1);
+
 $topnav-background-color: #243B55;
+$header-bg: #1a237e; // Màu xanh dương đậm cho header
+$header-bg-lighter: #283593; // Màu nhạt hơn cho các phần tử con
 
 :host {
+  .admin-navbar {
+    background-color: $header-bg;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: $box-shadow-sm;
+    height: 60px;
+    padding: 0;
+    position: relative;
+    z-index: 1030;
+
+    // Container fluid adjustments for mobile
+    .container-fluid {
+      @media (max-width: 576px) {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+    }
+
+    // Styles for navbar brand
+    .navbar-brand {
+      color: $white;
+      font-weight: 700;
+      font-size: 1.25rem;
+      padding: 0.5rem 0;
+
+      @media (max-width: 576px) {
+        font-size: 1.125rem;
+      }
+
+      i {
+        color: #82b1ff; // Màu xanh dương nhạt cho icon
+      }
+    }
+
+    // Styles for navbar toggle button
+    .navbar-toggler {
+      padding: 0.25rem 0.5rem;
+      transition: color 0.15s ease-in-out;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 0.25rem;
+
+      &:focus, &:active {
+        box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.2);
+        outline: none;
+      }
+
+      .fa-bars {
+        color: $white;
+        font-size: 1.5rem;
+
+        @media (max-width: 576px) {
+          font-size: 1.25rem;
+        }
+      }
+    }
+
+    // Ensure the navbar collapse properly fits mobile screens
+    .navbar-collapse {
+      @media (max-width: 991.98px) {
+        background-color: $header-bg; // Giữ màu nền đồng nhất khi thu gọn
+        border-radius: 0 0 0.75rem 0.75rem;
+        box-shadow: $box-shadow;
+        max-height: calc(100vh - 60px);
+        overflow-y: auto;
+        padding: 0.75rem;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        z-index: 1040;
+      }
+
+      @media (min-width: 992px) {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    // Styles for navbar items
+    .navbar-nav {
+      // Mobile-specific styles
+      @media (max-width: 991.98px) {
+        padding-bottom: 0.5rem;
+
+        .nav-item {
+          margin-bottom: 0.375rem;
+        }
+
+        .nav-link {
+          padding: 0.75rem;
+          border-radius: 0.375rem;
+          font-size: 1rem;
+          font-weight: 500;
+        }
+
+        // Remove the after element on mobile
+        .nav-link.active::after {
+          display: none;
+        }
+
+        // Adjust dropdown styles for mobile
+        .dropdown-menu {
+          background-color: rgba(255, 255, 255, 0.05);
+          border: none;
+          box-shadow: none;
+          padding: 0.5rem;
+          margin-top: 0.25rem;
+          margin-bottom: 0.5rem;
+
+          .dropdown-item {
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            margin: 0.25rem 0;
+            color: rgba(255, 255, 255, 0.9);
+
+            &:hover, &:focus, &.active {
+              background-color: rgba(255, 255, 255, 0.1);
+            }
+          }
+        }
+      }
+
+      @media (min-width: 992px) {
+        .nav-item {
+          margin: 0 0.25rem;
+        }
+      }
+
+      .nav-link {
+        color: rgba(255, 255, 255, 0.85); // Màu chữ trắng với độ trong suốt nhẹ
+        font-weight: 500;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+
+        i {
+          color: #82b1ff; // Màu xanh dương nhạt cho icon
+          font-size: 1rem;
+        }
+
+        &:hover {
+          color: $white;
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        &.active {
+          color: $white;
+          background-color: rgba(255, 255, 255, 0.15);
+          font-weight: 600;
+
+          @media (min-width: 992px) {
+            &::after {
+              content: '';
+              position: absolute;
+              bottom: -1px;
+              left: 1rem;
+              right: 1rem;
+              height: 3px;
+              background-color: #82b1ff; // Màu xanh dương nhạt cho indicator
+              border-radius: 2px;
+            }
+          }
+        }
+      }
+
+      // Styles for dropdown
+      .dropdown-menu {
+        background-color: $header-bg-lighter; // Màu nền dropdown hài hòa với header
+        border-color: rgba(255, 255, 255, 0.1);
+        border-radius: 0.5rem;
+        box-shadow: $box-shadow;
+        margin-top: 0.5rem;
+
+        .dropdown-item {
+          color: rgba(255, 255, 255, 0.85);
+          border-radius: 0.25rem;
+          margin: 0 0.25rem;
+          padding: 0.5rem 0.75rem;
+          transition: all 0.2s ease;
+
+          i {
+            color: #82b1ff; // Màu xanh dương nhạt cho icon
+            font-size: 0.875rem;
+          }
+
+          &:hover, &:focus, &.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: $white;
+          }
+        }
+
+        .dropdown-header {
+          color: rgba(255, 255, 255, 0.6);
+          padding: 0.5rem 1rem;
+        }
+
+        .dropdown-divider {
+          border-color: rgba(255, 255, 255, 0.1);
+          margin: 0.25rem 0;
+        }
+      }
+
+      // Remove bootstrap's dropdown caret
+      .dropdown-toggle::after {
+        display: none;
+      }
+    }
+  }
+
+  // Avatar Circle
+  .avatar-circle {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 2rem;
+    flex-shrink: 0;
+
+    // Larger avatar on mobile
+    @media (max-width: 991.98px) {
+      height: 2.25rem;
+      width: 2.25rem;
+    }
+
+    .initials {
+      color: $white;
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1;
+
+      @media (max-width: 991.98px) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  // Cải thiện dropdown header trên mobile
+  @media (max-width: 991.98px) {
+    .dropdown-header {
+      border-radius: 0.375rem;
+      padding: 0.75rem !important;
+      background-color: rgba(255, 255, 255, 0.05);
+      margin-bottom: 0.5rem;
+
+      h6 {
+        font-size: 1rem;
+        color: $white;
+      }
+
+      small {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  // Animation for dropdown menus
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -20px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  // Add animation to dropdowns
+  .dropdown-menu {
+    animation: fadeInDown 0.2s ease;
+  }
+
   .navbar {
     z-index: 1500;
     background-color: $topnav-background-color;
@@ -8,12 +311,57 @@ $topnav-background-color: #243B55;
     padding-bottom: 0;
     padding-top: 0;
     height: 50px;
+    display: flex;
+    justify-content: space-between;
     // margin: 5px;
 
     .navbar-brand {
       color: white;
       font-size: .9rem;
       text-transform: uppercase;
+
+      @media screen and (max-width: 576px) {
+        font-size: .8rem;
+        margin-right: 0.5rem;
+        max-width: 60%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    /* Mobile navbar toggle buttons */
+    .navbar-toggler {
+      border: none;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      background: transparent;
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+
+      &.menu-toggle {
+        margin-right: 0.5rem;
+      }
+
+      &.user-toggle {
+        margin-left: auto;
+      }
+    }
+
+    /* Make navbar responsive */
+    @media screen and (max-width: 992px) {
+      .navbar-collapse {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        width: 200px;
+        background-color: $topnav-background-color;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1600;
+      }
     }
 
     .message {
@@ -53,6 +401,12 @@ $topnav-background-color: #243B55;
     min-width: 150px;
     text-align: end;
 
+    @media screen and (max-width: 576px) {
+      min-width: auto;
+      text-align: right;
+      padding: 0.5rem;
+    }
+
     i {
       margin-left: 0.5rem;
     }
@@ -64,6 +418,10 @@ $topnav-background-color: #243B55;
     width: 300px;
     background-color: $topnav-background-color;
     // background: linear-gradient(to right, #141E30, #243B55);
+
+    @media screen and (max-width: 576px) {
+      width: 250px;
+    }
 
     .media {
       border-bottom: 1px solid #ddd;
@@ -112,6 +470,10 @@ $topnav-background-color: #243B55;
     // background-color: $topnav-background-color;
     background: linear-gradient(to right, #141E30, #243B55);
 
+    @media screen and (max-width: 576px) {
+      width: 200px;
+    }
+
     .dropdown-item {
       color: #fff;
       padding: 0.5rem;
@@ -127,6 +489,34 @@ $topnav-background-color: #243B55;
 
     .dropdown-divider {
       margin: 0;
+    }
+  }
+}
+
+// Mobile specific layout
+@media (max-width: 991.98px) {
+  :host .admin-navbar {
+    padding: 0.5rem 1rem;
+
+    .navbar-collapse {
+      background-color: #243B55;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      padding: 1rem;
+      border-bottom: 1px solid #e9ecef;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .navbar-nav {
+      .nav-item {
+        width: 100%;
+        .nav-link.active {
+          background-color: #215991;
+          border-radius: 0.375rem;
+        }
+      }
     }
   }
 }

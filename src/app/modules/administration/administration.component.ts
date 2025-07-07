@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { SystemConstants } from 'src/app/shared/constants/systems.constant';
 import { User } from 'src/app/shared';
 
@@ -10,8 +9,6 @@ import { User } from 'src/app/shared';
   encapsulation: ViewEncapsulation.None
 })
 export class AdministrationComponent implements OnInit {
-  @ViewChild('sidebar') sidebar: SidebarComponent;
-  collapedSideBar: boolean = true;
   isAdmin: boolean = false;
   currentUser: User;
 
@@ -29,9 +26,5 @@ export class AdministrationComponent implements OnInit {
       console.error('Error loading user info:', error);
       this.isAdmin = false;
     }
-  }
-
-  receiveCollapsed($event: any) {
-    this.collapedSideBar = $event;
   }
 }

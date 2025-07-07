@@ -1,38 +1,41 @@
-<table>
-  <colgroup>
-    <col *ngFor="let attribute of listAttribute" [width]="attribute?.Width">
-  </colgroup>
-  <tbody>
-    <tr style="background-color: #eee;">
-      <td *ngFor="let attribute of listAttribute" class="text-center" style="border: solid 1px #ccc;">{{attribute?.Name}}</td>
-      <!-- <td class="text-center" style="border: solid 1px #ccc;">Tên nhiệm vụ</td>
-      <td class="text-center" style="border: solid 1px #ccc;">Chủ trì</td>
-      <td class="text-center" style="border: solid 1px #ccc;">Phối hợp thực hiện</td>
-      <td class="text-center" style="border: solid 1px #ccc;">Kết quả, chỉ tiêu báo cáo</td>
-      <td class="text-center" style="border: solid 1px #ccc;">Thời gian hoàn thành</td>
-      <td class="text-center" style="border: solid 1px #ccc;">Ghi chú</td> -->
-    </tr>
-  </tbody>
-</table>
-<dx-scroll-view style="height: calc(100vh - {{minusHeight}}px);">
-  <table>
+<div class="table-responsive">
+  <table class="table">
     <colgroup>
       <col *ngFor="let attribute of listAttribute" [width]="attribute?.Width">
     </colgroup>
     <tbody>
-      <tr *ngFor="let item of listNhomNhiemVu">
-        <td class="text-center" style="border: solid 1px #ccc;">{{item.TT}}</td>
-        <td class="text-center" style="border: solid 1px #ccc;" [colSpan]="6">{{item.TenNhomNhiemVu}}</td>
-      </tr>
-      <tr *ngFor="let item of items">
-        <td class="text-center" style="border: solid 1px #ccc;">{{item.TT}}</td>
-        <td class="text-center" style="border: solid 1px #ccc;">Tên nhiệm vụ</td>
+      <tr style="background-color: #eee;">
+        <td *ngFor="let attribute of listAttribute" class="text-center" style="border: solid 1px #ccc;">{{attribute?.Name}}</td>
+        <!-- <td class="text-center" style="border: solid 1px #ccc;">Tên nhiệm vụ</td>
         <td class="text-center" style="border: solid 1px #ccc;">Chủ trì</td>
         <td class="text-center" style="border: solid 1px #ccc;">Phối hợp thực hiện</td>
         <td class="text-center" style="border: solid 1px #ccc;">Kết quả, chỉ tiêu báo cáo</td>
         <td class="text-center" style="border: solid 1px #ccc;">Thời gian hoàn thành</td>
-        <td class="text-center" style="border: solid 1px #ccc;">Ghi chú</td>
+        <td class="text-center" style="border: solid 1px #ccc;">Ghi chú</td> -->
       </tr>
     </tbody>
   </table>
-</dx-scroll-view>
+
+  <dx-scroll-view style="height: calc(100vh - {{minusHeight}}px); max-width: 100%;">
+    <table class="table">
+      <colgroup>
+        <col *ngFor="let attribute of listAttribute" [width]="attribute?.Width">
+      </colgroup>
+      <tbody>
+        <tr *ngFor="let item of listNhomNhiemVu">
+          <td class="text-center" style="border: solid 1px #ccc;">{{item.TT}}</td>
+          <td class="text-center" style="border: solid 1px #ccc;" [colSpan]="6">{{item.TenNhomNhiemVu}}</td>
+        </tr>
+        <tr *ngFor="let item of items">
+          <td class="text-center" style="border: solid 1px #ccc;">{{item.TT}}</td>
+          <td class="text-center" style="border: solid 1px #ccc;">Tên nhiệm vụ</td>
+          <td class="text-center" style="border: solid 1px #ccc;">Chủ trì</td>
+          <td class="text-center" style="border: solid 1px #ccc;">Phối hợp thực hiện</td>
+          <td class="text-center" style="border: solid 1px #ccc;">Kết quả, chỉ tiêu báo cáo</td>
+          <td class="text-center" style="border: solid 1px #ccc;">Thời gian hoàn thành</td>
+          <td class="text-center" style="border: solid 1px #ccc;">Ghi chú</td>
+        </tr>
+      </tbody>
+    </table>
+  </dx-scroll-view>
+</div>

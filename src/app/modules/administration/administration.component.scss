@@ -1,8 +1,8 @@
 .main-container {
-  margin-top: 0px;
-  margin-left: 260px;
-  padding: 0px;
-  min-height: 100%;
+  margin-top: 0;
+  margin-left: 0; /* Sidebar is gone, so no margin needed */
+  // padding: 15px;
+  min-height: calc(100vh - 50px); /* Adjust for header height */
   height: auto;
   -ms-overflow-x: hidden;
   overflow-x: hidden;
@@ -10,15 +10,63 @@
   position: relative;
   // overflow: hidden;
   background-color: #f5f6f8;
+  transition: margin-left 0.3s ease;
 }
 
-.collapsed {
-  margin-left: 70px;
-}
+/* Remove all old sidebar-related styles */
+/*
+.collapsed { ... }
+.sidebar-container { ... }
+.sidebar-overlay { ... }
+... etc ...
+*/
 
+/* Responsive styles for tablet and mobile */
 @media screen and (max-width: 992px) {
   .main-container {
     margin-left: 0px !important;
+    padding: 10px;
+  }
+}
+
+/* Mobile specific styles */
+@media screen and (max-width: 576px) {
+  .main-container {
+    padding: 10px;
+  }
+
+  /* Make tables scrollable horizontally on mobile */
+  .table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Adjust grid layout for mobile */
+  .grid-container {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  /* Adjust buttons for better touch targets */
+  .delete-btn,
+  .add-btn,
+  .update-btn {
+    padding: 8px;
+
+    .icon {
+      font-size: 20px;
+    }
+  }
+
+  /* Adjust list actions for mobile */
+  .list-actions {
+    display: flex;
+    flex-wrap: wrap;
+
+    a {
+      margin-bottom: 5px;
+    }
   }
 }
 
@@ -27,6 +75,14 @@
     margin-top: 0px !important;
     margin-left: 0px !important;
   }
+}
+
+/* Keep other generic responsive styles if needed */
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 // liem

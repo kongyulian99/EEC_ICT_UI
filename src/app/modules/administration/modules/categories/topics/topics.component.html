@@ -1,7 +1,7 @@
 <app-generic-page [pageTitle]="title" [loading]="loading">
   <ng-container main-filters>
     <div class="search-container">
-      <dx-text-box style="width: 700px;" mode="search" [showClearButton]="true" [placeholder]="placeholderSearch"
+      <dx-text-box style="max-width: 700px;" mode="search" [showClearButton]="true" [placeholder]="placeholderSearch"
         [(value)]="textSearch" (onEnterKey)="onFilter()">
         <dx-button slot="buttons" [icon]="'search'" (onClick)="onFilter()"></dx-button>
       </dx-text-box>
@@ -14,8 +14,6 @@
 
   <ng-container buttons>
     <dx-button text="Add New" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()"></dx-button>
-    <dx-button text="Expand All" [icon]="'expand'" [type]="'default'" (click)="expandAll()" class="ml-2"></dx-button>
-    <dx-button text="Collapse All" [icon]="'collapse'" [type]="'default'" (click)="collapseAll()" class="ml-2"></dx-button>
   </ng-container>
 
   <ng-container body>

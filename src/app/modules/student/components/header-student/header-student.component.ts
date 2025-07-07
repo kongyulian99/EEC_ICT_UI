@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class HeaderStudentComponent implements OnInit {
   userFullName: string = '';
   userAvatar: string = '';
+  isNavbarCollapsed: boolean = true;
 
   constructor(
     private router: Router,

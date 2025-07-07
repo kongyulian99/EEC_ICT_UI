@@ -1,3 +1,31 @@
 td {
   padding: 5px;
 }
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+  border-collapse: collapse;
+}
+
+@media screen and (max-width: 768px) {
+  td {
+    padding: 3px;
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  td {
+    padding: 2px;
+    font-size: 0.85rem;
+  }
+}

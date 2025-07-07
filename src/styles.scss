@@ -1,6 +1,81 @@
 /* You can add global styles to this file, and also import other style files */
 
-// Existing code...
+// Responsive breakpoints
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
+
+// Responsive utilities
+@media (max-width: $breakpoint-sm) {
+  .d-xs-none { display: none !important; }
+  .d-xs-block { display: block !important; }
+  .d-xs-flex { display: flex !important; }
+}
+
+@media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md) {
+  .d-sm-none { display: none !important; }
+  .d-sm-block { display: block !important; }
+  .d-sm-flex { display: flex !important; }
+}
+
+@media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg) {
+  .d-md-none { display: none !important; }
+  .d-md-block { display: block !important; }
+  .d-md-flex { display: flex !important; }
+}
+
+@media (min-width: $breakpoint-lg) and (max-width: $breakpoint-xl) {
+  .d-lg-none { display: none !important; }
+  .d-lg-block { display: block !important; }
+  .d-lg-flex { display: flex !important; }
+}
+
+@media (min-width: $breakpoint-xl) {
+  .d-xl-none { display: none !important; }
+  .d-xl-block { display: block !important; }
+  .d-xl-flex { display: flex !important; }
+}
+
+// Text utilities for responsive
+@media (max-width: $breakpoint-sm) {
+  .text-xs-center { text-align: center !important; }
+  .text-xs-left { text-align: left !important; }
+  .text-xs-right { text-align: right !important; }
+}
+
+// Responsive padding and margin
+@media (max-width: $breakpoint-sm) {
+  .p-xs-0 { padding: 0 !important; }
+  .m-xs-0 { margin: 0 !important; }
+}
+
+// Base HTML and body styles
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+// Responsive container
+.container-fluid {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+// Responsive table
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
 /* CSS cho nút đăng nhập Google */
 .google-login-button {
@@ -55,4 +130,27 @@
 
 .spinner-border {
   animation: spinner-border 0.75s linear infinite, fadeIn 0.2s;
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive forms */
+@media (max-width: $breakpoint-sm) {
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+
+  .form-control {
+    font-size: 0.9rem;
+    padding: 0.375rem 0.5rem;
+  }
+
+  .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.9rem;
+  }
 }

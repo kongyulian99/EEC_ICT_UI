@@ -5,7 +5,7 @@ import { AdministrationComponent } from './administration.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AdministrationRoutingModule } from './administration-routing.module';
-import { NgbDropdownModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModalModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalChangePasswordComponent } from './components/modal-change-password/modal-change-password.component';
 import { SharedDirectivesModule } from 'src/app/shared';
 
@@ -24,6 +24,7 @@ import { SharedDirectivesModule } from 'src/app/shared';
     AdministrationRoutingModule,
     NgbDropdownModule,
     NgbModalModule,
+    NgbCollapseModule,
     DxButtonModule,
     DxTextBoxModule,
     DxValidatorModule,

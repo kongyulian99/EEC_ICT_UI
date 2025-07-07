@@ -20,7 +20,7 @@ import {
 } from 'devextreme-angular';
 import { HeaderStudentComponent } from './components/header-student/header-student.component';
 import { TestDetailComponent } from './test/test-detail/test-detail.component';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { ScoreDetailComponent } from './test/test-detail/score-detail/score-detail.component';
 import { ComponentsSharedModule } from 'src/app/shared';
 
@@ -48,6 +48,7 @@ import { ComponentsSharedModule } from 'src/app/shared';
     DxPieChartModule,
     DxTooltipModule,
     NgbDropdownModule,
+    NgbCollapseModule,
     ComponentsSharedModule,
     StudentRoutingModule
   ],
