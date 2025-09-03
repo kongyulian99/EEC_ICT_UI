@@ -105,7 +105,7 @@ export class ShareFunctionsService {
         URL.revokeObjectURL(objectUrl);
       },
       error: (any) => {
-        this.notificationService.showError('Không tìm thấy File');
+        this.notificationService.showError('File not found');
       },
     });
   }

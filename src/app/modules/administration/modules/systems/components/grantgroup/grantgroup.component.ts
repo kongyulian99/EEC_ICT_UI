@@ -161,7 +161,7 @@ export class GrantGroupComponent implements OnInit {
                 .subscribe(
                     (res: any) => {
                         if (res.ReturnStatus.Code === 0) {
-                            this.notificationService.showSuccess('Lưu thông tin thay đổi thành công');
+                            this.notificationService.showSuccess('Changes saved successfully');
 
                             relevantRolesIds.forEach((ID) => {
                                 this.selectedGroupData[ID][permissionId] = event.value;

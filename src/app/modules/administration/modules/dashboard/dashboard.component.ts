@@ -177,15 +177,15 @@ export class DashboardComponent implements OnInit {
   getActivityLabel(activityType: string): string {
     switch (activityType) {
       case 'exam_attempt':
-        return 'Làm bài thi';
+        return 'Exam attempt';
       case 'user_login':
-        return 'Đăng nhập';
+        return 'Login';
       case 'exam_created':
-        return 'Tạo bài thi';
+        return 'Exam created';
       case 'user_registered':
-        return 'Đăng ký';
+        return 'Registration';
       default:
-        return 'Hoạt động khác';
+        return 'Other activity';
     }
   }
 

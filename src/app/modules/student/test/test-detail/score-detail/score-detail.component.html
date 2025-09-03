@@ -45,27 +45,27 @@
               </div>
               <div class="score-status-indicator">
                 <i [class]="detailedResult.AttemptInfo.Passed ? 'fa fa-check-circle' : 'fa fa-times-circle'"></i>
-                {{detailedResult.AttemptInfo.Passed ? 'Đạt' : 'Không đạt'}}
+                {{detailedResult.AttemptInfo.Passed ? 'Passed' : 'Failed'}}
               </div>
-              <div class="pass-score">Điểm đậu: {{detailedResult.AttemptInfo.PassScore}}</div>
+              <div class="pass-score">Passing score: {{detailedResult.AttemptInfo.PassScore}}</div>
             </div>
           </div>
 
-          <!-- Thông tin điểm số -->
+          <!-- Score Information -->
           <div class="col-md-4">
             <div class="score-info-container">
               <div class="score-display">
                 <div class="score-value-large">{{detailedResult.AttemptInfo.TotalScore}}</div>
-                <div class="score-label">điểm</div>
+                <div class="score-label">points</div>
               </div>
               <div class="donut-legend">
                 <div class="legend-item">
                   <span class="legend-color correct"></span>
-                  <span>Đúng: {{detailedResult.Statistics.CorrectAnswers}} câu ({{detailedResult.Statistics.CorrectPercentage}}%)</span>
+                  <span>Correct: {{detailedResult.Statistics.CorrectAnswers}} questions ({{detailedResult.Statistics.CorrectPercentage}}%)</span>
                 </div>
                 <div class="legend-item">
                   <span class="legend-color incorrect"></span>
-                  <span>Sai: {{detailedResult.Statistics.IncorrectAnswers}} câu ({{100 - detailedResult.Statistics.CorrectPercentage}}%)</span>
+                  <span>Incorrect: {{detailedResult.Statistics.IncorrectAnswers}} questions ({{100 - detailedResult.Statistics.CorrectPercentage}}%)</span>
                 </div>
               </div>
             </div>

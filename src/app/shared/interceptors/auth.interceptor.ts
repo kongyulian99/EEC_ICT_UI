@@ -92,7 +92,7 @@ export class AuthResponseInterceptor implements HttpInterceptor {
                                             localStorage.removeItem(SystemConstants.CURRENT_USER);
                                             this.router.navigate(['/login']).then(()=>{
                                                 // response.Status.Code = 401;
-                                                response.ReturnStatus.Message = 'Hết phiên đăng nhập';
+                                                response.ReturnStatus.Message = 'Login session expired';
                                                 // console.log('dkfjd');
                                                 return throwError(()=>response);
 

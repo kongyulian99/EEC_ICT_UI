@@ -62,14 +62,14 @@ export class DropDownPermission implements OnInit {
         if (response.ReturnStatus.Code == 0) {
           this.items = response.ReturnData;
           if(this.showAll) {
-            this.items.unshift({cPermissionCode: '', cPermissionName: 'Toàn bộ'});
+            this.items.unshift({cPermissionCode: '', cPermissionName: 'All'});
           }
         } else {
-          this.notificationService.showError('Dữ liệu tải lỗi!');
+          this.notificationService.showError('Data loading error!');
         }
       },
       (_: any) => {
-        this.notificationService.showError('Hệ thống xảy ra lỗi!');
+        this.notificationService.showError('System error occurred!');
       }
     );
   }

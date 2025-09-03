@@ -9,10 +9,10 @@ import { dxButtonConfig } from 'src/app/shared/config';
 })
 export class UserInfoComponent implements OnInit {
   user: any = {};
-  title: string = 'Thông tin người dùng';
+  title: string = 'User Information';
 
 
-  allGender = [{ label: 'Nam', value: 1}, { label: 'Nữ', value: 2}]
+  allGender = [{ label: 'Male', value: 1}, { label: 'Female', value: 2}]
   entity : any = {}
 
   dxButtonConfig = dxButtonConfig;
@@ -45,7 +45,7 @@ export class UserInfoComponent implements OnInit {
       .subscribe(
         (res: any) => {
           if (res.ReturnStatus.Code === 0) {
-            this.notificationService.showSuccess('Lưu thông tin thành công');
+            this.notificationService.showSuccess('Information saved successfully');
           }
         }
       )

@@ -78,13 +78,13 @@ export class GroupComponent implements OnInit {
           }
           this.totalRows = response.ReturnData.length;
         } else {
-          this.notificationService.showError('Dữ liệu tải lỗi!');
+          this.notificationService.showError('Data loading error!');
           this.totalRows = 0;
         }
         this.loading = false;
       },
       error: _ => {
-        this.notificationService.showError('Hệ thống xảy ra lỗi!');
+        this.notificationService.showError('System error occurred!');
         this.totalRows = 0;
         this.loading = false;
       }
@@ -150,7 +150,7 @@ export class GroupComponent implements OnInit {
   save() {
     const check = this.detail.validationEntity.instance.validate();
     if (!check.isValid || this.detail.existName) {
-      this.notificationService.showError('Thông tin nhập không hợp lệ!');
+      this.notificationService.showError('Invalid input information!');
       return;
     }
     const body = clone(this.detail.entity);
@@ -168,7 +168,7 @@ export class GroupComponent implements OnInit {
               this.focusKey = res.ReturnData.Data;
               this.totalRows++;
             } else {
-              this.notificationService.showError('Không thành công!');
+              this.notificationService.showError('Unsuccessful!');
             }
           }
         )
@@ -178,14 +178,14 @@ export class GroupComponent implements OnInit {
         .subscribe(
           (res: any) => {
             if (res.ReturnStatus.Code === 0) {
-              this.notificationService.showSuccess('Cập nhật thành công!');
+              this.notificationService.showSuccess('Update successful!');
               const index1 = this.listData.findIndex(o => o.ID == body.ID)
               this.listData[index1] = this.detail.entity;
               const index2 = this.allData.findIndex(o => o.ID == body.ID)
               this.allData[index2] = this.detail.entity;
               this.state = 'detail';
             } else {
-              this.notificationService.showError('Không thành công!');
+              this.notificationService.showError('Unsuccessful!');
             }
           }
         )
@@ -198,13 +198,13 @@ export class GroupComponent implements OnInit {
           if (response.ReturnStatus.Code == 0) {
             this.listData = this.listData.filter(o => o.ID != id);
             this.allData = this.allData.filter(o => o.ID != id);
-            this.notificationService.showSuccess("Đã xóa thành công nhóm '" + name + "'!");
+            this.notificationService.showSuccess("Successfully deleted group '" + name + "'!");
           } else {
-            this.notificationService.showError('Không thành công!');
+            this.notificationService.showError('Unsuccessful!');
           }
         },
         error: _ => {
-          this.notificationService.showError('Lỗi hệ thống!')
+          this.notificationService.showError('System error!')
         }
       })
     })

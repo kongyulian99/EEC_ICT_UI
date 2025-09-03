@@ -76,7 +76,7 @@ export class ScoreDetailComponent implements OnInit {
       if (this.attemptId) {
         this.loadDetailedResult();
       } else {
-        this.notificationService.showError('Không tìm thấy thông tin lượt làm bài');
+        this.notificationService.showError('Attempt information not found');
         this.goBack();
       }
     });
@@ -100,7 +100,7 @@ export class ScoreDetailComponent implements OnInit {
       },
       error: (error) => {
         console.error('Lỗi khi tải kết quả chi tiết:', error);
-        this.notificationService.showError('Đã xảy ra lỗi khi tải kết quả chi tiết');
+        this.notificationService.showError('An error occurred while loading detailed results');
         this.isLoading = false;
         this.goBack();
       }

@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { BaseService } from './base.service';
 import { SystemConstants } from '../constants/systems.constant';
-import { User, UserLoginPayload, ReturnBaseInfo, AuthResponseInfo, GoogleLoginRequest } from '../interfaces/user.interface';
+import { User, UserLoginPayload, ReturnBaseInfo, AuthResponseInfo, GoogleLoginRequest, UserRegisterPayload } from '../interfaces/user.interface';
 import { ResponseData } from '../models';
 import { environment } from 'src/environments/environment';
 
@@ -30,6 +30,10 @@ export class AuthenService extends BaseService {
     return this.http.post<ResponseData>(`${environment.apiUrl}/api/Auth/Login`, user, { headers: this.httpOptions })
       .pipe(catchError(this.handleError));
   }
+  register(user: UserRegisterPayload) {
+    console.log(environment.apiUrl);
+    return this.http.post<ResponseData>(`${environment.apiUrl}/api/Auth/Register`, user, { headers: this.httpOptions })
+  }
 
   // Phương thức khởi tạo đăng nhập Google bằng OAuth 2.0 sử dụng chuyển hướng
   loginWithGoogle(): void {
@@ -52,7 +56,7 @@ export class AuthenService extends BaseService {
       window.location.href = oauthURL;
     } catch (error) {
       console.error('Lỗi khi chuyển hướng đến trang đăng nhập Google:', error);
-      this.notificationService.showError('Không thể khởi tạo đăng nhập Google');
+      this.notificationService.showError('Unable to initialize Google login');
       // Dispatch sự kiện thất bại
       window.dispatchEvent(new CustomEvent('auth-failure'));
     }
@@ -157,7 +161,7 @@ export class AuthenService extends BaseService {
     .pipe(
       catchError((error) => {
         console.error('API Error:', error);
-        this.notificationService.showError('Đã xảy ra lỗi khi gọi API đăng nhập Google: ' + (error.message || 'Không xác định'));
+        this.notificationService.showError('An error occurred when calling Google login API: ' + (error.message || 'Unknown error'));
         window.dispatchEvent(new CustomEvent('auth-failure'));
         return this.handleError(error);
       })
@@ -169,7 +173,7 @@ export class AuthenService extends BaseService {
         if (response && response.ReturnStatus && response.ReturnStatus.Code === 1) {
           // Lưu thông tin người dùng vào localStorage
           localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(response.ReturnData));
-          this.notificationService.showSuccess('Đăng nhập bằng Google thành công!');
+          this.notificationService.showSuccess('Google login successful!');
 
           // Chuyển hướng dựa trên vai trò
           const user = response.ReturnData;
@@ -185,16 +189,16 @@ export class AuthenService extends BaseService {
           // Dispatch sự kiện thành công
           window.dispatchEvent(new CustomEvent('auth-success'));
         } else {
-          const errorMessage = response?.ReturnStatus?.Message || 'Không thể đăng nhập bằng Google';
+          const errorMessage = response?.ReturnStatus?.Message || 'Unable to login with Google';
           console.error('Lỗi đăng nhập:', errorMessage);
-          this.notificationService.showError('Đăng nhập bằng Google thất bại: ' + errorMessage);
+          this.notificationService.showError('Google login failed: ' + errorMessage);
           // Dispatch sự kiện thất bại
           window.dispatchEvent(new CustomEvent('auth-failure'));
         }
       },
       error: (error) => {
         console.error('Lỗi đăng nhập Google:', error);
-        this.notificationService.showError('Đã xảy ra lỗi khi đăng nhập bằng Google');
+        this.notificationService.showError('An error occurred during Google login');
         // Dispatch sự kiện thất bại
         window.dispatchEvent(new CustomEvent('auth-failure'));
       }

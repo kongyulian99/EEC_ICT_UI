@@ -26,7 +26,7 @@ export abstract class BaseService {
         }
     }
     protected handleError(error: HttpErrorResponse) {
-        let errorMessage = 'Đã xảy ra lỗi!';
+        let errorMessage = 'An error occurred!';
 
         if (error.error instanceof ErrorEvent) {
             // Client-side error
@@ -35,9 +35,9 @@ export abstract class BaseService {
             // Server-side error
             if (error.error instanceof Blob) {
                 // Handle blob error (e.g., when downloading files)
-                return throwError(() => new Error('Lỗi khi tải file'));
+                return throwError(() => new Error('Error loading file'));
             }
-            errorMessage = `Mã lỗi: ${error.status}\nThông báo: ${error.message}`;
+            errorMessage = `Error code: ${error.status}\nMessage: ${error.message}`;
         }
 
         return throwError(() => new Error(errorMessage));

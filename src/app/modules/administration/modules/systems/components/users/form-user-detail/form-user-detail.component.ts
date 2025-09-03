@@ -128,7 +128,7 @@ export class FormUserDetailComponent implements OnInit {
       .subscribe(
         (res: any) => {
           if (res.ReturnStatus.Code === 0) {
-            this.notificationService.showSuccess('Xoá thông tin thành công');
+            this.notificationService.showSuccess('Information deleted successfully');
 
             let index = this.listGroupInUser.findIndex(x => x.ID == groupId);
             let obj = clone(this.listGroupInUser[index]);

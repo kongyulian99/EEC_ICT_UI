@@ -155,7 +155,17 @@ export class LoginComponent implements OnInit {
     if (this.registerLoading) {
       return;
     }
-
+    this.authService.register(this.registerData).subscribe({
+      next: (response: ResponseData) => {
+        this.registerLoading = false;
+        if (response.ReturnStatus.Code === 1) {
+          this.notificationService.showSuccess('Registration successful! Please log in.');
+          this.isLoginForm = true;
+        } else {
+          this.notificationService.showError(response.ReturnStatus.Message);
+        }
+      }
+    });
     // Check confirm password
     if (this.registerData.password !== this.registerData.confirmPassword) {
       this.notificationService.showError('Confirm password does not match!');

@@ -165,7 +165,7 @@ export class ExamDetailComponent implements OnInit {
       this.examsService.createExam({...this.exam, Create_User_Id: currentUser.Id}).subscribe(
         (response: any) => {
           if (response.ReturnStatus.Code === 1) {
-            this.notificationService.showSuccess('Thêm mới đề thi thành công');
+            this.notificationService.showSuccess('Exam added successfully');
             this.examId = response.ReturnData;
             this.isNewExam = false;
             this.router.navigate(['/administration/exams/detail'], { queryParams: { id: this.examId } });
@@ -183,7 +183,7 @@ export class ExamDetailComponent implements OnInit {
       this.examsService.updateExam(this.exam).subscribe(
         (response: any) => {
           if (response.ReturnStatus.Code === 1) {
-            this.notificationService.showSuccess('Cập nhật đề thi thành công');
+            this.notificationService.showSuccess('Exam updated successfully');
           } else {
             this.notificationService.showError(response.ReturnStatus.Message);
           }
@@ -260,7 +260,7 @@ export class ExamDetailComponent implements OnInit {
       }).subscribe(
         (response: any) => {
           if (response.ReturnStatus.Code === 1) {
-            this.notificationService.showSuccess('Thêm mới câu hỏi thành công');
+            this.notificationService.showSuccess('Question added successfully');
             this.questionPopupVisible = false;
             this.loadQuestions();
             // Cập nhật tổng số câu hỏi
@@ -281,7 +281,7 @@ export class ExamDetailComponent implements OnInit {
       this.questionService.updateQuestion(questionToSave).subscribe(
         (response: any) => {
           if (response.ReturnStatus.Code === 1) {
-            this.notificationService.showSuccess('Cập nhật câu hỏi thành công');
+            this.notificationService.showSuccess('Question updated successfully');
             this.questionPopupVisible = false;
             this.loadQuestions();
           } else {
@@ -307,7 +307,7 @@ export class ExamDetailComponent implements OnInit {
         this.questionService.deleteQuestion(question.Id).subscribe(
           (response: any) => {
             if (response.ReturnStatus.Code === 1) {
-              this.notificationService.showSuccess('Xóa câu hỏi thành công');
+              this.notificationService.showSuccess('Question deleted successfully');
               this.loadQuestions();
               // Cập nhật tổng số câu hỏi
               this.exam.Total_Questions = this.questions.length - 1;

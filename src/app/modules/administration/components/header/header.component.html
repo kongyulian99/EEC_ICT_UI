@@ -67,14 +67,14 @@
                             </div>
                         </div>
                         <a class="dropdown-item py-2" routerLink="/administration/user-info" (click)="isNavbarCollapsed = true">
-                            <i class="fa fa-user me-2"></i> Thông tin
+                            <i class="fa fa-user me-2"></i> Profile
                         </a>
                         <a class="dropdown-item py-2" href="javascript:void(0)" (click)="onChangePassword()">
                             <i class="fa fa-key me-2"></i> Change Password
                         </a>
                         <div class="dropdown-divider my-1"></div>
                         <a class="dropdown-item py-2" (click)="onLoggedout(); isNavbarCollapsed = true" routerLink="/login">
-                            <i class="fa fa-sign-out me-2"></i> Đăng xuất
+                            <i class="fa fa-sign-out me-2"></i> Logout
                         </a>
                     </div>
                 </li>
@@ -104,14 +104,14 @@
             </a>
             <div class="dropdown-user" ngbDropdownMenu>
               <a class="dropdown-item" href="javascript:void(0)" routerLink="/administration/user-info">
-                <i class="fa fa-fw fa-user"></i> Thông tin
+                <i class="fa fa-fw fa-user"></i> Profile
               </a>
               <a class="dropdown-item" href="javascript:void(0)" (click)="onChangePassword()">
                 <i class="fa fa-fw fa-gear"></i> Change Password
               </a>
           <li class="dropdown-divider"></li>
           <a (click)="onLoggedout()" routerLink="/login" class="dropdown-item">
-            <i class="fa fa-fw fa-power-off"></i>Đăng xuất
+            <i class="fa fa-fw fa-power-off"></i>Logout
           </a>
       </div>
       </li>

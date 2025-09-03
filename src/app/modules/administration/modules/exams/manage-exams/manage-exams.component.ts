@@ -97,7 +97,7 @@ export class ManageExamsComponent implements OnInit {
       this.examsService.createExam(this.editingExam).subscribe(
         (response: any) => {
           if (response.ReturnStatus.Code === 1) {
-            this.notificationService.showSuccess('Thêm mới đề thi thành công');
+            this.notificationService.showSuccess('Exam added successfully');
             this.popupVisible = false;
             this.loadExams();
           } else {
@@ -114,7 +114,7 @@ export class ManageExamsComponent implements OnInit {
       this.examsService.updateExam(this.editingExam).subscribe(
         (response: any) => {
           if (response.ReturnStatus.Code === 1) {
-            this.notificationService.showSuccess('Cập nhật đề thi thành công');
+            this.notificationService.showSuccess('Exam updated successfully');
             this.popupVisible = false;
             this.loadExams();
           } else {
@@ -139,7 +139,7 @@ export class ManageExamsComponent implements OnInit {
         this.examsService.deleteExam(exam.Id).subscribe(
           (response: any) => {
             if (response.ReturnStatus.Code === 1) {
-              this.notificationService.showSuccess('Xóa đề thi thành công');
+              this.notificationService.showSuccess('Exam deleted successfully');
               this.loadExams();
             } else {
               this.notificationService.showError(response.ReturnStatus.Message);

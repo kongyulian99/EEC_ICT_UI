@@ -30,6 +30,13 @@ export interface UserLoginPayload {
     Username: string;
     Password: string;
 }
+export interface UserRegisterPayload {
+    username: string,
+    fullName: string,
+    email: string,
+    password:  string,
+    confirmPassword: string;
+}
 
 // Thêm interface mới cho API Google Login
 export interface ReturnBaseInfo<T = any> {
