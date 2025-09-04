@@ -1,0 +1,31 @@
+<div *ngIf="parentTopics && parentTopics.length; else noTopics">
+  <div class="container py-4">
+    <div class="row g-3">
+      <div class="col-12" *ngFor="let p of parentTopics">
+        <div class="card topic-card shadow-sm">
+          <div class="card-header d-flex justify-content-between align-items-center bg-white border-0 pb-0">
+            <h5 class="mb-0 topic-title">{{ p.Name }}</h5>
+            <span class="badge bg-primary-subtle text-primary">{{ (childrenByParent[p.Id]?.length || 0) }} mục</span>
+          </div>
+          <div class="card-body pt-2">
+            <p class="text-muted small mb-3" *ngIf="p.Description">{{ p.Description }}</p>
+
+            <div *ngIf="childrenByParent[p.Id] && childrenByParent[p.Id].length; else noChild" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
+              <div class="col" *ngFor="let c of childrenByParent[p.Id]">
+                <a href="/student/topic-training/{{ c.Id }}" class="btn btn-light btn-sm w-100 text-start child-pill">
+                  <span class="text-truncate d-inline-block w-100">{{ c.Name }}</span>
+                </a>
+              </div>
+            </div>
+            <ng-template #noChild>
+              <div class="text-muted small">Không có mục con</div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #noTopics>
+  <div class="text-center py-5">Không có chủ đề nào.</div>
+</ng-template>

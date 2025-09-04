@@ -44,6 +44,11 @@ export class QuestionService extends BaseService {
       .pipe(catchError(this.handleError));
   }
 
+  getQuestionsByTopicId(topicId: number) {
+    return this.http.get<ResponseData<QuestionInfo[]>>(`${this.apiUrl}/GetByTopicId/${topicId}`, { headers: this.httpOptions })
+      .pipe(catchError(this.handleError));
+  }
+
   /**
    * Tạo câu hỏi mới
    * @param question Thông tin câu hỏi

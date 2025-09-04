@@ -23,6 +23,8 @@ import { TestDetailComponent } from './test/test-detail/test-detail.component';
 import { NgbDropdownModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { ScoreDetailComponent } from './test/test-detail/score-detail/score-detail.component';
 import { ComponentsSharedModule } from 'src/app/shared';
+import { TopicTrainingComponent } from './topic-training/topic-training.component';
+import { TopicDetailComponent } from './topic-training/topic-detail/topic-detail.component';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import { ComponentsSharedModule } from 'src/app/shared';
     TestComponent,
     HeaderStudentComponent,
     TestDetailComponent,
-    ScoreDetailComponent
+    ScoreDetailComponent,
+    TopicTrainingComponent,
+    TopicDetailComponent
   ],
   imports: [
     CommonModule,

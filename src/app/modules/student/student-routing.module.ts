@@ -5,6 +5,8 @@ import { StudentComponent } from './student.component';
 import { TestComponent } from './test/test.component';
 import { TestDetailComponent } from './test/test-detail/test-detail.component';
 import { ScoreDetailComponent } from './test/test-detail/score-detail/score-detail.component';
+import { TopicTrainingComponent } from './topic-training/topic-training.component';
+import { TopicDetailComponent } from './topic-training/topic-detail/topic-detail.component';
 
 const routes: Routes = [
   {
@@ -34,6 +36,14 @@ const routes: Routes = [
       {
         path: 'score-detail/:examId/:attemptId',
         component: ScoreDetailComponent
+      },
+      {
+        path: 'topic-training',
+        component: TopicTrainingComponent
+      },
+      {
+        path: 'topic-training/:topicId',
+        component: TopicDetailComponent
       }
     ]
   },
